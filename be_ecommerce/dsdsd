@@ -1,0 +1,10 @@
+async update(user: User, productId: string) {
+  const product = await this.productRepo.findOne(productId);
+  const ability = this.abilityFactory.defineAbility(user);
+
+  // CASL tự động so sánh product.createdBy với user.id
+  if (ability.cannot('update', product)) {
+    throw new ForbiddenException('Bạn không phải chủ sở hữu sản phẩm này');
+  }
+  // ... xử lý update
+}

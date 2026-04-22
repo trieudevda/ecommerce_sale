@@ -1,0 +1,139 @@
+{
+  "Common": {
+    "home": "Trang chủ",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "search": "Tìm kiếm"
+  },
+  "Sidebar": {
+    "dashboard": "Bảng điều khiển",
+    "user_management": "Quản lý người dùng",
+    "user_list": "Danh sách",
+    "user_edit": "Chỉnh sửa",
+    "upload": "Tải lên"
+  },
+  "Breadcrumb": {
+    "admin": "Quản trị",
+    "user": "Người dùng",
+    "list": "Danh sách",
+    "edit": "Chỉnh sửa",
+    "dashboard": "Dashboard",
+    "role": "Vai trò"
+  },
+  "User": {
+    "Table": {
+      "name": "Tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ",
+      "role": "Vai trò",
+      "date_of_birth": "Ngày sinh",
+      "is_email_verified": "Xác thực Email",
+      "last_login": "Lần đăng nhập cuối",
+      "status": "Trạng thái",
+      "created_at": "Ngày tạo",
+      "updated_at": "Ngày cập nhật",
+      "verified": "Đã xác minh",
+      "unverified": "Chưa xác minh",
+      "actions": "Hành động",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa"
+    },
+    "List": {
+      "title": "Danh sách người dùng",
+      "create": "Thêm người dùng",
+      "name": "Tên",
+      "email": "Email",
+      "actions": "Hành động"
+    },
+    "CRUD": {
+      "title": "Chỉnh sửa người dùng",
+      "name": "Tên",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "cancel": "Hủy",
+      "create": "Thêm người dùng",
+      "edit": "Chỉnh sửa người dùng",
+      "full_name": "Họ và tên",
+      "please_enter_your_name": "Vui lòng nhập tên",
+      "invalid_email": "Email không hợp lệ",
+      "invalid_password": "Mật khẩu không hợp lệ",
+      "phone": "Số điện thoại",
+      "please_enter_phone": "Vui lòng nhập số điện thoại",
+      "phone_number_is_not_in_the_correct_Vietnamese": "Số điện thoại không đúng định dạng Việt Nam (10 số)",
+        "user_added_successfully": "Thêm người dùng thành công",
+        "user_updated_successfully": "Cập nhật người dùng thành công",
+        "user_deleted_successfully": "Xóa người dùng thành công",
+        "error_when_adding_user": "Lỗi khi thêm người dùng",
+        "error_when_updating_user": "Lỗi khi cập nhật người dùng",
+        "error_when_deleting_user": "Lỗi khi xóa người dùng",
+        "adding_users_failed": "Thêm người dùng thất bại",
+        "updating_users_failed": "Cập nhật người dùng thất bại",
+        "deleting_users_failed": "Xóa người dùng thất bại",
+      "address": "Địa chỉ",
+      "please_enter_address": "Vui lòng nhập địa chỉ",
+      "role": "Vai trò",
+      "please_select_role": "Vui lòng chọn vai trò",
+        "date_of_birth": "Ngày sinh",
+        "please_enter_date_of_birth": "Vui lòng nhập ngày sinh",
+      "please_select_date_of_birth": "Vui lòng chọn ngày sinh",
+        "is_email_verified": "Xác thực Email",
+      "verified": "Đã xác minh",
+        "unverified": "Chưa xác minh",
+         "status": "Trạng thái",
+      "active": "Hoạt động",
+        "inactive": "Không hoạt động",
+      "deleted": "Đã xóa",
+         "last_login": "Lần đăng nhập cuối",
+      "save": "Lưu"
+    }
+  },
+  "Role": {
+    "List": {
+      "title": "Danh sách vai trò",
+      "create": "Thêm vai trò",
+      "name": "Tên"
+
+    },
+    "Table": {
+      "name": "Tên",
+      "slug": "Viết tắt",
+      "actions": "Hành động",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa"
+    },
+    "CRUD": {
+        "create": "Thêm vai trò",
+        "edit": "Chỉnh sửa vai trò",
+        "name": "Tên",
+        "slug": "Viết tắt",
+        "save": "Lưu",
+        "cancel": "Hủy"
+    }
+  },
+  "Auth": {
+    "login": "Đăng nhập",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "re_password": "Nhập lại mật khẩu",
+    "password_doesn't_match": "Mật khẩu không khớp",
+    "remember_me": "Ghi nhớ đăng nhập",
+    "submit": "Đăng nhập",
+    "successfully": "Thành công",
+    "error": "Lỗi",
+    "full_name": "Họ và tên",
+    "please_enter_your_name": "Vui lòng nhập tên",
+    "invalid_email": "Email không hợp lệ",
+    "invalid_password": "Mật khẩu không hợp lệ",
+    "phone": "Số điện thoại",
+    "please_enter_phone": "Vui lòng nhập số điện thoại",
+    "phone_number_is_not_in_the_correct_Vietnamese": "Số điện thoại không đúng định dạng Việt Nam (10 số)",
+    "user_added_successfully": "Thêm người dùng thành công",
+    "": "Cập nhật người dùng thành công",
+    "": "Xóa người dùng thành công",
+    "error_when_adding_user": "Lỗi khi thêm người dùng",
+    "": "Lỗi khi cập nhật người dùng",
+    "": "Lỗi khi xóa người dùng",
+    "adding_users_failed": "Thêm người dùng thành công"
+  }
+}

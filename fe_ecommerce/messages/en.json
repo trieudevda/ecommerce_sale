@@ -1,0 +1,22 @@
+{
+  "Common": {
+    "home": "Home",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "user_management": "User Management",
+    "user_list": "List",
+    "user_edit": "Edit",
+    "upload": "Upload"
+  },
+  "Breadcrumb": {
+    "admin": "Admin",
+    "user": "Users",
+    "list": "List",
+    "edit": "Edit",
+    "dashboard": "Dashboard"
+  }
+}

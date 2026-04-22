@@ -1,0 +1,7 @@
+Mỗi khi bạn thay đổi Entity (thêm cột, đổi kiểu dữ liệu), hãy làm theo 3 bước:
+Build dự án: npm run build (để TypeORM quét các file .js mới nhất).
+Tạo file Migration:
+npm run migration:generate -- name=UpdateUserTable
+(Lệnh này tự động so sánh Entity và DB để tạo code SQL).
+Thực thi vào DB:
+npm run migration:run
