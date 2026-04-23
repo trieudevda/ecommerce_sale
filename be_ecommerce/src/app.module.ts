@@ -10,14 +10,21 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/auth.service';
 import { AuthController } from './modules/auth/auth.controller';
-import { AuthGuard, PassportModule } from '@nestjs/passport';
+import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './modules/auth/guard/jwt.strategy';
 import { PermissionsGuard } from './common/guards/permissions.guard';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { DatabaseSeedService } from './database/seed';
 import { JwtAuthGuard } from './modules/auth/guard/jwt-auth.guard';
-import { seedPermissions } from './database/permission.seed';
+import { CustomLoggerService } from './common/logger/logger.service';
+import { CategoryModule } from './modules/category/category.module';
+import { ProductModule } from './modules/product/product.module';
+import { ProductVariantModule } from './modules/product_variant/product_variant.module';
+import { PriceHistoryModule } from './modules/price_history/price_history.module';
+import { OrderModule } from './modules/order/order.module';
+import { OrderItemModule } from './modules/order_item/order_item.module';
+import { PaymentModule } from './modules/payment/payment.module';
 
 @Module({
   imports: [
@@ -35,6 +42,13 @@ import { seedPermissions } from './database/permission.seed';
     AuthModule,
     PermissionsModule,
     RolesModule,
+    CategoryModule,
+    ProductModule,
+    ProductVariantModule,
+    PriceHistoryModule,
+    OrderModule,
+    OrderItemModule,
+    PaymentModule,
   ],
   controllers: [AppController, AuthController],
   providers: [
@@ -54,6 +68,7 @@ import { seedPermissions } from './database/permission.seed';
     },
     AuthService,
     DatabaseSeedService,
+    CustomLoggerService,
   ],
 })
 export class AppModule {}

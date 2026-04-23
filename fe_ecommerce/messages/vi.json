@@ -18,7 +18,8 @@
     "list": "Danh sách",
     "edit": "Chỉnh sửa",
     "dashboard": "Dashboard",
-    "role": "Vai trò"
+    "role": "Vai trò",
+    "product": "Sản phẩm"
   },
   "User": {
     "Table": {
@@ -85,6 +86,76 @@
         "inactive": "Không hoạt động",
       "deleted": "Đã xóa",
          "last_login": "Lần đăng nhập cuối",
+      "save": "Lưu"
+    }
+  },
+  "Product": {
+    "Table": {
+      "name": "Tên sản phẩm",
+      "category": "Danh mục",
+      "short_description": "Mô tả ngắn",
+      "description": "Mô tả",
+      "variants": "Biến thể",
+      "sku": "Mã SKU",
+      "price": "Giá",
+      "stock": "Tồn kho",
+      "status": "Trạng thái",
+      "created_at": "Ngày tạo",
+      "updated_at": "Ngày cập nhật",
+      "active": "Đang bán",
+      "inactive": "Ngừng bán",
+      "actions": "Hành động",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa"
+    },
+    "List": {
+      "title": "Danh sách sản phẩm",
+      "create": "Thêm sản phẩm",
+      "name": "Tên sản phẩm",
+      "category": "Danh mục",
+      "actions": "Hành động"
+    },
+    "CRUD": {
+      "title": "Chỉnh sửa sản phẩm",
+      "name": "Tên sản phẩm",
+      "short_description": "Mô tả ngắn",
+      "description": "Mô tả",
+      "cancel": "Hủy",
+      "create": "Thêm sản phẩm",
+      "edit": "Chỉnh sửa sản phẩm",
+
+      "please_enter_name": "Vui lòng nhập tên sản phẩm",
+      "please_enter_short_description": "Vui lòng nhập mô tả ngắn",
+      "please_enter_description": "Vui lòng nhập mô tả",
+
+      "category": "Danh mục",
+      "please_select_category": "Vui lòng chọn danh mục",
+
+      "price": "Giá",
+      "please_enter_price": "Vui lòng nhập giá",
+
+      "stock": "Tồn kho",
+      "please_enter_stock": "Vui lòng nhập tồn kho",
+
+      "sku": "Mã SKU",
+      "please_enter_sku": "Vui lòng nhập mã SKU",
+
+      "status": "Trạng thái",
+      "active": "Đang bán",
+      "inactive": "Ngừng bán",
+
+      "product_added_successfully": "Thêm sản phẩm thành công",
+      "product_updated_successfully": "Cập nhật sản phẩm thành công",
+      "product_deleted_successfully": "Xóa sản phẩm thành công",
+
+      "error_when_adding_product": "Lỗi khi thêm sản phẩm",
+      "error_when_updating_product": "Lỗi khi cập nhật sản phẩm",
+      "error_when_deleting_product": "Lỗi khi xóa sản phẩm",
+
+      "adding_product_failed": "Thêm sản phẩm thất bại",
+      "updating_product_failed": "Cập nhật sản phẩm thất bại",
+      "deleting_product_failed": "Xóa sản phẩm thất bại",
+
       "save": "Lưu"
     }
   },

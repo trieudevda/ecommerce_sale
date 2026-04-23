@@ -162,7 +162,7 @@ const App: React.FC = () => {
         });
         return keys;
     }, [allRole]);
-    const getPermissionChanges = (latestCheckedKeys) => {
+    const getPermissionChanges1 = (latestCheckedKeys) => {
         const changes = [];
 
         // Duyệt qua từng Role để so sánh độc lập
@@ -195,8 +195,39 @@ const App: React.FC = () => {
 
         return changes;
     };
-    const updateState = async (target: string,currentCheckedKeys: string[])=>{
+    const getPermissionChanges = (latestCheckedKeys) => {
+        const changes = [];
+        allRole.forEach(role => {
+            const roleId = String(role.id);
+            const prefix = `r${roleId}-p`;
+
+            // Lấy list ID hiện tại từ UI (chỉ lấy node lá - permission)
+            const currentIds = latestCheckedKeys
+                .filter(k => k.startsWith(prefix))
+                .map(k => k.split('-p')[1]);
+
+            // Lấy list ID gốc của Role này từ database/state
+            const originalIds = role.permissions.map(p => String(p.id));
+
+            const added = currentIds.filter(id => !originalIds.includes(id));
+            const removed = originalIds.filter(id => !currentIds.includes(id));
+
+            if (added.length > 0 || removed.length > 0) {
+                changes.push({
+                    roleId: role.id,
+                    added: added.map(Number),
+                    removed: removed.map(Number)
+                });
+            }
+        });
+        return changes;
+    };
+    const updateState1 = async (target: string,currentCheckedKeys: string[])=>{
         const changes = getPermissionChanges(currentCheckedKeys);
+        if (changes.length === 0) {
+            console.log("Không có thay đổi nào được thực hiện.");
+            return;
+        }
         const roleId = changes[0].roleId;
         const data = await requestApi('roles/role-per/' + roleId, { method: 'PATCH', body: JSON.stringify(changes[0]) });
         if(data?.statusCode && data.statusCode >= 400)
@@ -209,6 +240,47 @@ const App: React.FC = () => {
             });
         }
     }
+    const updateState = async (targetKey: string, currentCheckedKeys: string[]) => {
+        const changes = getPermissionChanges(currentCheckedKeys);
+
+        // TRƯỜNG HỢP 1: Không có thay đổi nào về quyền (có thể chỉ click node cha rỗng)
+        if (changes.length === 0) {
+            console.warn("Không tìm thấy thay đổi về Permission.");
+            return;
+        }
+
+        // TRƯỜNG HỢP 2: Có thay đổi
+        // Tìm change khớp với Role của node vừa click (targetKey)
+        // Giả sử targetKey có dạng "r1-mModule" hoặc "r1-p10" -> lấy được roleId là 1
+        const match = targetKey.match(/r(\d+)/);
+        const targetRoleId = match ? Number(match[1]) : null;
+
+        // Tìm đúng phần thay đổi của Role đó
+        const roleChange = changes.find(c => c.roleId === targetRoleId) || changes[0];
+
+        try {
+            const data = await requestApi(`roles/role-per/${roleChange.roleId}`, {
+                method: 'PATCH',
+                body: JSON.stringify(roleChange)
+            });
+
+            if (data?.statusCode >= 400) {
+                messageApi.error({
+                    title: 'Thất bại',
+                    description: data.message,
+                    placement: 'bottomRight',
+                });
+            } else {
+                messageApi.success({
+                    title: 'Thành công',
+                    description: 'Đã cập nhật quyền hạn.',
+                    placement: 'bottomRight',
+                });
+            }
+        } catch (error) {
+            console.error("Lỗi kết nối API:", error);
+        }
+    };
     const handleCreate = ()=>{
         if(user.role)
             console.log(user.sub)

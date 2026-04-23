@@ -48,7 +48,6 @@ export class CreateUserDto {
   address?: string;
 
   @IsOptional()
-  // @IsEnum(UserRoleEnum, { message: 'Role không hợp lệ' })
   @ValidateNested()
   @Type(() => RoleRelationDto)
   role?: RoleRelationDto;

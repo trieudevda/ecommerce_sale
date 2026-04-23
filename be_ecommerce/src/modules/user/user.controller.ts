@@ -23,6 +23,7 @@ import { Permissions } from '../../common/decorators/permissions.decorator';
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
   @Permissions('user.findAll')
   @Get('/find-all')
   findAll(@Query() query: FindUserQueryDto) {

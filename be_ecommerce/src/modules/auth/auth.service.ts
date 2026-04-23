@@ -6,9 +6,6 @@ import {
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../user/entities/user.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -29,12 +26,11 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       role: user.role,
-      permission: user.role.permissions
+      permission: user.role.permissions,
     };
     const tokens = await this.getTokens(payload);
     await this.userService.updateRefreshToken(user.id, tokens.refreshToken);
     return {
-      // access_token: await this.jwtService.signAsync(payload),
       ...tokens,
       user: payload,
     };
@@ -75,7 +71,6 @@ export class AuthService {
         permission: user.role.permissions,
       };
       const tokens = await this.getTokens(payload1);
-      // await this.userService.updateRefreshToken(user.id, tokens.refreshToken);
       return {
         ...tokens,
         user: payload1,

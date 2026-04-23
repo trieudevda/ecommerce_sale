@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -14,6 +11,7 @@ import { UserRoleEnum, UserStatusEnum } from './enums/user.enum';
 import * as bcrypt from 'bcrypt';
 import { Role } from '../roles/entities/role.entity';
 import { Permission } from '../permissions/entities/permission.entity';
+import { CustomLoggerService } from '../../common/logger/logger.service';
 
 @Injectable()
 export class UserService {
@@ -24,6 +22,7 @@ export class UserService {
     private readonly roleRepo: Repository<Role>,
     @InjectRepository(Permission)
     private readonly perRepo: Repository<Permission>,
+    private readonly logger: CustomLoggerService,
   ) {}
 
   async findAll({
@@ -119,7 +118,6 @@ export class UserService {
   }
   async updateRefreshToken(userId: string, refreshToken: string | null) {
     let hashedToken = null;
-
     if (refreshToken) {
       hashedToken = await bcrypt.hash(refreshToken, 10);
     }
@@ -129,7 +127,7 @@ export class UserService {
   }
   @Transactional()
   async create(createUserDto: CreateUserDto) {
-    let role = await this.roleRepo.findOne({
+    const role = await this.roleRepo.findOne({
       where: [{ id: createUserDto.role?.id }, { slug: UserRoleEnum.USER }],
     });
     if (!role) {
@@ -183,14 +181,14 @@ export class UserService {
       relations: ['permissions'],
     });
   }
-  async updateUserPermissions(id: string,  permissionIds: number[] ) {
+  async updateUserPermissions(id: string, permissionIds: number[]) {
     const user = await this.userRepo.findOne({
       where: { id },
       relations: ['permissions'],
     });
-      if (!user) {
-        return new NotFoundException('User không tồn tại');
-      }
+    if (!user) {
+      return new NotFoundException('User không tồn tại');
+    }
     const permissions = await this.perRepo.findByIds(permissionIds);
 
     user.permissions = permissions;

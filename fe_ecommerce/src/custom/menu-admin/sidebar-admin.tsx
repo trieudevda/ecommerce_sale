@@ -1,6 +1,6 @@
 import {
     DashboardOutlined, EditOutlined, KeyOutlined,
-    OrderedListOutlined, PlusOutlined, SafetyOutlined,
+    OrderedListOutlined, PlusOutlined, ProductOutlined, SafetyOutlined,
     UploadOutlined,
     UserOutlined,
     VideoCameraOutlined
@@ -34,6 +34,23 @@ const sidebarAdmin = (userId: string) => [
     },
     {
         key: '3',
+        icon: <ProductOutlined />,
+        label: 'Sản phẩm',
+        children: [
+            {
+                key: 'list',
+                icon: <OrderedListOutlined />,
+                label: <Link href={ADMIN_PATHS.PRODUCT.LIST()}>Danh sách</Link>,
+            },
+            // {
+            //     key: 'edit',
+            //     icon: <EditOutlined />,
+            //     label: <Link href={ADMIN_PATHS.USER.EDIT(userId)}>Sửa</Link>,
+            // }
+        ],
+    },
+    {
+        key: '4',
         icon: <SafetyOutlined />,
         label: 'Vai trò',
         children: [
@@ -50,7 +67,7 @@ const sidebarAdmin = (userId: string) => [
         ],
     },
     {
-        key: '4',
+        key: '5',
         icon: <KeyOutlined />,
         label: 'Phân quyền',
         children: [
