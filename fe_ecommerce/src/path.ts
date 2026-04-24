@@ -13,7 +13,7 @@ export const ADMIN_PATHS = {
     },
     PRODUCT: {
         LIST: () => APP_PATH.ADMIN + APP_PATH.PRODUCT,
-        // CREATE: () => APP_PATH.ADMIN + APP_PATH.USER + '/create',
+        CREATE: () => APP_PATH.ADMIN + APP_PATH.PRODUCT + '/create',
         // EDIT: (id: string) => APP_PATH.ADMIN + APP_PATH.USER + `/edit/${id}`,
     },
     ROLE: {

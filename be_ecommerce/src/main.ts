@@ -11,6 +11,7 @@ import {
 } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import cookieParser from 'cookie-parser';
+import * as express from 'express';
 
 async function bootstrap() {
   const isDev = process.env.ENVIRONMENT_APP === 'development';
@@ -40,6 +41,7 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
+  app.use('/uploads', express.static('uploads'));
   await app.listen(process.env.ENVIRONMENT_PORT ?? 3000);
 }
 bootstrap();

@@ -9,6 +9,7 @@ import {
     AlignCenterOutlined, AlignRightOutlined, LineHeightOutlined,
     CodeOutlined, ClearOutlined
 } from '@ant-design/icons'
+import ImageUpload from "@/components/upload/ImageUpload";
 
 // Component helper để tạo nút bấm đồng bộ
 const ToolbarButton = ({
@@ -90,6 +91,7 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
                 <Divider type="vertical" className="h-6 self-center" />
 
                 {/* Nhóm Link/Ảnh & Clear */}
+                <ImageUpload editor={editor} />
                 <ToolbarButton editor={editor} icon={<LinkOutlined />} title="Chèn link" action={setLink} isActive={editor.isActive('link')} />
                 <ToolbarButton editor={editor} icon={<DisconnectOutlined />} title="Bỏ link" action={() => editor.chain().focus().unsetLink().run()} disabled={!editor.isActive('link')} />
                 <ToolbarButton editor={editor} icon={<PictureOutlined />} title="Chèn ảnh" action={addImage} />

@@ -25,6 +25,7 @@ import { PriceHistoryModule } from './modules/price_history/price_history.module
 import { OrderModule } from './modules/order/order.module';
 import { OrderItemModule } from './modules/order_item/order_item.module';
 import { PaymentModule } from './modules/payment/payment.module';
+import { ImagesModule } from './modules/images/images.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { PaymentModule } from './modules/payment/payment.module';
     OrderModule,
     OrderItemModule,
     PaymentModule,
+    ImagesModule,
   ],
   controllers: [AppController, AuthController],
   providers: [

@@ -66,7 +66,7 @@ const App: React.FC = () => {
         }
     }
     const handleCreate = ()=>{
-        router.push(ADMIN_PATHS.USER.CREATE());
+        router.push(ADMIN_PATHS.PRODUCT.CREATE());
     }
     const columns = getListProductColumns({
         onEdit: handleEdit,
