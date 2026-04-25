@@ -41,7 +41,7 @@ const ImageUpload = ({ editor }: { editor: Editor | null }) => {
                 // Lấy URL trả về từ server của bạn
                 const url = info.file.response?.url;
                 if (url) {
-                    editor.chain().focus().setImage({ src: url }).run();
+                    editor.chain().focus().setImage({ src: process.env.NEXT_PUBLIC_API_IMAGE + url }).run();
                     setIsModalOpen(false);
                     message.success('Tải ảnh lên thành công!');
                 }

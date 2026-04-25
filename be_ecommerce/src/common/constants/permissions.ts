@@ -23,4 +23,5 @@ export const PERMISSIONS_CODE = {
     UPDATE: 'ORDER_UPDATE',
     DELETE: 'ORDER_DELETE',
   },
+
 };

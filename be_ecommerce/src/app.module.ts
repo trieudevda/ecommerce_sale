@@ -26,6 +26,8 @@ import { OrderModule } from './modules/order/order.module';
 import { OrderItemModule } from './modules/order_item/order_item.module';
 import { PaymentModule } from './modules/payment/payment.module';
 import { ImagesModule } from './modules/images/images.module';
+import { ProductAttributesModule } from './modules/product_attributes/product_attributes.module';
+import { ProductAttributeValuesModule } from './modules/product_attribute_values/product_attribute_values.module';
 
 @Module({
   imports: [
@@ -51,6 +53,8 @@ import { ImagesModule } from './modules/images/images.module';
     OrderItemModule,
     PaymentModule,
     ImagesModule,
+    ProductAttributesModule,
+    ProductAttributeValuesModule,
   ],
   controllers: [AppController, AuthController],
   providers: [

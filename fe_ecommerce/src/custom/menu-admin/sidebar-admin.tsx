@@ -1,5 +1,6 @@
 import {
     DashboardOutlined, EditOutlined, KeyOutlined,
+    LaptopOutlined,
     OrderedListOutlined, PlusOutlined, ProductOutlined, SafetyOutlined,
     UploadOutlined,
     UserOutlined,
@@ -42,6 +43,18 @@ const sidebarAdmin = (userId: string) => [
                 icon: <OrderedListOutlined />,
                 label: <Link href={ADMIN_PATHS.PRODUCT.LIST()}>Danh sách</Link>,
             },
+            {
+                key: 'category',
+                icon: <LaptopOutlined />,
+                label: 'Danh mục',
+                children: [
+                    {
+                        key: 'list',
+                        icon: <OrderedListOutlined />,
+                        label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.LIST()}>Danh sách</Link>,
+                    },
+                ]
+            }
             // {
             //     key: 'edit',
             //     icon: <EditOutlined />,

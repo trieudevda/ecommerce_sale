@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@nestjs/mapped-types": "*"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "scripts": {
+    "start:all": "concurrently \"npm run start:dev --prefix be_ecommerce\" \"npm run dev --prefix fe_ecommerce"
+  }
+}
