@@ -1,7 +1,7 @@
 import {
     DashboardOutlined, EditOutlined, KeyOutlined,
     LaptopOutlined,
-    OrderedListOutlined, PlusOutlined, ProductOutlined, SafetyOutlined,
+    OrderedListOutlined, PlusOutlined, ProductOutlined, SafetyOutlined, TagsOutlined,
     UploadOutlined,
     UserOutlined,
     VideoCameraOutlined
@@ -17,41 +17,63 @@ const sidebarAdmin = (userId: string) => [
         label: 'nav 1',
     },
     {
-        key: '2',
+        key: 'user',
         icon: <UserOutlined />,
         label: 'Người dùng',
         children: [
             {
-                key: 'list',
+                key: 'user-list',
                 icon: <OrderedListOutlined />,
                 label: <Link href={ADMIN_PATHS.USER.LIST()}>Danh sách</Link>,
             },
             {
-                key: 'edit',
+                key: 'user-edit',
                 icon: <EditOutlined />,
                 label: <Link href={ADMIN_PATHS.USER.EDIT(userId)}>Sửa</Link>,
             }
         ],
     },
     {
-        key: '3',
+        key: 'product',
         icon: <ProductOutlined />,
         label: 'Sản phẩm',
         children: [
             {
-                key: 'list',
+                key: 'product-list',
                 icon: <OrderedListOutlined />,
                 label: <Link href={ADMIN_PATHS.PRODUCT.LIST()}>Danh sách</Link>,
             },
             {
-                key: 'category',
+                key: 'product-category',
                 icon: <LaptopOutlined />,
                 label: 'Danh mục',
                 children: [
                     {
-                        key: 'list',
+                        key: 'product-category-list',
                         icon: <OrderedListOutlined />,
                         label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.LIST()}>Danh sách</Link>,
+                    },
+                    {
+                        key: 'product-category-create',
+                        icon: <PlusOutlined />,
+                        label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.CREATE()}>Tạo danh mục</Link>,
+                    },
+                    {
+                        key: 'product-category-attribute',
+                        icon: <OrderedListOutlined />,
+                        label: 'Thuộc tính',
+                        children: [
+                            {
+                                key: 'product-category-attribute-list',
+                                icon: <TagsOutlined />,
+                                label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.LIST()}>Danh sách</Link>,
+                            },
+                            {
+                                key: 'product-category-attribute-create',
+                                icon: <TagsOutlined />,
+                                label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.CREATE()}>Tạo thuộc tính</Link>,
+                            },
+                        ]
                     },
                 ]
             }
@@ -63,7 +85,7 @@ const sidebarAdmin = (userId: string) => [
         ],
     },
     {
-        key: '4',
+        key: 'role',
         icon: <SafetyOutlined />,
         label: 'Vai trò',
         children: [
@@ -80,7 +102,7 @@ const sidebarAdmin = (userId: string) => [
         ],
     },
     {
-        key: '5',
+        key: 'permission',
         icon: <KeyOutlined />,
         label: 'Phân quyền',
         children: [

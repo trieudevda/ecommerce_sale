@@ -20,9 +20,7 @@ async function bootstrap() {
     logger: !isDev ? ['error', 'warn'] : ['log', 'debug', 'error', 'warn'],
   });
   const dataSource = app.get(DataSource);
-  addTransactionalDataSource(dataSource);
-  // console.log('DataSource initialized:', dataSource.isInitialized);
-  // set  locale globally
+  addTransactionalDataSource(dataSource)
   dayjs.extend(isLeapYear);
   dayjs.locale('vi');
   app.setGlobalPrefix('api');

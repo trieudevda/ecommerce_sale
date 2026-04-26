@@ -4,6 +4,8 @@ const withNextIntl = createNextIntlPlugin('./messages/i18n.ts');
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
     allowedDevOrigins: ['192.168.15.41'],
-    experimental: {},
+    experimental: {turbopack: {
+      root: '.', 
+    },},
 };
 export default withNextIntl(nextConfig);

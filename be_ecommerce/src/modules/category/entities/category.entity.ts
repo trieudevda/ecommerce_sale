@@ -12,7 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Product } from '../../product/entities/product.entity';
-import { ProductAttribute } from '../../product_attributes/entities/product_attribute.entity';
+import { CategoryAttribute } from '../../category_attribute/entities/category_attribute.entity';
 
 @Tree('materialized-path')
 @Entity('categories')
@@ -58,7 +58,7 @@ export class Category {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToMany(() => ProductAttribute)
+  @ManyToMany(() => CategoryAttribute)
   @JoinTable()
-  attributes: ProductAttribute[];
+  attributes: CategoryAttribute[];
 }

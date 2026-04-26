@@ -33,7 +33,6 @@ export class UserService {
     limit,
     sort = 'DESC',
   }: FindUserQueryDto) {
-    // const page = Number(page) || 1;
     const configLimit = Math.min(Number(limit) || DEFAULT_LIMIT, MAX_LIMIT);
     const sortOrder: 'ASC' | 'DESC' =
       sort?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';

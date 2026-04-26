@@ -1,21 +1,21 @@
 'use client'
-import {useParams, useRouter} from 'next/navigation';
-import React, {useState} from "react";
-import {Button, Card, DatePicker, Form, Input, Layout, notification, Select, Space, Spin} from "antd";
-import {ArrowLeftOutlined, SaveOutlined} from "@ant-design/icons";
-import {useTranslations} from "use-intl";
+import { useParams, useRouter } from 'next/navigation';
+import React, { useState } from "react";
+import { Button, Card, DatePicker, Form, Input, Layout, notification, Select, Space, Spin } from "antd";
+import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
+import { useTranslations } from "use-intl";
 import dynamic from "next/dynamic";
 import ImageUpload from "@/components/upload/ImageUpload";
 
 const TiptapFull = dynamic(() => import('@/components/Common/Editor/TiptapFull'), { ssr: false })
-const Page = ()=>{
+const Page = () => {
     const router = useRouter();
     const params = useParams();
     const id = params.id;
-    const [role,setRole]=useState([]);
+    const [role, setRole] = useState([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const [messageApi, contextHolder] = notification.useNotification();
-    const t = useTranslations("Product.CRUD");
+    const t = useTranslations("Product.Category");
     const [form] = Form.useForm();
     const [content, setContent] = useState('')
 
@@ -93,9 +93,6 @@ const Page = ()=>{
     return <>
         <div style={{ maxWidth: 800, margin: '0 auto' }}>
             {contextHolder}
-            <Space style={{ marginBottom: 16 }}>
-                <Button icon={<ArrowLeftOutlined />} onClick={() => router.back()}>Quay lại</Button>
-            </Space>
             <Card title={t('create')}>
                 <Spin spinning={isLoading}>
                     <Form
@@ -126,6 +123,15 @@ const Page = ()=>{
                             <TiptapFull value={content} onChange={setContent} />
                         </Form.Item>
 
+                        <Form.Item label={t('category')} name="role">
+                            <Select
+                                placeholder={t('please_select_role')}
+                                options={[
+                                    ...role.map((item: any) => {
+                                        return { value: item.id, label: item.name };
+                                    })
+                                ]} />
+                        </Form.Item>
                         {/*<Form.Item*/}
                         {/*    label={t('description')}*/}
                         {/*    name="description"*/}

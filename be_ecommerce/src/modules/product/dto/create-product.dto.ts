@@ -39,5 +39,5 @@ export class CreateProductDto {
 
   @IsOptional()
   @IsEnum(ProductStatusEnum, { message: 'Status không hợp lệ' })
-  status: ProductStatusEnum;
+  status?: ProductStatusEnum;
 }

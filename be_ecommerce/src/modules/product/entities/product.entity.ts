@@ -3,8 +3,6 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -13,7 +11,6 @@ import {
 import { ProductVariant } from '../../product_variant/entities/product_variant.entity';
 import { Category } from '../../category/entities/category.entity';
 import { ProductStatusEnum } from '../enums/product.enum';
-import { ProductAttributeValues } from '../../product_attribute_values/entities/product_attribute_value.entity';
 
 @Entity('products')
 export class Product {
@@ -41,7 +38,6 @@ export class Product {
 
   @OneToMany(() => ProductVariant, (variant) => variant.product)
   variants: ProductVariant[];
-
   @Column({
     type: 'enum',
     enum: ProductStatusEnum,
@@ -54,7 +50,5 @@ export class Product {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
-  @ManyToMany(() => ProductAttributeValues)
-  @JoinTable()
-  attributeValues: ProductAttributeValues[];
+
 }
