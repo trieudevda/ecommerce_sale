@@ -5,7 +5,9 @@
     "module": "permissions"
   },
 
-  { "code": "product.findAll", "name": "Tìm tất cả quyền", "module": "product" },
+  { "code": "product.findAll", "name": "Tìm tất cả sản phẩm", "module": "product" },
+  { "code": "category.findAll", "name": "Tìm tất cả danh mục", "module": "category" },
+  { "code": "category.create", "name": "Tạo danh mục", "module": "create" },
 
   { "code": "roles.findAll", "name": "Tìm tất cả quyền", "module": "roles" },
   {

@@ -3,6 +3,8 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -11,6 +13,7 @@ import {
 import { ProductVariant } from '../../product_variant/entities/product_variant.entity';
 import { Category } from '../../category/entities/category.entity';
 import { ProductStatusEnum } from '../enums/product.enum';
+import { ProductAttributeValues } from '../../product_attribute_values/entities/product_attribute_value.entity';
 
 @Entity('products')
 export class Product {
@@ -19,7 +22,8 @@ export class Product {
 
   @Column()
   name: string;
-
+  @Column({ unique: true })
+  slug: string;
   @Column({ type: 'text', nullable: true })
   short_description: string;
 
@@ -29,7 +33,9 @@ export class Product {
   // @OneToMany(() => ProductImage, (img) => img.product)
   // images: ProductImage[];
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @ManyToOne(() => Category, (category) => category.products, {
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
@@ -48,4 +54,7 @@ export class Product {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+  @ManyToMany(() => ProductAttributeValues)
+  @JoinTable()
+  attributeValues: ProductAttributeValues[];
 }
