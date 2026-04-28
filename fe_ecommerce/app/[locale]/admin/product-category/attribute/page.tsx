@@ -25,14 +25,15 @@ import {useTranslations} from "use-intl";
 import {ADMIN_PATHS} from "@/src/path";
 import { getListCategoryColumns } from '@/components/templates/admin/category/listColumn';
 import LoadingAdmin from "@/components/templates/admin/loading/loading-admin";
+import {getListCategoryAttributeColumns} from "@/components/templates/admin/category-attribute/listColumn";
 
 
 const App: React.FC = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const isTree = searchParams.get('isTree');
-    const t = useTranslations("Product.Category");
-    const [cate,setCate] = React.useState([])
+    // const isTree = searchParams.get('isTree');
+    const t = useTranslations("Product.Category.Attribute");
+    const [attr,setAttr] = React.useState([])
     const [messageApi, contextHolder] = notification.useNotification();
     const [isLoading, setIsLoading] = React.useState(true);
     const { user } = useSelector((state: RootState) => state.auth);
@@ -42,13 +43,13 @@ const App: React.FC = () => {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await requestApi('category/find-all', { method: 'GET' });
+                const data = await requestApi('category-attribute/find-all', { method: 'GET' });
                 if( data.statusCode === 403 ){
                     messageApi.error({title:'Danh mục',description: "Bạn không có quyền thực hiện việc này!",
                         placement: 'bottomRight',});
                     return;
                 }
-                setCate(data.data);
+                setAttr(data.data);
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu:", error);
             } finally {
@@ -58,10 +59,10 @@ const App: React.FC = () => {
         fetchData();
     },[]);
     const handleCreate = ()=>{
-        router.push(ADMIN_PATHS.PRODUCT.CATEGORY.CREATE());
+        router.push(ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.CREATE());
     }
     const handleEdit = (id: {id: string})=>{
-        router.push(ADMIN_PATHS.PRODUCT.CATEGORY.EDIT(id));
+        // router.push(ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.EDIT(id));
     }
     const handleDelete = async (id: string)=>{
         // const data = await requestApi('user/' + id, { method: 'DELETE' });
@@ -76,7 +77,7 @@ const App: React.FC = () => {
         //     setUser((prevData) => prevData.filter(user => user.id !== id));
         // }
     }
-    const columns = getListCategoryColumns({
+    const columns = getListCategoryAttributeColumns({
         onEdit: handleEdit,
         onDelete: handleDelete,
         t: t
@@ -96,13 +97,13 @@ const App: React.FC = () => {
                     }
                 </Flex>
                 <AdminBreadcrumb/>
-                {
-                    isTree
-                    ? <Table rowKey="id" columns={columns} dataSource={cate} onChange={onChange} expandable={{
+                {/*{*/}
+                {/*     isTree*/}
+                     <Table rowKey="id" columns={columns} dataSource={attr} onChange={onChange} expandable={{
                             childrenColumnName: 'children',
                         }}/>
-                    : <Table rowKey="id" columns={columns} dataSource={cate} onChange={onChange}/>
-                }
+                     {/*: <Table rowKey="id" columns={columns} dataSource={attr} onChange={onChange}/>*/}
+                 {/*}*/}
 
             </div>
         }

@@ -16,6 +16,9 @@ export class CategoryAttribute {
   name: string; // Ví dụ: "Màu sắc", "Dung lượng"
 
   @Column({ nullable: true })
+  slug: string;
+
+  @Column({ nullable: true })
   description: string;
 
   @OneToMany(() => CategoryAttributeValue, (value) => value.attribute, {

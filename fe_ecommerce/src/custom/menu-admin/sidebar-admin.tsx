@@ -66,12 +66,12 @@ const sidebarAdmin = (userId: string) => [
                             {
                                 key: 'product-category-attribute-list',
                                 icon: <TagsOutlined />,
-                                label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.LIST()}>Danh sách</Link>,
+                                label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.LIST()}>Danh sách</Link>,
                             },
                             {
                                 key: 'product-category-attribute-create',
                                 icon: <TagsOutlined />,
-                                label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.CREATE()}>Tạo thuộc tính</Link>,
+                                label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.CREATE()}>Tạo thuộc tính</Link>,
                             },
                         ]
                     },

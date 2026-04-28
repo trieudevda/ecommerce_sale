@@ -5,9 +5,27 @@
     "module": "permissions"
   },
 
-  { "code": "product.findAll", "name": "Tìm tất cả sản phẩm", "module": "product" },
-  { "code": "category.findAll", "name": "Tìm tất cả danh mục", "module": "category" },
+  {
+    "code": "product.findAll",
+    "name": "Tìm tất cả sản phẩm",
+    "module": "product"
+  },
+  {
+    "code": "category.findAll",
+    "name": "Tìm tất cả danh mục",
+    "module": "category"
+  },
   { "code": "category.create", "name": "Tạo danh mục", "module": "create" },
+  {
+    "code": "category-attribute.findAll",
+    "name": "Tìm tất cả thuộc tính",
+    "module": "category-attribute"
+  },
+  {
+    "code": "category-attribute.create",
+    "name": "Tạo thuộc tính",
+    "module": "category-attribute"
+  },
 
   { "code": "roles.findAll", "name": "Tìm tất cả quyền", "module": "roles" },
   {

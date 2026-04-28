@@ -17,6 +17,10 @@ export class CreateCategoryAttributeDto {
 
   @IsString()
   @IsOptional()
+  slug?: string;
+
+  @IsString()
+  @IsOptional()
   description?: string;
 
   @IsArray()

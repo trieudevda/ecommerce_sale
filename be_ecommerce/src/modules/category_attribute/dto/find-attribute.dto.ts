@@ -7,6 +7,10 @@ export class FindCategoryAttributeDto {
   name?: string;
 
   @IsOptional()
+  @IsString()
+  slug?: string;
+
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
