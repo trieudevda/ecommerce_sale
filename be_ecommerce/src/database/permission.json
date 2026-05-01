@@ -15,7 +15,14 @@
     "name": "Tìm tất cả danh mục",
     "module": "category"
   },
-  { "code": "category.create", "name": "Tạo danh mục", "module": "create" },
+  {
+    "code": "category.find",
+    "name": "Tìm danh mục",
+    "module": "category"
+  },
+  { "code": "category.create", "name": "Tạo danh mục", "module": "category" },
+  { "code": "category.update", "name": "Cập nhật danh mục", "module": "category" },
+  { "code": "category.remove", "name": "Xóa danh mục", "module": "category" },
   {
     "code": "category-attribute.findAll",
     "name": "Tìm tất cả thuộc tính",
@@ -26,7 +33,21 @@
     "name": "Tạo thuộc tính",
     "module": "category-attribute"
   },
-
+  {
+    "code": "category-attribute.find",
+    "name": "Tìm thuộc tính",
+    "module": "category-attribute"
+  },
+  {
+    "code": "category-attribute.update",
+    "name": "Cập nhật thuộc tính",
+    "module": "category-attribute"
+  },
+  {
+    "code": "category-attribute.remove",
+    "name": "Xóa thuộc tính",
+    "module": "category-attribute"
+  },
   { "code": "roles.findAll", "name": "Tìm tất cả quyền", "module": "roles" },
   {
     "code": "roles.findAllRole",

@@ -2,8 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   Tree,
@@ -14,7 +16,7 @@ import {
 import { Product } from '../../product/entities/product.entity';
 import { CategoryAttribute } from '../../category_attribute/entities/category_attribute.entity';
 
-@Tree('materialized-path')
+// @Tree('materialized-path')
 @Entity('categories')
 export class Category {
   @PrimaryGeneratedColumn()
@@ -34,10 +36,20 @@ export class Category {
   })
   products: Product[];
 
-  @TreeParent()
+  // @TreeParent()
+  // parent: Category;
+
+  // @TreeChildren()
+  // children: Category[];
+
+  @Column({ nullable: true })
+  parentId: number;
+
+  @ManyToOne(() => Category, (category) => category.children, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'parentId' })
   parent: Category;
 
-  @TreeChildren()
+  @OneToMany(() => Category, (category) => category.parent)
   children: Category[];
 
   @Column({ nullable: true })

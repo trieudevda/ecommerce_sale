@@ -4,6 +4,7 @@ import {
   Column,
   OneToMany,
   CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { CategoryAttributeValue } from '../../category_attribute_values/entities/category_attribute_value.entity';
 
@@ -23,9 +24,13 @@ export class CategoryAttribute {
 
   @OneToMany(() => CategoryAttributeValue, (value) => value.attribute, {
     cascade: true,
+    eager: true,
   })
   values: CategoryAttributeValue[];
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

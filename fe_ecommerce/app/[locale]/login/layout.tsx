@@ -27,7 +27,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         router.push(ADMIN_PATHS.USER.LIST());
                     }
                 } catch (error) {
-                    console.error("Lỗi khi lấy dữ liệu:", error);
+                    messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
                 } finally {
                 }
             };

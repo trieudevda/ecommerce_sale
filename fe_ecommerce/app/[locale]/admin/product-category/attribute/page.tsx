@@ -51,7 +51,7 @@ const App: React.FC = () => {
                 }
                 setAttr(data.data);
             } catch (error) {
-                console.error("Lỗi khi lấy dữ liệu:", error);
+                messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
             } finally {
                 setIsLoading(false);
             }
@@ -61,21 +61,22 @@ const App: React.FC = () => {
     const handleCreate = ()=>{
         router.push(ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.CREATE());
     }
-    const handleEdit = (id: {id: string})=>{
-        // router.push(ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.EDIT(id));
+    const handleEdit = (slug: string)=>{
+        router.push(ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.EDIT(slug));
     }
-    const handleDelete = async (id: string)=>{
-        // const data = await requestApi('user/' + id, { method: 'DELETE' });
-        // if(data?.statusCode && data.statusCode >= 400)
-        //     messageApi.error({title:'Xóa người dùng',description: Array.isArray(data.message) ? data.message[0] : data.message,
-        //     placement: 'bottomRight',});
-        // else if(data) {
-        //     messageApi.success({
-        //         title: 'Xóa người dùng', description: 'Dữ liệu người dùng đã được cập nhật trên hệ thống.',
-        //         placement: 'bottomRight',
-        //     });
-        //     setUser((prevData) => prevData.filter(user => user.id !== id));
-        // }
+    const handleDelete = async (slug: string)=>{
+        const data = await requestApi('category-attribute/'+slug , { method: 'DELETE' });
+        if(data?.statusCode && data.statusCode >= 400)
+            // messageApi.error({title:'Xóa thuộc tính',description: Array.isArray(data.message) ? data.message[0] : data.message,
+            messageApi.error({title:'Xóa thuộc tính',description: "Bạn không có quyền xóa thuộc tính",
+            placement: 'bottomRight',});
+        else if(data) {
+            messageApi.success({
+                title: 'Xóa thuộc tính', description: 'Dữ liệu người dùng đã được cập nhật trên hệ thống.',
+                placement: 'bottomRight',
+            });
+            setAttr((prevData) => prevData.filter(attr => attr.slug !== slug));
+        }
     }
     const columns = getListCategoryAttributeColumns({
         onEdit: handleEdit,

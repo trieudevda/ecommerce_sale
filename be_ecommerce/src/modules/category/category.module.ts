@@ -4,9 +4,10 @@ import { CategoryController } from './category.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { CustomLoggerService } from 'src/common/logger/logger.service';
+import { CategoryAttribute } from '../category_attribute/entities/category_attribute.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Category])],
+  imports: [TypeOrmModule.forFeature([Category,CategoryAttribute])],
   controllers: [CategoryController],
   providers: [CategoryService,CustomLoggerService],
   exports:[CategoryService]

@@ -6,6 +6,7 @@ import { SaveOutlined } from "@ant-design/icons";
 import { useTranslations } from "use-intl";
 import {requestApi} from "@/components/api/be.api";
 import LoadingAdmin from "@/components/templates/admin/loading/loading-admin";
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 const Page = () => {
     const [isLoading, setIsLoading] = React.useState(false);
@@ -66,6 +67,50 @@ const Page = () => {
                             >
                                 <Input.TextArea placeholder={t('description')}/>
                             </Form.Item>
+                            <Form.List
+                                name="values"
+                                rules={[
+                                    {
+                                        validator: async (_, names) => {
+                                            if (!names || names.length < 1) {
+                                                return Promise.reject(new Error('Phải có ít nhất 1 giá trị'));
+                                            }
+                                        },
+                                    },
+                                ]}
+                            >
+                                {(fields, { add, remove }, { errors }) => (
+                                    <>
+                                        {fields.map((field) => (
+                                            <Space key={field.key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                                <Form.Item
+                                                    {...field}
+                                                    name={[field.name, 'value']} // Map vào mảng object: { value: '...' }
+                                                    rules={[{ required: true, message: 'Nhập giá trị' }]}
+                                                >
+                                                    <Input placeholder="Ví dụ: Đỏ / XL / 128GB" />
+                                                </Form.Item>
+
+                                                {/* Nút xóa từng value */}
+                                                <MinusCircleOutlined onClick={() => remove(field.name)} />
+                                            </Space>
+                                        ))}
+
+                                        {/* Nút thêm mới một dòng value */}
+                                        <Form.Item>
+                                            <Button
+                                                type="dashed"
+                                                onClick={() => add()}
+                                                block
+                                                icon={<PlusOutlined />}
+                                            >
+                                                Thêm giá trị
+                                            </Button>
+                                            <Form.ErrorList errors={errors} />
+                                        </Form.Item>
+                                    </>
+                                )}
+                            </Form.List>
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={isLoading}>
                                     {t('save')}

@@ -1,14 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 import { CategoryAttribute } from '../../category_attribute/entities/category_attribute.entity';
 
-
-@Entity('category-attribute_values')
+@Entity('category-attribute-values')
 export class CategoryAttributeValue {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  value: string; // Ví dụ: "Đỏ", "Xanh", "128GB"
+  value: string;
 
   @ManyToOne(() => CategoryAttribute, (attribute) => attribute.values, {
     onDelete: 'CASCADE',

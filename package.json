@@ -7,6 +7,7 @@
     "concurrently": "^9.2.1"
   },
   "scripts": {
-    "start:all": "concurrently \"npm run start:dev --prefix be_ecommerce\" \"npm run dev --prefix fe_ecommerce"
+    "start:all": "concurrently \"npm run start:dev --prefix be_ecommerce\" \"npm run dev --prefix fe_ecommerce",
+    "migrate": "npm run build --prefix be_ecommerce && npm run migration:generate --prefix be_ecommerce && npm run build --prefix be_ecommerce && npm run migration:run --prefix be_ecommerce"
   }
 }

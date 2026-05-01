@@ -1,4 +1,4 @@
-import {Divider, Space, TableColumnsType, Tag, Tooltip, Typography} from "antd";
+import {Popconfirm, Space, TableColumnsType, Tag, Tooltip, Typography} from "antd";
 import React from "react";
 import {PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
 interface DataType {
@@ -6,19 +6,12 @@ interface DataType {
     name: string;
     slug: string;
     description: string;
-    children?: DataType[];
-    parent?: DataType[];
-    metaTitle: string;
-    metaDescription: string;
-    metaKeywords: Date;
-    isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
-    attributes?: DataType[];
 }
 interface ActionProps {
-    onEdit: (id: string) => void;
-    onDelete: (id: string) => void;
+    onEdit: (slug: string) => void;
+    onDelete: (slug: string) => void;
     t: any
 }
 export const getListCategoryAttributeColumns = ({ onEdit, onDelete, t }: ActionProps): TableColumnsType<DataType> => [
@@ -35,38 +28,6 @@ export const getListCategoryAttributeColumns = ({ onEdit, onDelete, t }: ActionP
         dataIndex: 'description',
     },
     {
-        title: t('parent'),
-        // dataIndex: 'parent',
-        render: (_, record) => record.parent?.name || '-',
-    },
-    {
-        title: t('metaTitle'),
-        dataIndex: 'metaTitle',
-    },
-    {
-        title: t('metaDescription'),
-        dataIndex: 'metaDescription',
-    },
-    {
-        title: t('metaKeywords'),
-        dataIndex: 'metaKeywords',
-    },
-    {
-        title: t('attributes'),
-        // dataIndex: 'attributes',
-        render: (_, record) =>
-            record.attributes?.map((a: any) => a.name).join(', ') || '-',
-    },
-    {
-        title: t('isActive'),
-        dataIndex: 'isActive',
-        render: (isActive: boolean) => (
-            <Tag color={isActive ? 'green' : 'red'}>
-                {isActive ? t('active') : t('inactive')}
-            </Tag>
-        ),
-    },
-    {
         title: t('created_at'),
         dataIndex: 'createdAt',
     },
@@ -81,18 +42,32 @@ export const getListCategoryAttributeColumns = ({ onEdit, onDelete, t }: ActionP
         render: (_, record) => (
             <Space size="middle">
                 <Tooltip title={t('edit')} placement={'bottom'}>
-                    <Typography.Link onClick={() => onEdit(record.id)}>
+                    <Typography.Link onClick={() => onEdit(record.slug)}>
                         <PencilSquareIcon className="w-5 h-5 text-blue-500"/>
                     </Typography.Link>
                 </Tooltip>
                 <Tooltip title={t('delete')} placement={'bottom'}>
-                    <Typography.Link
-                        type="danger"
-                        onClick={() => onDelete(record.id)}
+                    <Popconfirm
+                        title="Xóa thuộc tính"
+                        description="Bạn có chắc chắn muốn xóa thuộc tính này không?"
+                        onConfirm={() => onDelete(record.slug)}
+                        okText="Có"
+                        cancelText="Không"
+                        okButtonProps={{ danger: true }}
                     >
-                        <TrashIcon className="w-5 h-5 text-red-500"/>
-                    </Typography.Link>
+                        <Typography.Link type="danger">
+                            <TrashIcon className="w-5 h-5 text-red-500"/>
+                        </Typography.Link>
+                    </Popconfirm>
                 </Tooltip>
+                {/*<Tooltip title={t('delete')} placement={'bottom'}>*/}
+                {/*    <Typography.Link*/}
+                {/*        type="danger"*/}
+                {/*        onClick={() => onDelete(record.slug)}*/}
+                {/*    >*/}
+                {/*        <TrashIcon className="w-5 h-5 text-red-500"/>*/}
+                {/*    </Typography.Link>*/}
+                {/*</Tooltip>*/}
             </Space>
         ),
     },

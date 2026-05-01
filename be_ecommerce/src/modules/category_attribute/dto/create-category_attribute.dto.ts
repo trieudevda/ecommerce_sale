@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   ValidateNested,
@@ -11,6 +12,10 @@ import {
 } from '../../category_attribute_values/dto/create-category_attribute_value.dto';
 
 export class CreateCategoryAttributeDto {
+  @IsOptional()
+  @IsNumber()
+  id?: number;
+
   @IsString()
   @IsNotEmpty()
   name: string;

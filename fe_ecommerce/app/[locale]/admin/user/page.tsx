@@ -56,7 +56,7 @@ const App: React.FC = () => {
                 }
                 setUser(data.data);
             } catch (error) {
-                console.error("Lỗi khi lấy dữ liệu:", error);
+                messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
             } finally {
                 setIsLoading(false);
             }

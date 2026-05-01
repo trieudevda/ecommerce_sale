@@ -20,7 +20,9 @@
     "dashboard": "Dashboard",
     "role": "Vai trò",
     "product": "Sản phẩm",
-    "product-category": "Danh mục sản phẩm"
+    "product-category": "Danh mục sản phẩm",
+    "attribute": "Thuộc tính",
+    "attribute-value": "Giá trị thuộc tính"
   },
   "User": {
     "Table": {
@@ -160,6 +162,7 @@
       "children": "Con",
       "parent": "Cha",
       "attributes": "Thuộc tính",
+      "please_select_attribute": "Vui lòng chọn thuộc tính",
       "isActive": "Trạng thái hoạt động",
       "please_enter_name": "Vui lòng nhập tên danh mục",
       "please_enter_description": "Vui lòng nhập mô tả",
@@ -180,11 +183,20 @@
       "inactive": "Không hoạt động",
       "Attribute": {
         "create": "Tạo thuộc tính",
+        "edit_attr": "Chỉnh sửa thuộc tính",
         "name": "Tên thuộc tính",
         "description": "Mô tả",
+        "values": "Giá trị",
         "save": "Lưu",
         "please_enter_description": "Vui lòng nhập mô tả",
-        "please_enter_name": "Vui lòng nhập tên thuộc tính"
+        "please_enter_name": "Vui lòng nhập tên thuộc tính",
+        "title": "Danh sách thuộc tính",
+        "slug": "Viết tắt",
+        "actions": "Hành động",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "created_at": "Ngày tạo",
+        "updated_at": "Ngày cập nhật"
       }
     }
   },

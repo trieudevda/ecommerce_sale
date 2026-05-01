@@ -30,7 +30,7 @@ import LoadingAdmin from "@/components/templates/admin/loading/loading-admin";
 const App: React.FC = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const isTree = searchParams.get('isTree');
+    const isTree = searchParams.get('isTree') || false;
     const t = useTranslations("Product.Category");
     const [cate,setCate] = React.useState([])
     const [messageApi, contextHolder] = notification.useNotification();
@@ -42,7 +42,7 @@ const App: React.FC = () => {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await requestApi('category/find-all', { method: 'GET' });
+                const data = await requestApi('category/find-all', { method: 'GET',params:{isTree:isTree,isActive:true} });
                 if( data.statusCode === 403 ){
                     messageApi.error({title:'Danh mục',description: "Bạn không có quyền thực hiện việc này!",
                         placement: 'bottomRight',});
@@ -50,31 +50,31 @@ const App: React.FC = () => {
                 }
                 setCate(data.data);
             } catch (error) {
-                console.error("Lỗi khi lấy dữ liệu:", error);
+                messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
             } finally {
                 setIsLoading(false);
             }
         };
         fetchData();
-    },[]);
+    },[isTree]);
     const handleCreate = ()=>{
         router.push(ADMIN_PATHS.PRODUCT.CATEGORY.CREATE());
     }
-    const handleEdit = (id: {id: string})=>{
-        router.push(ADMIN_PATHS.PRODUCT.CATEGORY.EDIT(id));
+    const handleEdit = (slug: {id: string})=>{
+        router.push(ADMIN_PATHS.PRODUCT.CATEGORY.EDIT(slug));
     }
-    const handleDelete = async (id: string)=>{
-        // const data = await requestApi('user/' + id, { method: 'DELETE' });
-        // if(data?.statusCode && data.statusCode >= 400)
-        //     messageApi.error({title:'Xóa người dùng',description: Array.isArray(data.message) ? data.message[0] : data.message,
-        //     placement: 'bottomRight',});
-        // else if(data) {
-        //     messageApi.success({
-        //         title: 'Xóa người dùng', description: 'Dữ liệu người dùng đã được cập nhật trên hệ thống.',
-        //         placement: 'bottomRight',
-        //     });
-        //     setUser((prevData) => prevData.filter(user => user.id !== id));
-        // }
+    const handleDelete = async (slug: string)=>{
+        const data = await requestApi('category/'+slug, { method: 'DELETE' });
+        if(data?.statusCode && data.statusCode >= 400)
+            messageApi.error({title:'Xóa Danh mục',description: Array.isArray(data.message) ? data.message[0] : data.message,
+            placement: 'bottomRight',});
+        else if(data) {
+            messageApi.success({
+                title: 'Xóa Danh mục', description: 'Dữ liệu danh mục đã được cập nhật trên hệ thống.',
+                placement: 'bottomRight',
+            });
+            setCate((prevData) => prevData.filter(cate => cate.slug !== slug));
+        }
     }
     const columns = getListCategoryColumns({
         onEdit: handleEdit,
@@ -96,13 +96,7 @@ const App: React.FC = () => {
                     }
                 </Flex>
                 <AdminBreadcrumb/>
-                {
-                    isTree
-                    ? <Table rowKey="id" columns={columns} dataSource={cate} onChange={onChange} expandable={{
-                            childrenColumnName: 'children',
-                        }}/>
-                    : <Table rowKey="id" columns={columns} dataSource={cate} onChange={onChange}/>
-                }
+                <Table rowKey="id" columns={columns} dataSource={cate} onChange={onChange}/>
 
             </div>
         }

@@ -53,28 +53,33 @@ const sidebarAdmin = (userId: string) => [
                         icon: <OrderedListOutlined />,
                         label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.LIST()}>Danh sách</Link>,
                     },
+                    // {
+                    //     key: 'product-category-create',
+                    //     icon: <PlusOutlined />,
+                    //     label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.CREATE()}>Tạo danh mục</Link>,
+                    // },
                     {
-                        key: 'product-category-create',
-                        icon: <PlusOutlined />,
-                        label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.CREATE()}>Tạo danh mục</Link>,
+                        key: 'product-category-attribute-list',
+                        icon: <TagsOutlined />,
+                        label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.LIST()}>Thuộc tính</Link>,
                     },
-                    {
-                        key: 'product-category-attribute',
-                        icon: <OrderedListOutlined />,
-                        label: 'Thuộc tính',
-                        children: [
-                            {
-                                key: 'product-category-attribute-list',
-                                icon: <TagsOutlined />,
-                                label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.LIST()}>Danh sách</Link>,
-                            },
-                            {
-                                key: 'product-category-attribute-create',
-                                icon: <TagsOutlined />,
-                                label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.CREATE()}>Tạo thuộc tính</Link>,
-                            },
-                        ]
-                    },
+                    // {
+                    //     key: 'product-category-attribute-value-list',
+                    //     icon: <TagsOutlined />,
+                    //     label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE_VALUE.LIST()}>Giá trị Thuộc tính</Link>,
+                    // },
+                    // {
+                    //     key: 'product-category-attribute',
+                    //     icon: <OrderedListOutlined />,
+                    //     label: 'Thuộc tính',
+                    //     children: [
+                    //         {
+                    //             key: 'product-category-attribute-create',
+                    //             icon: <TagsOutlined />,
+                    //             label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.CREATE()}>Tạo thuộc tính</Link>,
+                    //         },
+                    //     ]
+                    // },
                 ]
             }
             // {

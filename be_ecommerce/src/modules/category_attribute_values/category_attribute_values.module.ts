@@ -8,5 +8,6 @@ import { CategoryAttributeValue } from './entities/category_attribute_value.enti
   imports: [TypeOrmModule.forFeature([CategoryAttributeValue])],
   controllers: [CategoryAttributeValuesController],
   providers: [CategoryAttributeValuesService],
+  exports: [CategoryAttributeValuesService],
 })
 export class CategoryAttributeValuesModule {}

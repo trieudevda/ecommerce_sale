@@ -34,19 +34,26 @@ export class CategoryAttributeController {
   findAll(@Query() query: FindCategoryAttributeDto) {
     return this.categoryAttributeService.findAll(query);
   }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.categoryAttributeService.findOne(+id);
-  // }
+  @Permissions('category-attribute.find')
+  @Get('/find')
+  findOne(@Query() query: FindCategoryAttributeDto) {
+    return this.categoryAttributeService.findOne(query);
+  }
   //
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateCategoryAttributeDto: UpdateCategoryAttributeDto) {
-  //   return this.categoryAttributeService.update(+id, updateCategoryAttributeDto);
-  // }
-  //
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.categoryAttributeService.remove(+id);
-  // }
+  @Permissions('category-attribute.update')
+  @Patch(':slug')
+  update(
+    @Param('slug') slug: string,
+    @Body() updateCategoryAttributeDto: UpdateCategoryAttributeDto,
+  ) {
+    return this.categoryAttributeService.update(
+      slug,
+      updateCategoryAttributeDto,
+    );
+  }
+  @Permissions('category-attribute.remove')
+  @Delete(':slug')
+  remove(@Param('slug') slug: string) {
+    return this.categoryAttributeService.remove(slug);
+  }
 }

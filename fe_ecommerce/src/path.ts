@@ -23,7 +23,8 @@ export const ADMIN_PATHS = {
             ATTRIBUTE: {
                 LIST: () => APP_PATH.ADMIN + APP_PATH.PRODUCT_CATEGORY + APP_PATH.PRODUCT_CATEGORY_ATTRIBUTE,
                 CREATE: () => APP_PATH.ADMIN + APP_PATH.PRODUCT_CATEGORY + APP_PATH.PRODUCT_CATEGORY_ATTRIBUTE+ '/create',
-            }
+                EDIT: (slug: string) => APP_PATH.ADMIN + APP_PATH.PRODUCT_CATEGORY + APP_PATH.PRODUCT_CATEGORY_ATTRIBUTE+ `/edit/${slug}`,
+            },
         }
         // EDIT: (id: string) => APP_PATH.ADMIN + APP_PATH.USER + `/edit/${id}`,
     },
