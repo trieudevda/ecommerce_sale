@@ -11,27 +11,14 @@ const Page = () => {
     const params = useParams();
     const id = params.id;
     const [cate, setCate] = useState([]);
+    const [cateType, setCateType] = useState([]);
     const [cateAttr, setCateAttr] = useState([]);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [isChildLoading, setIsChildLoading] = useState(false);
     const [messageApi, contextHolder] = notification.useNotification();
     const t = useTranslations("Product.Category");
     const [form] = Form.useForm();
     React.useEffect(() => {
-        const fetchCate = async () => {
-            try {
-                const res: any = await requestApi('category/find-all', { method: 'GET' });
-                if (res && !res.statusCode) {
-                    if (res !== "undefined")
-                        setCate(res.data);
-                } else {
-                    messageApi.error({ title: 'Lỗi', description: res.message || 'Chưa có vai trò' });
-                }
-            } catch (error) {
-                messageApi.error({ title: 'Lỗi kết nối', description: 'Không thể lấy dữ liệu từ server' });
-            } finally {
-                setIsLoading(false);
-            }
-        }
         const fetchCateAttr = async () => {
             try {
                 const res: any = await requestApi('category-attribute/find-all', { method: 'GET' });
@@ -47,9 +34,42 @@ const Page = () => {
                 setIsLoading(false);
             }
         }
-        fetchCate();
+        const fetchCateType = async () => {
+            try {
+                const res: any = await requestApi('category/enums/ref-types', { method: 'GET' });
+                if (res && !res.statusCode) {
+                    if (res !== "undefined")
+                        setCateType(res);
+                } else {
+                    messageApi.error({ title: 'Lỗi', description: res.message || 'Chưa có kiểu loại' });
+                }
+            } catch (error) {
+                messageApi.error({ title: 'Lỗi kết nối', description: 'Không thể lấy dữ liệu từ server' });
+            } finally {
+                setIsLoading(false);
+            }
+        }
         fetchCateAttr();
+        fetchCateType();
     }, [id, form, messageApi]);
+    const fetchCate = async (type: string) => {
+        form.setFieldValue('childId', undefined);
+        setCate([]);
+        setIsChildLoading(true);
+        try {
+            const res: any = await requestApi('category/find-all', { method: 'GET',params:{type: type} });
+            if (res && !res.statusCode) {
+                if (res !== "undefined")
+                    setCate(res.data);
+            } else {
+                messageApi.error({ title: 'Lỗi', description: res.message || 'Chưa có vai trò' });
+            }
+        } catch (error) {
+            messageApi.error({ title: 'Lỗi kết nối', description: 'Không thể lấy dữ liệu từ server' });
+        } finally {
+            setIsChildLoading(false);
+        }
+    }
     const onFinish = async (values: any) => {
         setIsLoading(true);
         try {
@@ -58,7 +78,6 @@ const Page = () => {
                 body: JSON.stringify(values),
             });
             if (res && !res.statusCode) {
-                console.log(res.status)
                 messageApi.success({
                     title: 'Thành công',
                     description: 'Thêm danh mục thành công.',
@@ -99,9 +118,22 @@ const Page = () => {
                                     <Input placeholder={t('name')} />
                                 </Form.Item>
                                 {
-                                    cate && cate.length > 0
+                                    cateType && cateType.length && <Form.Item label={t('category_type')} name="type">
+                                            <Select
+                                                placeholder={t('please_select_category_type')}
+                                                onChange={fetchCate}
+                                                options={[
+                                                    ...(cateType?.map((item: any) => {
+                                                        return { value: item.value, label: item.label };
+                                                    })) || []
+                                                ]} />
+                                        </Form.Item>
+                                }
+                                {
+                                    cate.length > 0
                                         ? <Form.Item label={t('category')} name="parentId">
                                             <Select
+                                            loading = {isChildLoading}
                                                 placeholder={t('please_select_category')}
                                                 options={[
                                                     ...(cate?.map((item: any) => {
@@ -129,7 +161,7 @@ const Page = () => {
                                 <Form.Item
                                     label={t('description')}
                                     name="description"
-                                    // rules={[{ required: true, message: t('please_enter_description') }]}
+                                // rules={[{ required: true, message: t('please_enter_description') }]}
                                 >
                                     <Input.TextArea placeholder={t('description')} />
                                 </Form.Item>
@@ -137,7 +169,7 @@ const Page = () => {
                                 <Form.Item
                                     label={t('metaTitle')}
                                     name="metaTitle"
-                                    // rules={[{ required: true, message: t('please_enter_meta_title') }]}
+                                // rules={[{ required: true, message: t('please_enter_meta_title') }]}
                                 >
                                     <Input placeholder={t('metaTitle')} />
                                 </Form.Item>
@@ -145,7 +177,7 @@ const Page = () => {
                                 <Form.Item
                                     label={t('metaDescription')}
                                     name="metaDescription"
-                                    // rules={[{ required: true, message: t('please_enter_meta_description') }]}
+                                // rules={[{ required: true, message: t('please_enter_meta_description') }]}
                                 >
                                     <Input placeholder={t('metaDescription')} />
                                 </Form.Item>
@@ -153,7 +185,7 @@ const Page = () => {
                                 <Form.Item
                                     label={t('metaKeywords')}
                                     name="metaKeywords"
-                                    // rules={[{ required: true, message: t('please_enter_meta_keywords') }]}
+                                // rules={[{ required: true, message: t('please_enter_meta_keywords') }]}
                                 >
                                     <Input placeholder={t('metaKeywords')} />
                                 </Form.Item>

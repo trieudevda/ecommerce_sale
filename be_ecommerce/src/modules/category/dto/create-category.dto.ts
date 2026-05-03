@@ -4,7 +4,9 @@ import {
   IsString,
   IsNumber,
   IsArray,
+  IsEnum,
 } from 'class-validator';
+import { CategoryRefTypeEnum } from '../enum/category.enum';
 
 export class CreateCategoryDto {
   @IsString()
@@ -13,6 +15,10 @@ export class CreateCategoryDto {
   @IsOptional()
   @IsString()
   slug?: string;
+
+  @IsOptional()
+  @IsEnum(CategoryRefTypeEnum, { message: 'type không hợp lệ' })
+  type?: CategoryRefTypeEnum;
 
   @IsOptional()
   @IsString()

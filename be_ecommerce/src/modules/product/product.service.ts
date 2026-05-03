@@ -8,15 +8,39 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from '../roles/entities/role.entity';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
+import { Transactional } from 'typeorm-transactional';
+import { createUniqueSlug } from 'src/common/helpers/slug.helper';
+import { ImageService } from '../images/images.service';
+import { ImageRefTypeEnum } from '../images/enum/images.enum';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepo: Repository<Product>,
-  ) {}
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+    private readonly imageService: ImageService
+  ) { }
+  @Transactional()
+  async create(files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] }, createProductDto: CreateProductDto) {
+    const { refType, ...data } = createProductDto;
+    data.slug = await createUniqueSlug(
+      data.name!,
+      async (s) => {
+        const exist = await this.productRepo.findOne({ where: { slug: s } });
+        return !!exist;
+      },
+    );
+    console.log(data)
+    data.variants = data.variants?.map(v => ({
+      ...v,
+      attributeValues: v.attributeValueIds?.map(id => ({ id })) // Map ID sang Object
+    }))
+    // const product = await this.productRepo.create(data);
+    // const savedProduct = await this.productRepo.save(product);
+    // savedProduct.gallery = await this.imageService.createMany(files,savedProduct.id,refType as ImageRefTypeEnum);
+
+// console.log(data)
+    return data;
   }
 
   async findAll({

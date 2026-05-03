@@ -15,6 +15,7 @@ import {
 } from 'typeorm';
 import { Product } from '../../product/entities/product.entity';
 import { CategoryAttribute } from '../../category_attribute/entities/category_attribute.entity';
+import { CategoryRefTypeEnum } from '../enum/category.enum';
 
 // @Tree('materialized-path')
 @Entity('categories')
@@ -28,6 +29,13 @@ export class Category {
   @Column({ unique: true })
   slug: string;
 
+@Column({
+    type: 'enum',
+    enum: CategoryRefTypeEnum,
+    default: CategoryRefTypeEnum.NONE,
+  })
+  type: CategoryRefTypeEnum;
+
   @Column({ nullable: true })
   description: string;
 
@@ -35,12 +43,6 @@ export class Category {
     cascade: false,
   })
   products: Product[];
-
-  // @TreeParent()
-  // parent: Category;
-
-  // @TreeChildren()
-  // children: Category[];
 
   @Column({ nullable: true })
   parentId: number;

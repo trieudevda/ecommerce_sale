@@ -12,7 +12,6 @@ const TiptapFull = ({ value, onChange }: { value: string, onChange: (val: string
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
-                // Tùy chỉnh danh sách để hiển thị marks
                 bulletList: { keepMarks: true, keepAttributes: false },
                 orderedList: { keepMarks: true, keepAttributes: false },
             }),
@@ -40,22 +39,14 @@ const TiptapFull = ({ value, onChange }: { value: string, onChange: (val: string
     })
 
     return (
-        // 🌟 THIẾT KẾ: Khung bo góc, shadow chuẩn Antd, hiệu ứng focus màu xanh
         <div className="w-full bg-white border border-gray-300 rounded-lg overflow-hidden transition-all duration-300 hover:border-gray-400 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 shadow-sm hover:shadow-md">
-
-            {/* Thanh công cụ đã được redesign */}
             <Toolbar editor={editor} />
-
-            {/* 🌟 THIẾT KẾ: Vùng soạn thảo với Typography & CSS tùy chỉnh */}
             <div className="p-5 min-h-[400px]">
                 <EditorContent
                     editor={editor}
-                    // Thêm class 'prose' của Tailwind Typography để định dạng nội dung
                     className="prose prose-blue max-w-none focus:outline-none min-h-[400px]"
                 />
             </div>
-
-            {/* CSS Tùy chỉnh nâng cao */}
             <style jsx global>{`
                 /* 1. Xử lý Placeholder */
                 .tiptap p.is-editor-empty:first-child::before {

@@ -12,7 +12,7 @@ export class ImageService {
   constructor(
     @InjectRepository(Image)
     private repo: Repository<Image>,
-  ) {}
+  ) { }
 
   create(data: Partial<Image>) {
     return this.repo.save(data);
@@ -30,18 +30,46 @@ export class ImageService {
 
     if (!image) throw new Error('Image not found');
 
-    // reset ảnh cũ
     await this.repo.update(
       { refId: image.refId, refType: image.refType },
       { isPrimary: false },
     );
-
-    // set ảnh mới
     image.isPrimary = true;
     return this.repo.save(image);
   }
-  async createMany(data: Partial<Image>[]) {
-    return this.repo.save(data);
+  async createMany(
+    files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] },
+    refId: number,
+    refType: ImageRefTypeEnum) {
+    const imageData: Image[] = [];
+    if (files.avatar && files.avatar.length > 0) {
+      const avatarFile = files.avatar[0];
+      const relativePath = avatarFile.path.replace(/\\/g, '/');
+
+      imageData.push(this.repo.create({
+        url: `/${relativePath.split('uploads/')[1]}`,
+        refId: refId,
+        refType: refType,
+        sortOrder: 0,
+        isPrimary: true,
+      }));
+    }
+    if (files.gallery && files.gallery.length > 0) {
+      files.gallery.forEach((file, index) => {
+        const relativePath = file.path.replace(/\\/g, '/');
+
+        imageData.push(this.repo.create({
+          url: `/${relativePath.split('uploads/')[1]}`,
+          refId: refId,
+          refType: refType,
+          sortOrder: index + 1,
+        }));
+      });
+    }
+    if (imageData.length > 0) {
+      return await this.repo.save(imageData);
+    }
+    return [];
   }
 
   async delete(id: number) {

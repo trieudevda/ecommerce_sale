@@ -20,11 +20,12 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { FindCategoryQueryDto } from './dto/find-category-query.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CategoryRefTypeEnum } from './enum/category.enum';
 
 @Controller('category')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) { }
 
   @Permissions('category.findAll')
   @Get('/find-all')
@@ -53,5 +54,15 @@ export class CategoryController {
   @Delete(':slug')
   remove(@Param('slug') slug: string) {
     return this.categoryService.remove(slug);
+  }
+  @Permissions('category.create')
+  @Permissions('category.update')
+  @Get('enums/ref-types')
+  getRefTypes() {
+    // return Object.values(CategoryRefTypeEnum);
+    return Object.entries(CategoryRefTypeEnum).map(([key, value]) => ({
+    label: key,   // Ví dụ: "ACTIVE"
+    value: value, // Ví dụ: "active"
+  }));
   }
 }

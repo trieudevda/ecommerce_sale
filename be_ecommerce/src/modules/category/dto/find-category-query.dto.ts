@@ -10,6 +10,7 @@ import {
   IsBoolean,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
+import { CategoryRefTypeEnum } from '../enum/category.enum';
 
 export class FindCategoryQueryDto {
   @IsOptional()
@@ -19,6 +20,10 @@ export class FindCategoryQueryDto {
   @IsOptional()
   @IsString()
   name?: string;
+  
+  @IsOptional()
+  @IsEnum(CategoryRefTypeEnum, { message: 'type không hợp lệ' })
+  type?: CategoryRefTypeEnum;
 
   @IsOptional()
   @IsString()

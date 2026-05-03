@@ -11,6 +11,16 @@
     "module": "product"
   },
   {
+    "code": "product.find",
+    "name": "Tìm sản phẩm",
+    "module": "product"
+  },
+  {
+    "code": "product.create",
+    "name": "Tạo sản phẩm",
+    "module": "product"
+  },
+  {
     "code": "category.findAll",
     "name": "Tìm tất cả danh mục",
     "module": "category"

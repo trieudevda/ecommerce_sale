@@ -24,7 +24,7 @@ export class Image {
   sortOrder: number;
 
   @Column()
-  refId: number; // id của product / user
+  refId: number;
 
   @Column({
     type: 'enum',

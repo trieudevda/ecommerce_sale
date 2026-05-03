@@ -18,7 +18,7 @@ export class ProductVariant {
   id: number;
 
   @Column()
-  sku: string;
+  sku: string; 
 
   @Column({ default: 0 })
   stock: number;

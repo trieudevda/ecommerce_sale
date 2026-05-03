@@ -8,8 +8,10 @@ import {
   Delete,
   ParseIntPipe,
   Param,
+  Patch,
+  BadRequestException,
 } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ImageService } from './images.service';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
@@ -86,59 +88,61 @@ export class ImagesController {
   }
   @Post('upload-multiple')
   @UseInterceptors(
-    FilesInterceptor('files', 10, {
-      storage: diskStorage({
-        destination: (req, file, cb) => {
-          const refType = req.body.refType || 'other';
-
-          const now = new Date();
-          const year = now.getFullYear();
-          const month = String(now.getMonth() + 1).padStart(2, '0');
-          const day = String(now.getDate()).padStart(2, '0');
-
-          const uploadPath = join(
-            process.cwd(),
-            'uploads',
-            refType,
-            String(year),
-            month,
-            day,
-          );
-
-          // 🔥 tạo folder nếu chưa có
-          fs.mkdirSync(uploadPath, { recursive: true });
-
-          cb(null, uploadPath);
+      FileFieldsInterceptor(
+        [
+          { name: 'avatar', maxCount: 1 },
+          { name: 'gallery', maxCount: 10 },
+        ],
+        {
+          storage: diskStorage({
+            destination: (req, file, cb) => {
+              const refType = req.body.refType || 'other';
+  
+              const now = new Date();
+              const year = now.getFullYear();
+              const month = String(now.getMonth() + 1).padStart(2, '0');
+              const day = String(now.getDate()).padStart(2, '0');
+  
+              const uploadPath = join(
+                process.cwd(),
+                'uploads',
+                refType,
+                String(year),
+                month,
+                day,
+              );
+  
+              if (!fs.existsSync(uploadPath)) {
+                fs.mkdirSync(uploadPath, { recursive: true });
+              }
+  
+              cb(null, uploadPath);
+            },
+            filename: (req, file, cb) => {
+              const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+              cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
+            },
+          }),
         },
-
-        filename: (req, file, cb) => {
-          const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
-
-          cb(null, uniqueName + extname(file.originalname));
-        },
-      }),
-    }),
-  )
+      ),
+    )
   async uploadMultiple(
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles() files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] },
     @Body() body,
   ) {
-    const { refId, refType } = body;
-
-    const images = files.map((file, index) => {
-      // 🔥 convert path → url
-      const relativePath = file.path.replace(/\\/g, '/'); // fix win path
-
-      return {
-        url: `/${relativePath.split('uploads/')[1]}`,
-        refId: Number(refId),
-        refType,
-        sortOrder: index,
-      };
-    });
-
-    return this.imageService.createMany(images);
+    // if (!files || files.length === 0) {
+    //   throw new BadRequestException('Không có file nào được tải lên');
+    // }
+    if (!body.refId) {
+      throw new BadRequestException('Thiếu refId để liên kết hình ảnh');
+    }
+    return this.imageService.createMany(
+      files, 
+      Number(body.refId), 
+      body.refType || 'other'
+    );
   }
+
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.imageService.delete(id);

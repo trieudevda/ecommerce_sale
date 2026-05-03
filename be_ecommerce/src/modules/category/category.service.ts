@@ -23,8 +23,9 @@ export class CategoryService {
   async findAll({
     name,
     slug,
+    type,
     isTree = false,
-    isActive = false,
+    isActive = true,
     page = 1,
     limit,
     sort = 'DESC',
@@ -33,7 +34,10 @@ export class CategoryService {
     const sortOrder: 'ASC' | 'DESC' =
       sort?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
     const qb = this.cateRepo.createQueryBuilder('categories');
-    qb.where('categories.isActive = :isActive', { isActive })
+    if (type) {
+      qb.andWhere('categories.type = :type', { type });
+    }
+    qb.andWhere('categories.isActive = :isActive', { isActive })
     qb.leftJoinAndSelect('categories.parent', 'parent');
     qb.leftJoin('categories.attributes', 'attributes');
     qb.addSelect(['attributes.id', 'attributes.name']);
@@ -58,9 +62,9 @@ export class CategoryService {
       },
     };
   }
-  async find({ id, name, slug, isActive = false }: FindCategoryQueryDto) {
+  async find({ id, name, slug, isActive = true }: FindCategoryQueryDto) {
     const cate = await this.cateRepo.findOne({
-      where: [{ slug: slug }, { isActive: isActive }],
+      where: { slug: slug, isActive: isActive },
       relations: ['attributes', 'parent']
     });
     if (!cate) {
@@ -78,9 +82,9 @@ export class CategoryService {
     let parent = parentId
       ? await this.cateRepo.findOneBy({ id: parentId })
       : undefined;
-    if (!parent) {
-      throw new BadRequestException(`Không tìm thấy danh mục cha có ID ${parentId}`);
-    }
+    // if (!parent) {
+    //   throw new BadRequestException(`Không tìm thấy danh mục cha có ID ${parentId}`);
+    // }
     let attributes = attributeIds && attributeIds.length > 0
       ? await this.cateAttrRepo.find({ where: { id: In(attributeIds as number[]) } })
       : undefined;
@@ -100,16 +104,16 @@ export class CategoryService {
       throw new NotFoundException('Danh mục không tồn tại');
     }
     const { parentId, attributeIds, ...updateData } = updateCateDto;
-    const updatedate = await this.cateRepo.merge(category, updateData);
+    const updatecate = await this.cateRepo.merge(category, updateData);
     if (attributeIds && attributeIds.length > 0) {
       const cateAttr = await this.cateAttrRepo.find({ where: { id: In(attributeIds as number[]) } });
-      updatedate.attributes = cateAttr;
+      updatecate.attributes = cateAttr;
     }
     if (parentId) {
-      const cateParent = await this.cateAttrRepo.findOne({ where: { id: parentId } });
-      updatedate.parent = cateParent as any;
+      const cateParent = await this.cateRepo.findOne({ where: { id: parentId } });
+      updatecate.parent = cateParent as any;
     }
-    const result = await this.cateRepo.save(updatedate);
+    const result = await this.cateRepo.save(updatecate);
     return result;
   }
   @Transactional()
