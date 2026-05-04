@@ -1,45 +1,42 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { FindUserQueryDto } from '../user/dto/find-user-query.dto';
 import { FindProductQueryDto } from './dto/find-product-query.dto';
 import { DEFAULT_LIMIT, MAX_LIMIT } from '../../config/constant-find';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from '../roles/entities/role.entity';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { Transactional } from 'typeorm-transactional';
-import { createUniqueSlug } from 'src/common/helpers/slug.helper';
 import { ImageService } from '../images/images.service';
-import { ImageRefTypeEnum } from '../images/enum/images.enum';
+import { createUniqueSlug } from '../../common/helpers/slug.helper';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepo: Repository<Product>,
-    private readonly imageService: ImageService
-  ) { }
+    private readonly imageService: ImageService,
+  ) {}
   @Transactional()
-  async create(files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] }, createProductDto: CreateProductDto) {
+  async create(
+    files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] },
+    createProductDto: CreateProductDto,
+  ) {
     const { refType, ...data } = createProductDto;
-    data.slug = await createUniqueSlug(
-      data.name!,
-      async (s) => {
-        const exist = await this.productRepo.findOne({ where: { slug: s } });
-        return !!exist;
-      },
-    );
-    console.log(data)
-    data.variants = data.variants?.map(v => ({
+    data.slug = await createUniqueSlug(data.name!, async (s) => {
+      const exist = await this.productRepo.findOne({ where: { slug: s } });
+      return !!exist;
+    });
+    console.log(data);
+    data.variants = data.variants?.map((v) => ({
       ...v,
-      attributeValues: v.attributeValueIds?.map(id => ({ id })) // Map ID sang Object
-    }))
+      attributeValues: v.attributeValueIds?.map((id) => ({ id })), // Map ID sang Object
+    }));
     // const product = await this.productRepo.create(data);
     // const savedProduct = await this.productRepo.save(product);
     // savedProduct.gallery = await this.imageService.createMany(files,savedProduct.id,refType as ImageRefTypeEnum);
 
-// console.log(data)
+    // console.log(data)
     return data;
   }
 

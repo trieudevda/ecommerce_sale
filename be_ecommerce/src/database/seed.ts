@@ -36,7 +36,12 @@ export class DatabaseSeedService implements OnApplicationBootstrap {
         });
       }
     } catch (error) {
-      console.error('❌ Seed lỗi:', error.message);
+      if (error instanceof Error) {
+        console.error('❌ Seed lỗi:', error.message);
+      } else {
+        console.error('❌ Seed lỗi không xác định:', error);
+      }
+      // console.error('❌ Seed lỗi:', error.message);
     }
   }
 }

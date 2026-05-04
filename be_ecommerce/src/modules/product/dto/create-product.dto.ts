@@ -9,7 +9,7 @@ import {
 import { Transform, Type } from 'class-transformer';
 import { CategoryRelationDto } from '../../category/dto/category-relation';
 import { ProductVariantRelationDto } from '../../product_variant/dto/product-variant-relation';
-import { ImageRelationDto } from 'src/modules/images/dto/image-relation';
+import { ImageRelationDto } from '../../images/dto/image-relation';
 
 export class CreateProductDto {
   @IsOptional()
@@ -23,7 +23,7 @@ export class CreateProductDto {
   @IsOptional()
   @IsString()
   slug?: string;
-  
+
   @IsOptional()
   @IsString()
   short_description?: string;
@@ -34,14 +34,14 @@ export class CreateProductDto {
 
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => ImageRelationDto) 
+  @Type(() => ImageRelationDto)
   avatar?: ImageRelationDto[];
 
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => ImageRelationDto) 
+  @Type(() => ImageRelationDto)
   gallery?: ImageRelationDto[];
-  
+
   @IsOptional()
   @IsString()
   refType?: string;
@@ -56,7 +56,11 @@ export class CreateProductDto {
   @Type(() => ProductVariantRelationDto)
   @Transform(({ value }) => {
     if (typeof value === 'string') {
-      try { return JSON.parse(value); } catch { return value; }
+      try {
+        return JSON.parse(value);
+      } catch {
+        return value;
+      }
     }
     return value;
   })

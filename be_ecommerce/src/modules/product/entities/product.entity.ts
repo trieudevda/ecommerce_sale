@@ -11,7 +11,7 @@ import {
 import { ProductVariant } from '../../product_variant/entities/product_variant.entity';
 import { Category } from '../../category/entities/category.entity';
 import { ProductStatusEnum } from '../enums/product.enum';
-import { Image } from 'src/modules/images/entities/image.entity';
+import { Image } from '../../images/entities/image.entity';
 
 @Entity('products')
 export class Product {
@@ -28,7 +28,7 @@ export class Product {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @OneToMany(() => Image, (image) => image.refId)
+  @OneToMany(() => Image, (image: Image) => image.refId)
   @JoinColumn({ name: 'id', referencedColumnName: 'refId' })
   gallery: Image[];
 

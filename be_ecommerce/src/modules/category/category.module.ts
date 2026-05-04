@@ -3,13 +3,13 @@ import { CategoryService } from './category.service';
 import { CategoryController } from './category.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
-import { CustomLoggerService } from 'src/common/logger/logger.service';
 import { CategoryAttribute } from '../category_attribute/entities/category_attribute.entity';
+import { CustomLoggerService } from '../../common/logger/logger.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Category,CategoryAttribute])],
+  imports: [TypeOrmModule.forFeature([Category, CategoryAttribute])],
   controllers: [CategoryController],
-  providers: [CategoryService,CustomLoggerService],
-  exports:[CategoryService]
+  providers: [CategoryService, CustomLoggerService],
+  exports: [CategoryService],
 })
 export class CategoryModule {}

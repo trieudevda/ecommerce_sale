@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Category } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, In, Repository } from 'typeorm';
@@ -6,10 +6,10 @@ import { CustomLoggerService } from '../../common/logger/logger.service';
 import { Transactional } from 'typeorm-transactional';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { FindCategoryQueryDto } from './dto/find-category-query.dto';
-import { createUniqueSlug } from 'src/common/helpers/slug.helper';
-import { DEFAULT_LIMIT, MAX_LIMIT } from 'src/config/constant-find';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryAttribute } from '../category_attribute/entities/category_attribute.entity';
+import { DEFAULT_LIMIT, MAX_LIMIT } from '../../config/constant-find';
+import { createUniqueSlug } from '../../common/helpers/slug.helper';
 
 @Injectable()
 export class CategoryService {
@@ -19,7 +19,7 @@ export class CategoryService {
     @InjectRepository(CategoryAttribute)
     private readonly cateAttrRepo: Repository<CategoryAttribute>,
     private readonly logger: CustomLoggerService,
-  ) { }
+  ) {}
   async findAll({
     name,
     slug,
@@ -37,7 +37,7 @@ export class CategoryService {
     if (type) {
       qb.andWhere('categories.type = :type', { type });
     }
-    qb.andWhere('categories.isActive = :isActive', { isActive })
+    qb.andWhere('categories.isActive = :isActive', { isActive });
     qb.leftJoinAndSelect('categories.parent', 'parent');
     qb.leftJoin('categories.attributes', 'attributes');
     qb.addSelect(['attributes.id', 'attributes.name']);
@@ -65,7 +65,7 @@ export class CategoryService {
   async find({ id, name, slug, isActive = true }: FindCategoryQueryDto) {
     const cate = await this.cateRepo.findOne({
       where: { slug: slug, isActive: isActive },
-      relations: ['attributes', 'parent']
+      relations: ['attributes', 'parent'],
     });
     if (!cate) {
       throw new NotFoundException('Danh mục không tồn tại');
@@ -85,9 +85,12 @@ export class CategoryService {
     // if (!parent) {
     //   throw new BadRequestException(`Không tìm thấy danh mục cha có ID ${parentId}`);
     // }
-    let attributes = attributeIds && attributeIds.length > 0
-      ? await this.cateAttrRepo.find({ where: { id: In(attributeIds as number[]) } })
-      : undefined;
+    let attributes =
+      attributeIds && attributeIds.length > 0
+        ? await this.cateAttrRepo.find({
+            where: { id: In(attributeIds as number[]) },
+          })
+        : undefined;
     parent = parent || undefined;
     const data: DeepPartial<Category> = { ...rest, slug, parent, attributes };
     const cate = this.cateRepo.create(data);
@@ -106,11 +109,15 @@ export class CategoryService {
     const { parentId, attributeIds, ...updateData } = updateCateDto;
     const updatecate = await this.cateRepo.merge(category, updateData);
     if (attributeIds && attributeIds.length > 0) {
-      const cateAttr = await this.cateAttrRepo.find({ where: { id: In(attributeIds as number[]) } });
+      const cateAttr = await this.cateAttrRepo.find({
+        where: { id: In(attributeIds as number[]) },
+      });
       updatecate.attributes = cateAttr;
     }
     if (parentId) {
-      const cateParent = await this.cateRepo.findOne({ where: { id: parentId } });
+      const cateParent = await this.cateRepo.findOne({
+        where: { id: parentId },
+      });
       updatecate.parent = cateParent as any;
     }
     const result = await this.cateRepo.save(updatecate);
