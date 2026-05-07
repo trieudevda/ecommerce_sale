@@ -1,12 +1,11 @@
 'use client'
-import { useParams, useRouter } from 'next/navigation';
-import React, { useState } from "react";
-import { Button, Card, DatePicker, Form, Input, Layout, notification, Select, Space, Spin, Upload } from "antd";
-import { ArrowLeftOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
-import { useTranslations } from "use-intl";
+import {useParams, useRouter} from 'next/navigation';
+import React, {useState} from "react";
+import {Button, Card, Form, Input, notification, Select, Space, Spin, Upload} from "antd";
+import {PlusOutlined, SaveOutlined} from "@ant-design/icons";
+import {useTranslations} from "use-intl";
 import dynamic from "next/dynamic";
-import ImageUpload from "@/components/upload/ImageUpload";
-import { requestApi } from "@/components/api/be.api"
+import {requestApi} from "@/components/api/be.api"
 
 const TiptapFull = dynamic(() => import('@/components/Common/Editor/TiptapFull'), { ssr: false })
 const Page = () => {
@@ -65,8 +64,11 @@ const Page = () => {
             formData.append('name', values.name);
             formData.append('short_description', values.short_description);
             formData.append('description', content);
-            formData.append('cate', String(values.cate));
+            formData.append('category', JSON.stringify({id:Number(values.category)}));
             formData.append('refType', 'PRODUCT')
+            console.log(values)
+            console.log('formData')
+            console.log(formData)
             if (avatarFile) {
                 formData.append('avatar', avatarFile);
             }
@@ -75,7 +77,6 @@ const Page = () => {
             });
             if (values.variants && values.variants.length > 0) {
                 formData.append('variants', JSON.stringify(values.variants));
-                console.log(values)
             }
 
             // console.log(formData);
@@ -84,7 +85,7 @@ const Page = () => {
                 body: formData,
             });
 
-            console.log(res);
+            // console.log(res);
             // const transformedData = {
             //     ...values,
             //     cate: { id: values.cate },
@@ -188,7 +189,7 @@ const Page = () => {
                             <TiptapFull value={content} onChange={setContent} />
                         </Form.Item>
 
-                        <Form.Item label={t('category')} name="cate">
+                        <Form.Item label={t('category')} name="category">
                             <Select
                                 placeholder={t('please_select_cate')}
                                 options={[

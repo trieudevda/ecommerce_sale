@@ -1,15 +1,12 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import {NestFactory} from '@nestjs/core';
+import {AppModule} from './app.module';
 import * as dayjs from 'dayjs';
 import isLeapYear from 'dayjs/plugin/isLeapYear';
 import 'dayjs/locale/vi';
-import { ValidationPipe } from '@nestjs/common';
+import {ValidationPipe} from '@nestjs/common';
 import 'reflect-metadata';
-import {
-  addTransactionalDataSource,
-  initializeTransactionalContext,
-} from 'typeorm-transactional';
-import { DataSource } from 'typeorm';
+import {addTransactionalDataSource, initializeTransactionalContext,} from 'typeorm-transactional';
+import {DataSource} from 'typeorm';
 import cookieParser from 'cookie-parser';
 import * as express from 'express';
 
@@ -20,7 +17,7 @@ async function bootstrap() {
     logger: !isDev ? ['error', 'warn'] : ['log', 'debug', 'error', 'warn'],
   });
   const dataSource = app.get(DataSource);
-  addTransactionalDataSource(dataSource)
+  addTransactionalDataSource(dataSource);
   dayjs.extend(isLeapYear);
   dayjs.locale('vi');
   app.setGlobalPrefix('api');
@@ -28,6 +25,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: isDev,
+      transformOptions: { enableImplicitConversion: isDev },
       whitelist: isDev,
       disableErrorMessages: !isDev,
       enableDebugMessages: isDev,

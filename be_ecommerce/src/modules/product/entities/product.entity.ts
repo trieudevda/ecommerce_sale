@@ -39,8 +39,9 @@ export class Product {
   category: Category;
 
   @OneToMany(() => ProductVariant, (variant) => variant.product)
+  @JoinColumn({ name: 'product_id' })
   variants: ProductVariant[];
-  
+
   @Column({
     type: 'enum',
     enum: ProductStatusEnum,
@@ -53,5 +54,4 @@ export class Product {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
-
 }

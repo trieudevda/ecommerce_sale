@@ -1,15 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
-  UseInterceptors,
   UploadedFiles,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -18,8 +18,7 @@ import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Permissions } from '../../common/decorators/permissions.decorator';
 import { FindProductQueryDto } from './dto/find-product-query.dto';
-import { FindUserQueryDto } from '../user/dto/find-user-query.dto';
-import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import * as fs from 'fs';
@@ -27,7 +26,7 @@ import * as fs from 'fs';
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService) {}
 
   @Permissions('product.create')
   @Post()
@@ -63,14 +62,19 @@ export class ProductController {
             cb(null, uploadPath);
           },
           filename: (req, file, cb) => {
-            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+            const uniqueSuffix =
+              Date.now() + '-' + Math.round(Math.random() * 1e9);
             cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
           },
         }),
       },
     ),
   )
-  create(@UploadedFiles() files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] }, @Body() createProductDto: CreateProductDto) {
+  create(
+    @UploadedFiles()
+    files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] },
+    @Body() createProductDto: CreateProductDto,
+  ) {
     return this.productService.create(files, createProductDto);
   }
 

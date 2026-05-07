@@ -1,15 +1,9 @@
-import { ProductStatusEnum } from '../enums/product.enum';
-import {
-  IsEnum,
-  IsInt,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
-import { Transform, Type } from 'class-transformer';
-import { CategoryRelationDto } from '../../category/dto/category-relation';
-import { ProductVariantRelationDto } from '../../product_variant/dto/product-variant-relation';
-import { ImageRelationDto } from '../../images/dto/image-relation';
+import {ProductStatusEnum} from '../enums/product.enum';
+import {IsEnum, IsInt, IsOptional, IsString, ValidateNested,} from 'class-validator';
+import {plainToInstance, Transform, Type} from 'class-transformer';
+import {CategoryRelationDto} from '../../category/dto/category-relation';
+import {ProductVariantRelationDto} from '../../product_variant/dto/product-variant-relation';
+import {ImageRelationDto} from '../../images/dto/image-relation';
 
 export class CreateProductDto {
   @IsOptional()
@@ -47,22 +41,26 @@ export class CreateProductDto {
   refType?: string;
 
   @IsOptional()
-  @ValidateNested()
-  @Type(() => CategoryRelationDto)
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      const parsed = JSON.parse(value);
+      return plainToInstance(CategoryRelationDto, parsed);
+    }
+    return plainToInstance(CategoryRelationDto, value);
+  })
   category?: CategoryRelationDto;
 
   @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => ProductVariantRelationDto)
   @Transform(({ value }) => {
-    if (typeof value === 'string') {
-      try {
-        return JSON.parse(value);
-      } catch {
-        return value;
-      }
-    }
-    return value;
+    // if (typeof value === 'string') {
+    //   return plainToInstance(ProductVariantRelationDto, JSON.parse(value));
+    // }
+    // return plainToInstance(CategoryRelationDto, value);
+    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
+
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed.map((v) => plainToInstance(ProductVariantRelationDto, v));
   })
   variants?: ProductVariantRelationDto[];
 

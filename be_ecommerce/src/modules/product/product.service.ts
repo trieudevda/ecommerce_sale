@@ -9,12 +9,15 @@ import { Product } from './entities/product.entity';
 import { Transactional } from 'typeorm-transactional';
 import { ImageService } from '../images/images.service';
 import { createUniqueSlug } from '../../common/helpers/slug.helper';
+import { ProductVariant } from '../product_variant/entities/product_variant.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepo: Repository<Product>,
+    @InjectRepository(ProductVariant)
+    private readonly productVariantRepo: Repository<ProductVariant>,
     private readonly imageService: ImageService,
   ) {}
   @Transactional()
@@ -28,12 +31,22 @@ export class ProductService {
       return !!exist;
     });
     console.log(data);
+    // const idVariant = data.variants?.map((v) =>
+    //   v.attributeValueIds?.map((id) => ({ id })),
+    // );
+    // console.log(idVariant);
+    // const attrVariant = this.productVariantRepo.findAndCount({
+    //   where: In(idVariant),
+    // });
     data.variants = data.variants?.map((v) => ({
-      ...v,
-      attributeValues: v.attributeValueIds?.map((id) => ({ id })), // Map ID sang Object
+      sku: v.sku,
+      price: v.price,
+      stock: v.stock,
+      attributeValueIds: v.attributeValueIds?.map((id) => ({ id })),
     }));
-    // const product = await this.productRepo.create(data);
-    // const savedProduct = await this.productRepo.save(product);
+    console.log(data.variants);
+    const product = this.productRepo.create(data);
+    const savedProduct = await this.productRepo.save(product);
     // savedProduct.gallery = await this.imageService.createMany(files,savedProduct.id,refType as ImageRefTypeEnum);
 
     // console.log(data)
