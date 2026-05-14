@@ -12,7 +12,9 @@ export class ProductPriceHistory {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => ProductVariant, (variant) => variant.prices)
+  @ManyToOne(() => ProductVariant, (variant) => variant.prices,{
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'variant_id' })
   variant: ProductVariant;
 

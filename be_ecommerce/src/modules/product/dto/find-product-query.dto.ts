@@ -18,8 +18,12 @@ export class FindProductQueryDto {
   name?: string;
 
   @IsOptional()
+  @IsString()
+  slug?: string;
+
+  @IsOptional()
   @IsEnum(ProductStatusEnum, { message: 'Status không hợp lệ' })
-  status: ProductStatusEnum;
+  status?: ProductStatusEnum;
 
   @IsOptional()
   @IsIn(['ASC', 'DESC'])

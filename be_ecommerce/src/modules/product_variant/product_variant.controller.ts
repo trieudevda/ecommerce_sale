@@ -8,10 +8,10 @@ export class ProductVariantController {
 
   @Post()
   create(
-    @Param() id: number,
-    @Body() createProductVariantDto: CreateProductVariantDto,
+    @Param('productId') productId: number,
+    @Body() createProductVariantDto: CreateProductVariantDto[],
   ) {
-    return this.productVariantService.create(id, createProductVariantDto);
+    return this.productVariantService.create(productId, createProductVariantDto);
   }
 
   // @Get()

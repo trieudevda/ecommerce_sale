@@ -8,7 +8,6 @@ import {
      Typography,
 } from 'antd';
 import {requestApi} from "@/components/api/be.api";
-import {getListUserColumns} from "@/components/templates/admin/user/listColumn";
 import { useRouter } from 'next/navigation';
 import {useSelector} from "react-redux";
 import {RootState} from "@/src/redux/store";
@@ -22,10 +21,10 @@ const App: React.FC = () => {
     const router = useRouter();
     const t = useTranslations("Product.List");
     const tTable = useTranslations("Product.Table");
-    const [user1,setUser] = React.useState([])
+    const [product,setProduct] = React.useState([])
     const [messageApi, contextHolder] = notification.useNotification();
     const [isLoading, setIsLoading] = React.useState(true);
-    const { user, isAuthenticated, isAppLoading } = useSelector((state: RootState) => state.auth);
+    const { user } = useSelector((state: RootState) => state.auth);
     const onChange: TableProps['onChange'] = (pagination, filters, sorter, extra) => {
         console.log('params', pagination, filters, sorter, extra);
     };
@@ -33,13 +32,13 @@ const App: React.FC = () => {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
-                const data = await requestApi('product/find-all', { method: 'GET' });
+                const data:any = await requestApi('product/find-all', { method: 'GET' });
                 if( data.statusCode === 403 ){
                     messageApi.error({title:'Quyền',description: "Bạn không có quyền thực hiện việc này!",
                         placement: 'bottomRight',});
                     return;
                 }
-                setUser(data.data);
+                setProduct(data.data);
             } catch (error) {
                 messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
             } finally {
@@ -49,21 +48,21 @@ const App: React.FC = () => {
 
         fetchData();
     },[]);
-    const handleEdit = (id: {id: string})=>{
-        router.push(`/admin/user/edit/${id}`);
+    const handleEdit = (slug: string)=>{
+        router.push(ADMIN_PATHS.PRODUCT.EDIT(slug));
     }
-    const handleDelete = async (id: string)=>{
-        const data = await requestApi('user/' + id, { method: 'DELETE' });
-        if(data?.statusCode && data.statusCode >= 400)
-            messageApi.error({title:'Xóa người dùng',description: Array.isArray(data.message) ? data.message[0] : data.message,
-                placement: 'bottomRight',});
-        else if(data) {
-            messageApi.success({
-                title: 'Xóa người dùng', description: 'Dữ liệu người dùng đã được cập nhật trên hệ thống.',
-                placement: 'bottomRight',
-            });
-            setUser((prevData) => prevData.filter(user => user.id !== id));
-        }
+    const handleDelete = async (slug: string)=>{
+        // const data:any = await requestApi('product/' + slug, { method: 'DELETE' });
+        // if(data?.statusCode && data.statusCode >= 400)
+        //     messageApi.error({title:'Xóa sản phẩm',description: Array.isArray(data.message) ? data.message[0] : data.message,
+        //         placement: 'bottomRight',});
+        // else if(data) {
+        //     messageApi.success({
+        //         title: 'Xóa sản phẩm', description: 'Dữ liệu sản phẩm đã được cập nhật trên hệ thống.',
+        //         placement: 'bottomRight',
+        //     });
+        //     setUser((prevData) => prevData.filter(user => user.slug !== slug));
+        // }
     }
     const handleCreate = ()=>{
         router.push(ADMIN_PATHS.PRODUCT.CREATE());
@@ -88,7 +87,7 @@ const App: React.FC = () => {
                         }
                     </Flex>
                     <AdminBreadcrumb/>
-                    <Table rowKey="id" columns={columns} dataSource={user1} onChange={onChange}/>
+                    <Table rowKey="id" columns={columns} dataSource={product} onChange={onChange}/>
                 </div>
         }
     </>

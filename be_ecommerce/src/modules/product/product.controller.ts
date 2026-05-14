@@ -3,10 +3,13 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
   Query,
+  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -30,6 +33,7 @@ export class ProductController {
 
   @Permissions('product.create')
   @Post()
+  @HttpCode(HttpStatus.OK)
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -90,13 +94,57 @@ export class ProductController {
     return this.productService.findOne(query);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+  @Permissions('product.update')
+  @Patch(':slug')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        { name: 'avatar', maxCount: 1 },
+        { name: 'gallery', maxCount: 10 },
+      ],
+      {
+        storage: diskStorage({
+          destination: (req, file, cb) => {
+            const refType = req.body.refType || 'other';
+
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+
+            const uploadPath = join(
+              process.cwd(),
+              'uploads',
+              refType,
+              String(year),
+              month,
+              day,
+            );
+
+            if (!fs.existsSync(uploadPath)) {
+              fs.mkdirSync(uploadPath, { recursive: true });
+            }
+
+            cb(null, uploadPath);
+          },
+          filename: (req, file, cb) => {
+            const uniqueSuffix =
+              Date.now() + '-' + Math.round(Math.random() * 1e9);
+            cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
+          },
+        }),
+        limits:{files:11}
+      },
+    ),
+  )
+  update(@UploadedFiles()
+    files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] },@Param('slug') slug: string, @Body() updateProductDto: UpdateProductDto) {
+    return this.productService.update(files,slug, updateProductDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  @Delete(':slug')
+  remove(@Param('slug') slug: string) {
+    return this.productService.remove(slug);
   }
 }

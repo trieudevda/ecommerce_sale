@@ -16,6 +16,7 @@ export const ADMIN_PATHS = {
     PRODUCT: {
         LIST: () => APP_PATH.ADMIN + APP_PATH.PRODUCT,
         CREATE: () => APP_PATH.ADMIN + APP_PATH.PRODUCT + '/create',
+        EDIT: (slug: string) => APP_PATH.ADMIN + APP_PATH.PRODUCT + `/edit/${slug}`,
         CATEGORY: {
             LIST: () => APP_PATH.ADMIN + APP_PATH.PRODUCT_CATEGORY,
             CREATE: () => APP_PATH.ADMIN + APP_PATH.PRODUCT_CATEGORY + '/create',

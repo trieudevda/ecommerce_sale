@@ -7,28 +7,28 @@ import { UpdatePriceHistoryDto } from './dto/update-price_history.dto';
 export class PriceHistoryController {
   constructor(private readonly priceHistoryService: PriceHistoryService) {}
 
-  @Post()
-  create(@Body() createPriceHistoryDto: CreatePriceHistoryDto) {
-    return this.priceHistoryService.create(createPriceHistoryDto);
-  }
+  // @Post()
+  // create(@Body() createPriceHistoryDto: CreatePriceHistoryDto) {
+  //   return this.priceHistoryService.create(createPriceHistoryDto);
+  // }
 
-  @Get()
-  findAll() {
-    return this.priceHistoryService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.priceHistoryService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.priceHistoryService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.priceHistoryService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePriceHistoryDto: UpdatePriceHistoryDto) {
-    return this.priceHistoryService.update(+id, updatePriceHistoryDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updatePriceHistoryDto: UpdatePriceHistoryDto) {
+  //   return this.priceHistoryService.update(id, updatePriceHistoryDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.priceHistoryService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.priceHistoryService.remove(+id);
+  // }
 }

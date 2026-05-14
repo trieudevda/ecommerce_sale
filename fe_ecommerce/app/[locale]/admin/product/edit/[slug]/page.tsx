@@ -1,12 +1,11 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import {
   Button,
   Card,
   Form,
   Input,
-  InputNumber,
   notification,
   Select,
   Space,
@@ -25,6 +24,8 @@ const TiptapFull = dynamic(
 );
 const Page = () => {
   const router = useRouter();
+  const params = useParams();
+  const slug = params.slug;
   const [cate, setCate] = useState([]);
   const [cateAttr, setCateAttr] = useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -33,22 +34,62 @@ const Page = () => {
   const [form] = Form.useForm();
   const [content, setContent] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [galleryPreview, setGalleryPreview] = useState<string[]>([]);
+  const [existingAvatarId, setExistingAvatarId] = useState<number | null>(null);
+  const [existingGalleryIds, setExistingGalleryIds] = useState<number[]>([]);
 
   React.useEffect(() => {
     const fetchAll = async () => {
       setIsLoading(true);
 
       try {
-        const [cateRes, attrRes] = await Promise.all([
+        const [cateRes, dataSlug, attrRes]: any = await Promise.all([
           requestApi("category/find-all", { method: "GET" }),
+          requestApi("product/find", { method: "GET", params: { slug: slug } }),
           requestApi("category-attribute/find-all", { method: "GET" }),
         ]);
-
         if (cateRes && !cateRes.statusCode) {
           setCate(cateRes.data);
         }
-
+        if (dataSlug && !dataSlug.statusCode) {
+          form.setFieldsValue({
+            ...dataSlug,
+            category: dataSlug.category?.id,
+            variants: dataSlug.variants?.map((v: any) => ({
+              id: v.id,
+              sku: v.sku,
+              stock: v.stock,
+              price: v.price,
+              attributeValueIds: v.attributeValues?.map((a: any) => a.id) || [],
+            })),
+          });
+          setContent(dataSlug.description);
+          setExistingAvatarId(dataSlug.gallery[0]?.id || null);
+          setAvatarPreview(
+            dataSlug.gallery?.[0]?.url
+              ? process.env.NEXT_PUBLIC_IMAGE_URL +
+                  "/uploads/" +
+                  dataSlug.gallery[0].url
+              : null,
+          );
+          setExistingGalleryIds(
+            dataSlug.gallery
+              ?.filter((img: any) => img.isPrimary === false)
+              .map((img: any) => img.id) || [],
+          );
+          setGalleryPreview(
+            dataSlug.gallery
+              ?.filter((img: any) => img.isPrimary !== true)
+              .map((img: any) => ({
+                uid: img.id.toString(),
+                name: img.url,
+                status: "done",
+                url: process.env.NEXT_PUBLIC_IMAGE_URL + "/uploads/" + img.url,
+              })) || [],
+          );
+        }
         if (attrRes && !attrRes.statusCode) {
           setCateAttr(attrRes.data);
         }
@@ -78,22 +119,32 @@ const Page = () => {
       if (avatarFile) {
         formData.append("avatar", avatarFile);
       }
+      if (avatarPreview)
+        formData.append(
+          "existingAvatarIds",
+          existingAvatarId ? existingAvatarId.toString() : "null",
+        );
       galleryFiles.forEach((file) => {
         formData.append("gallery", file);
       });
+      if (galleryPreview.length > 0)
+        formData.append(
+          "existingGalleryIds",
+          JSON.stringify(existingGalleryIds),
+        );
       if (values.variants && values.variants.length > 0) {
         formData.append("variants", JSON.stringify(values.variants));
       }
-      const res: any = await requestApi(`product`, {
-        method: "POST",
+      const res: any = await requestApi(`product/${slug}`, {
+        method: "PATCH",
         body: formData,
       });
       if (res && res.status === "success") {
         messageApi.success({
           title: "Thành công",
-          description: "Thêm sản phẩm thành công.",
+          description: "Cập nhật sản phẩm thành công.",
         });
-        setTimeout(() => router.push(ADMIN_PATHS.PRODUCT.LIST()), 1500);
+        // setTimeout(() => router.push(ADMIN_PATHS.PRODUCT.LIST()), 1500);
       } else {
         messageApi.error({
           title: "Thất bại",
@@ -105,7 +156,7 @@ const Page = () => {
     } catch (error) {
       messageApi.error({
         title: "Lỗi",
-        description: "Có lỗi xảy ra khi lưu dữ liệu",
+        description: "Có lỗi xảy ra khi lưu dữ liệu" + error.toString(),
       });
     } finally {
       setIsLoading(false);
@@ -115,7 +166,7 @@ const Page = () => {
     <>
       <div style={{ maxWidth: 800, margin: "0 auto" }}>
         {contextHolder}
-        <Card title={t("create")}>
+        <Card title={t("edit")}>
           <Spin spinning={isLoading}>
             <Form
               form={form}
@@ -130,19 +181,32 @@ const Page = () => {
               >
                 <Input placeholder={t("name")} />
               </Form.Item>
-              <Form.Item
-                label={t("avatar")}
-                name={'avatar'}
-                rules={[{ required: true, message: t("please_upload_avatar") }]}
-              >
+              <Form.Item label="Ảnh đại diện (Avatar)">
                 <Upload
                   listType="picture-card"
                   maxCount={1}
                   beforeUpload={(file) => {
                     setAvatarFile(file);
+                    setAvatarPreview(URL.createObjectURL(file));
+                    setExistingAvatarId(null);
                     return false; // Chặn upload tự động
                   }}
-                  onRemove={() => setAvatarFile(null)}
+                  onRemove={() => {
+                    setAvatarFile(null);
+                    setAvatarPreview(null);
+                  }}
+                  fileList={
+                    avatarPreview
+                      ? [
+                          {
+                            uid: "-1",
+                            name: "image.png",
+                            status: "done",
+                            url: avatarPreview,
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {!avatarFile && (
                     <div>
@@ -152,19 +216,40 @@ const Page = () => {
                   )}
                 </Upload>
               </Form.Item>
-              <Form.Item label={t("gallery")} name={'gallery'} rules={[{ required: true, message: t("please_upload_gallery") }]}>
+              <Form.Item label="Thư viện ảnh (Gallery)">
                 <Upload
                   listType="picture-card"
                   multiple
                   beforeUpload={(file) => {
                     setGalleryFiles((prev) => [...prev, file]);
+                    setGalleryPreview((prev) => [
+                      ...prev,
+                      {
+                        uid: file.uid,
+                        name: file.name,
+                        status: "done",
+                        url: URL.createObjectURL(file),
+                      },
+                    ]);
                     return false;
                   }}
                   onRemove={(file) => {
                     setGalleryFiles((prev) =>
                       prev.filter((f) => f.uid !== file.uid),
                     );
+
+                    setGalleryPreview((prev) =>
+                      prev.filter((f) => f.uid !== file.uid),
+                    );
+
+                    // remove existing image id
+                    if (!isNaN(Number(file.uid))) {
+                      setExistingGalleryIds((prev) =>
+                        prev.filter((id) => id !== Number(file.uid)),
+                      );
+                    }
                   }}
+                  fileList={galleryPreview}
                 >
                   {galleryFiles.length < 10 && (
                     <div>
@@ -186,10 +271,9 @@ const Page = () => {
               >
                 <Input.TextArea placeholder={t("short_description")} />
               </Form.Item>
-              <Form.Item label={t("description")}>
+              <Form.Item label={t("description")} name="description">
                 <TiptapFull value={content} onChange={setContent} />
               </Form.Item>
-
               <Form.Item label={t("category")} name="category">
                 <Select
                   placeholder={t("please_select_cate")}
@@ -220,6 +304,9 @@ const Page = () => {
                           }}
                           align="baseline"
                         >
+                          <Form.Item {...restField} name={[name, "id"]} hidden>
+                            <Input />
+                          </Form.Item>
                           <Form.Item
                             {...restField}
                             name={[name, "attributeValueIds"]}
@@ -257,7 +344,7 @@ const Page = () => {
                               { required: true, message: "Nhập tồn kho" },
                             ]}
                           >
-                            <InputNumber placeholder="Tồn kho" min={0} />
+                            <Input placeholder="Tồn kho" type="number" />
                           </Form.Item>
                           <Form.Item
                             {...restField}
@@ -265,7 +352,7 @@ const Page = () => {
                             label="Giá"
                             rules={[{ required: true, message: "Nhập giá" }]}
                           >
-                            <InputNumber placeholder="Giá bán" min={0} />
+                            <Input placeholder="Giá bán" type="number" />
                           </Form.Item>
 
                           <Button
@@ -292,7 +379,6 @@ const Page = () => {
                   )}
                 </Form.List>
               </Card>
-
               <Form.Item>
                 <Button
                   type="primary"

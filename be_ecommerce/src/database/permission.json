@@ -21,6 +21,11 @@
     "module": "product"
   },
   {
+    "code": "product.update",
+    "name": "Cập nhật sản phẩm",
+    "module": "product"
+  },
+  {
     "code": "category.findAll",
     "name": "Tìm tất cả danh mục",
     "module": "category"

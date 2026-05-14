@@ -27,12 +27,14 @@ export const getListProductColumns = ({ onEdit, onDelete, t }: ActionProps): Tab
     },
     {
         title: t('category'),
-        dataIndex: 'category',
+        dataIndex: '',
+        key: 'category',
+        render: (value) => <Tag color="blue">{value.name}</Tag>,
     },
-    {
-        title: t('variants'),
-        dataIndex: 'variants',
-    },
+    // {
+    //     title: t('variants'),
+    //     dataIndex: 'variants',
+    // },
     {
         title: t('status'),
         dataIndex: 'status',
@@ -52,14 +54,14 @@ export const getListProductColumns = ({ onEdit, onDelete, t }: ActionProps): Tab
         render: (_, record) => (
             <Space size="middle">
                 <Tooltip title={t('edit')} placement={'bottom'}>
-                    <Typography.Link onClick={() => onEdit(record.id)}>
+                    <Typography.Link onClick={() => onEdit(record.slug)}>
                         <PencilSquareIcon className="w-5 h-5 text-blue-500"/>
                     </Typography.Link>
                 </Tooltip>
                 <Tooltip title={t('delete')} placement={'bottom'}>
                     <Typography.Link
                         type="danger"
-                        onClick={() => onDelete(record.id)}
+                        onClick={() => onDelete(record.slug)}
                     >
                         <TrashIcon className="w-5 h-5 text-red-500"/>
                     </Typography.Link>

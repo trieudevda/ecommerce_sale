@@ -5,6 +5,7 @@ import {
   Delete,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UploadedFile,
   UploadedFiles,
@@ -147,6 +148,67 @@ export class ImagesController {
     );
   }
 
+  @Patch()
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        { name: 'avatar', maxCount: 1 },
+        { name: 'gallery', maxCount: 10 },
+      ],
+      {
+        storage: diskStorage({
+          destination: (req: any, file, cb) => {
+            const refType = req.body.refType || 'other';
+
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+
+            const uploadPath = join(
+              process.cwd(),
+              'uploads',
+              refType,
+              String(year),
+              month,
+              day,
+            );
+
+            if (!fs.existsSync(uploadPath)) {
+              fs.mkdirSync(uploadPath, { recursive: true });
+            }
+
+            cb(null, uploadPath);
+          },
+          filename: (req, file, cb) => {
+            const uniqueSuffix =
+              Date.now() + '-' + Math.round(Math.random() * 1e9);
+            cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
+          },
+        }),
+      },
+    ),
+  )
+  async update(
+    @UploadedFiles()
+    files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] },
+    @Body() body: any,
+  ) {
+    const { refId, refType, keepGalleryIds, removeAvatar } = body;
+    if (!refId || !refType) {
+      throw new BadRequestException('Thiếu refId hoặc refType để liên kết hình ảnh');
+    }
+    // const files = { avatar: [file] };
+    return this.imageService.updateImages(
+      files,
+      Number(refId),
+      refType,
+      body.existingAvatarId ? Number(body.existingAvatarId) : undefined,
+      Array.isArray(body.existingGalleryIds)
+        ? body.existingGalleryIds.map((id: any) => Number(id))
+        : [],
+    );
+  }
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.imageService.delete(id);
