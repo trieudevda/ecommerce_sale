@@ -62,6 +62,7 @@ const Page = () => {
               sku: v.sku,
               stock: v.stock,
               price: v.price,
+  priceId: v.prices?.[0]?.id,
               attributeValueIds: v.attributeValues?.map((a: any) => a.id) || [],
             })),
           });
@@ -133,6 +134,14 @@ const Page = () => {
           JSON.stringify(existingGalleryIds),
         );
       if (values.variants && values.variants.length > 0) {
+        console.log("variants to submit", values.variants);
+        const variants = values.variants.map((v: any) => ({
+          ...v,
+          prices: {
+            id: v.priceId ?? null,
+            price: Number(v.price),
+          },
+        }));
         formData.append("variants", JSON.stringify(values.variants));
       }
       const res: any = await requestApi(`product/${slug}`, {
@@ -305,6 +314,7 @@ const Page = () => {
                           align="baseline"
                         >
                           <Form.Item {...restField} name={[name, "id"]} hidden>
+                            <Form.Item {...restField} name={[name, "priceId"]} hidden></Form.Item>
                             <Input />
                           </Form.Item>
                           <Form.Item

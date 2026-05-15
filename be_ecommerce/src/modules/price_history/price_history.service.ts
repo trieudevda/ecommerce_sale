@@ -18,6 +18,13 @@ export class PriceHistoryService {
     return await this.priceHistoryRepo.save(priceHistory);
   }
 
+  // @Transactional()
+  // async createMany(createPriceHistoryDto: CreatePriceHistoryDto[]) {
+  //   const priceHistory = this.priceHistoryRepo.create(createPriceHistoryDto);
+  //    await this.priceHistoryRepo.insert(priceHistory);
+
+  //   return this.priceHistoryRepo.find({ where: { variant: { id: variantId } }, relations: ['variant'] });
+  // }
   findAll() {
     return `This action returns all priceHistory`;
   }
@@ -26,16 +33,35 @@ export class PriceHistoryService {
     return `This action returns a #${id} priceHistory`;
   }
 
-  async update(variantId: number, updatePriceHistoryDto: UpdatePriceHistoryDto[]): Promise<ProductPriceHistory[]> {
+  async update(variantId: number, productPriceHistories: ProductPriceHistory[], updatePriceHistoryDto: UpdatePriceHistoryDto[]): Promise<ProductPriceHistory[]> {
     if (updatePriceHistoryDto.length === 0) return [];
-    for (const item of updatePriceHistoryDto) {
-      await this.priceHistoryRepo.update(
-        { id: item.id, variant: { id: variantId } },
-        item,
-      );
+    const map = new Map(
+      productPriceHistories.map(p => [p.id, p]),
+    );
+    const updatedEntities: ProductPriceHistory[] = [];
+    for (const dto of updatePriceHistoryDto) {
+      if (dto.id === undefined) continue;
+      const old = map.get(dto.id);
+      if (!old) continue;
+      if (dto.price !== undefined) {
+        old.price = dto.price;
+      }
+      if (dto.startDate !== undefined) {
+        old.startDate = dto.startDate;
+      }
+      if (dto.endDate !== undefined) {
+        old.endDate = dto.endDate;
+      }
+      updatedEntities.push(old);
     }
-    // const updatedPriceHistory = this.priceHistoryRepo.create(updatePriceHistoryDto);
-    // const result = await this.priceHistoryRepo.save(updatedPriceHistory);
+    console.log('updatedEntities', updatedEntities);
+     await this.priceHistoryRepo.save(updatedEntities);
+    // for (const item of updatePriceHistoryDto) {
+    //   await this.priceHistoryRepo.update(
+    //     { id: item.id, variant: { id: variantId } },
+    //     item,
+    //   );
+    // }
     return this.priceHistoryRepo.find({ where: { variant: { id: variantId } }, relations: ['variant'] });
   }
 

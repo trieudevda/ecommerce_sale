@@ -133,7 +133,7 @@ export class ProductService {
         price.startDate <= NOW()
         AND (price.endDate IS NULL OR price.endDate > NOW())
       `,)
-      .addSelect(['price.price'])
+      .addSelect(['price.id','price.price'])
       .leftJoin('variants.attributeValues', 'attributeValues')
       .addSelect(['attributeValues.id', 'attributeValues.value'])
       .where('product.slug = :slug', { slug })

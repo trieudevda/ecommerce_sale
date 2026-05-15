@@ -6,6 +6,7 @@ import { ProductVariant } from "src/modules/product_variant/entities/product_var
 
 export class CreatePriceHistoryDto {
     @IsOptional()
+    @IsNumber()
     id?: number;
 
     @IsOptional()

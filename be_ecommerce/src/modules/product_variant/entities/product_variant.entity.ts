@@ -40,4 +40,5 @@ export class ProductVariant {
     },
   })
   attributeValues: CategoryAttributeValue[];
+  old: import("typeorm").InsertResult;
 }

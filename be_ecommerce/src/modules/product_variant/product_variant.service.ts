@@ -41,7 +41,8 @@ export class ProductVariantService {
     const oldVariants = await this.productVariantRepository.find({
       where: { product: { id: productId } },
       relations: ['attributeValues','prices'],
-    });console.dir(dtos,{depth: null});
+    });
+    console.dir(oldVariants,{depth: null});
     const map = new Map(oldVariants.map(v => [v.id, v]));
     const result: ProductVariant[] = [];
     for (const dto of dtos) {
@@ -49,13 +50,12 @@ export class ProductVariantService {
         const old = map.get(dto.id)!; 
         if (dto.sku !== undefined) old.sku = dto.sku;
         if (dto.stock !== undefined) old.stock = dto.stock;
-        dto.variant = { id: dto.id } as ProductVariant;
-        
         console.log('old.dto',dto);
         console.log('old.prices1',old.prices);
-        if (dto.price !== undefined) old.prices = await this.priceHistoryService.create(dto.prices as CreatePriceHistoryDto);
-        // if (dto.price !== undefined) old.prices = await this.priceHistoryService.update(old.id, dto.prices as ProductPriceHistory[]);
-        console.log('old.prices',old.prices);
+        if (dto.prices !== undefined && dto.prices.length > 0) {
+          old.prices = await this.priceHistoryService.update(old.id, old.prices, dto.prices as ProductPriceHistory[]);
+        }
+        // console.log('old.prices',old.prices);
         old.attributeValues = (dto.attributeValueIds || []).map(id => ({ id } as CategoryAttributeValue));
         result.push(old);
         map.delete(dto.id);
