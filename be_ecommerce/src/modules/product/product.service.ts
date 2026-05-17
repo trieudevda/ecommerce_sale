@@ -47,6 +47,7 @@ export class ProductService {
     });
     data.category = await this.categoryRepo.findOne({ where: { id: data.category?.id } }) as CategoryRelationDto;
     data.status = ProductStatusEnum.PUBLIC;
+    
     const product = this.productRepo.create(data);
     const savedProduct = await this.productRepo.save(product);
     await this.imageService.createMany(files, savedProduct.id, ImageRefTypeEnum.PRODUCT);
@@ -73,7 +74,7 @@ export class ProductService {
 
       await this.priceHistoryService.create({
         variant: { id: variant.id },
-        price: input.price,
+        price: input.price as any,
         startDate: new Date(),
       });
     }
@@ -128,12 +129,30 @@ export class ProductService {
       .addSelect(['category.id', 'category.name', 'category.slug'])
       .leftJoin('product.variants', 'variants')
       .addSelect(['variants.id', 'variants.sku', 'variants.stock'])
-      .leftJoin('variants.prices', 'price',
-        `
-        price.startDate <= NOW()
-        AND (price.endDate IS NULL OR price.endDate > NOW())
-      `,)
-      .addSelect(['price.id','price.price'])
+      .leftJoinAndMapOne(
+    'variants.prices',
+    ProductPriceHistory,
+    'price',
+    `
+      price.id = (
+        SELECT p2.id
+        FROM product_price_history p2
+        WHERE p2.variant_id = variants.id
+          AND p2.startDate <= NOW()
+          AND (p2.endDate IS NULL OR p2.endDate > NOW())
+        ORDER BY p2.startDate DESC
+        LIMIT 1
+      )
+    `,
+  )
+      // .leftJoin('variants.prices', 'price',
+      //   `
+      //   price.startDate <= NOW()
+      //   AND (price.endDate IS NULL OR price.endDate > NOW())
+      // `,)
+      // .addSelect(['price.id', 'price.price'])
+      // .orderBy('price.startDate', 'DESC')
+      // .limit(1)
       .leftJoin('variants.attributeValues', 'attributeValues')
       .addSelect(['attributeValues.id', 'attributeValues.value'])
       .where('product.slug = :slug', { slug })
@@ -157,6 +176,8 @@ export class ProductService {
   @Transactional()
   async update(files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] }, slug: string, updateProductDto: UpdateProductDto) {
     const { existingAvatarIds, existingGalleryIds, refType, ...data } = updateProductDto;
+    console.log('updateProductDto----------------------------------------------');
+    console.dir(updateProductDto, { depth: null });
     const getProduct = await this.productRepo.findOne({ where: { slug: slug }, relations: ['category', 'variants'] });
     if (!getProduct) {
       throw new NotFoundException('Sản phẩm không tồn tại');
@@ -179,10 +200,15 @@ export class ProductService {
     const variants = data.variants?.map((v) => {
       const oldVariant = getProduct.variants.find((item) => item.id === v.id);
       const newPrice: ProductPriceHistory = {
+        id: v.priceId as any,
         variant: { id: v.id } as ProductVariant,
-        price: v.price,
+        price: v.price as any,
         startDate: dayjs().toDate(),
       } as ProductPriceHistory;
+      console.log('oldVariant------------------------------------------------');
+    console.dir(oldVariant, { depth: null }); 
+      console.log('newPrice------------------------------------------------');
+    console.dir(newPrice, { depth: null }); 
       return {
         id: v.id,
         sku: v.sku,
@@ -193,9 +219,9 @@ export class ProductService {
         attributeValueIds: v.attributeValueIds?.map((id) => id),
       }
     }) as UpdateProductVariantDto[];
+    console.log('------------------------------------------------');
+    console.dir(variants, { depth: null }); 
     const variant = await this.productVariantService.update(savedProduct.id, variants);
-    // console.log('variants', variants)
-    // console.log('data.variants', data.variants)
     return {
       status: 'success',
     };

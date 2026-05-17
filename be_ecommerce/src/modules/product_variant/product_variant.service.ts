@@ -40,34 +40,37 @@ export class ProductVariantService {
   async update(productId: number, dtos: UpdateProductVariantDto[]) {
     const oldVariants = await this.productVariantRepository.find({
       where: { product: { id: productId } },
-      relations: ['attributeValues','prices'],
+      relations: ['attributeValues', 'prices'],
     });
-    console.dir(oldVariants,{depth: null});
     const map = new Map(oldVariants.map(v => [v.id, v]));
     const result: ProductVariant[] = [];
     for (const dto of dtos) {
       if (dto.id && map.has(dto.id)) {
-        const old = map.get(dto.id)!; 
+        const old = map.get(dto.id)!;
         if (dto.sku !== undefined) old.sku = dto.sku;
         if (dto.stock !== undefined) old.stock = dto.stock;
-        console.log('old.dto',dto);
-        console.log('old.prices1',old.prices);
         if (dto.prices !== undefined && dto.prices.length > 0) {
           old.prices = await this.priceHistoryService.update(old.id, old.prices, dto.prices as ProductPriceHistory[]);
         }
-        // console.log('old.prices',old.prices);
         old.attributeValues = (dto.attributeValueIds || []).map(id => ({ id } as CategoryAttributeValue));
         result.push(old);
         map.delete(dto.id);
       } else {
-        result.push(
-          this.productVariantRepository.create({
-            sku: dto.sku,
-            stock: dto.stock,
-            product: { id: productId },
-            attributeValues: (dto.attributeValueIds || []).map(id => ({ id })),
-          }),
-        );
+        console.log('dtocreate', dto);
+        let variant = await this.productVariantRepository.create({
+          sku: dto.sku,
+          stock: dto.stock,
+          product: { id: productId },
+          attributeValues: (dto.attributeValueIds || []).map(id => ({ id })),
+        });
+        await this.productVariantRepository.save(variant);
+        const created = await this.priceHistoryService.create({
+          price: dto.prices?.[0].price as any,
+          variant: { id: variant.id },
+          startDate: new Date(),
+        });
+        variant.prices = [created];
+        result.push(variant);
       }
     }
     const deleteIds = [...map.keys()];

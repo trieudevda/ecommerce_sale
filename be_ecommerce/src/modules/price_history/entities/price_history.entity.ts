@@ -18,8 +18,8 @@ export class ProductPriceHistory {
   @JoinColumn({ name: 'variant_id' })
   variant: ProductVariant;
 
-  @Column('decimal', { precision: 10, scale: 2 })
-  price: number;
+  @Column('decimal', { precision: 20, scale: 2 })
+  price: string;
 
   @Column({ type: 'timestamp' })
   startDate: Date;

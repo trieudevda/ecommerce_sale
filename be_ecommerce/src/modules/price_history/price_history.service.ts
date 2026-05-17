@@ -14,17 +14,15 @@ export class PriceHistoryService {
   ) { }
   @Transactional()
   async create(createPriceHistoryDto: CreatePriceHistoryDto) {
+    // const entity = this.priceHistoryRepo.create({
+    //   ...createPriceHistoryDto,
+    //   price: createPriceHistoryDto.price,
+    //   variant: { id: createPriceHistoryDto.variant.id },
+    // });
     const priceHistory = this.priceHistoryRepo.create(createPriceHistoryDto);
     return await this.priceHistoryRepo.save(priceHistory);
   }
 
-  // @Transactional()
-  // async createMany(createPriceHistoryDto: CreatePriceHistoryDto[]) {
-  //   const priceHistory = this.priceHistoryRepo.create(createPriceHistoryDto);
-  //    await this.priceHistoryRepo.insert(priceHistory);
-
-  //   return this.priceHistoryRepo.find({ where: { variant: { id: variantId } }, relations: ['variant'] });
-  // }
   findAll() {
     return `This action returns all priceHistory`;
   }
@@ -40,7 +38,10 @@ export class PriceHistoryService {
     );
     const updatedEntities: ProductPriceHistory[] = [];
     for (const dto of updatePriceHistoryDto) {
-      if (dto.id === undefined) continue;
+      if (dto.id === undefined) {
+        updatedEntities.push(dto as any);
+        continue;
+      };
       const old = map.get(dto.id);
       if (!old) continue;
       if (dto.price !== undefined) {
@@ -54,14 +55,7 @@ export class PriceHistoryService {
       }
       updatedEntities.push(old);
     }
-    console.log('updatedEntities', updatedEntities);
-     await this.priceHistoryRepo.save(updatedEntities);
-    // for (const item of updatePriceHistoryDto) {
-    //   await this.priceHistoryRepo.update(
-    //     { id: item.id, variant: { id: variantId } },
-    //     item,
-    //   );
-    // }
+    await this.priceHistoryRepo.save(updatedEntities);
     return this.priceHistoryRepo.find({ where: { variant: { id: variantId } }, relations: ['variant'] });
   }
 

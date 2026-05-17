@@ -6,6 +6,7 @@ import {
   Card,
   Form,
   Input,
+  InputNumber,
   notification,
   Select,
   Space,
@@ -61,8 +62,8 @@ const Page = () => {
               id: v.id,
               sku: v.sku,
               stock: v.stock,
-              price: v.price,
-  priceId: v.prices?.[0]?.id,
+              price: getPriceNumber(v.prices?.price),
+              priceId: v.prices?.id,
               attributeValueIds: v.attributeValues?.map((a: any) => a.id) || [],
             })),
           });
@@ -105,6 +106,72 @@ const Page = () => {
     };
     fetchAll();
   }, []);
+  const getPriceNumber = (priceString: string) => Number(priceString.trim());
+  const formatPrice = (value: number) => value.toLocaleString("vi-VN");
+  const PriceInput = ({ value = '', onChange }: any) => {
+    const format = (val: any) => {
+      if (val === undefined || val === null) return "";
+    return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+  const parse = (val: string) => {
+    return val.replace(/\D/g, "");
+  };
+    return (
+      // <Input
+      //   value={format(value)}
+      //   onKeyDown={(e) => {
+      //   const allowKeys = [
+      //     "Backspace",
+      //     "Delete",
+      //     "ArrowLeft",
+      //     "ArrowRight",
+      //     "Tab",
+      //   ];
+
+      //   if (
+      //     !/[0-9]/.test(e.key) &&
+      //     !allowKeys.includes(e.key)
+      //   ) {
+      //     e.preventDefault();
+      //   }
+      // }}
+      //   onChange={(e) => {
+      //     const raw = parse(e.target.value);
+      //     onChange(raw);
+      //   }}
+      //   placeholder="Nhập giá"
+      // />
+      <InputNumber
+      value={value}
+      style={{ width: "100%" }}
+      controls={false}
+      stringMode
+      formatter={(value) =>
+        String(value || "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      }
+      parser={(value) =>
+        String(value || "").replace(/\./g, "")
+      }
+      onKeyDown={(e) => {
+        const allowKeys = [
+          "Backspace",
+          "Delete",
+          "ArrowLeft",
+          "ArrowRight",
+          "Tab",
+        ];
+
+        if (
+          !/[0-9]/.test(e.key) &&
+          !allowKeys.includes(e.key)
+        ) {
+          e.preventDefault();
+        }
+      }}
+      onChange={onChange}
+    />
+    );
+  };
   const onFinish = async (values: any) => {
     setIsLoading(true);
     try {
@@ -134,15 +201,16 @@ const Page = () => {
           JSON.stringify(existingGalleryIds),
         );
       if (values.variants && values.variants.length > 0) {
-        console.log("variants to submit", values.variants);
+        // console.log("variants to submit", values.variants);
         const variants = values.variants.map((v: any) => ({
           ...v,
           prices: {
             id: v.priceId ?? null,
-            price: Number(v.price),
+            price: v.price,
           },
         }));
-        formData.append("variants", JSON.stringify(values.variants));
+        // formData.append("variants", JSON.stringify(values.variants));
+        formData.append("variants", JSON.stringify(variants));
       }
       const res: any = await requestApi(`product/${slug}`, {
         method: "PATCH",
@@ -314,8 +382,14 @@ const Page = () => {
                           align="baseline"
                         >
                           <Form.Item {...restField} name={[name, "id"]} hidden>
-                            <Form.Item {...restField} name={[name, "priceId"]} hidden></Form.Item>
                             <Input />
+                          </Form.Item>
+                          <Form.Item
+                            {...restField}
+                            name={[name, "priceId"]}
+                            hidden
+                          >
+                             <Input />
                           </Form.Item>
                           <Form.Item
                             {...restField}
@@ -362,7 +436,9 @@ const Page = () => {
                             label="Giá"
                             rules={[{ required: true, message: "Nhập giá" }]}
                           >
-                            <Input placeholder="Giá bán" type="number" />
+                            <PriceInput />
+                            {/* <Input placeholder="Giá bán" type="number" */}
+                            {/* /> */}
                           </Form.Item>
 
                           <Button

@@ -19,9 +19,9 @@ export class CreatePriceHistoryDto {
     })
     variant: ProductVariantRelationDto;
 
-    @IsNumber()
-    @Transform(({ value }) => Number(value))
-    price?: number;
+    @IsString()
+    // @Transform(({ value }) => Number(value))
+    price?: string;
 
     @IsOptional()
     startDate?: Date;

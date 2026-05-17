@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+import { CreatePriceHistoryDto } from 'src/modules/price_history/dto/create-price_history.dto';
 import { ProductPriceHistory } from 'src/modules/price_history/entities/price_history.entity';
 
 export class CreateProductVariantDto {
@@ -18,10 +19,21 @@ export class CreateProductVariantDto {
   sku: string;
 
   @IsOptional()
-  @Transform(({ value }) => Number(value))
-  @IsNumber()
-  @Type(() => Number)
-  price: number;
+  @IsString()
+  price: string;
+
+  @IsOptional()
+  @IsString()
+  priceId?: string;
+  // @IsOptional()
+  // @Transform(({ value }) => {
+  //   const parsed = typeof value === 'string' ? JSON.parse(value) : value;
+
+  //   if (!Array.isArray(parsed)) return [];
+
+  //   return parsed.map((v) => plainToInstance(ProductPriceHistory, v));
+  // })
+  // prices: ProductPriceHistory[];
 
   @IsOptional()
   @Transform(({ value }) => {
@@ -29,10 +41,9 @@ export class CreateProductVariantDto {
 
     if (!Array.isArray(parsed)) return [];
 
-    return parsed.map((v) => plainToInstance(ProductPriceHistory, v));
+    return parsed.map((v) => plainToInstance(CreatePriceHistoryDto, v));
   })
-  prices: ProductPriceHistory[];
-
+  prices: CreatePriceHistoryDto[];
   @IsOptional()
   @Transform(({ value }) => Number(value))
   @IsInt()
