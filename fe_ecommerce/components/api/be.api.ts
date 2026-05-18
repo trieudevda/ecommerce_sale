@@ -1,12 +1,6 @@
-// src/lib/api.ts
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export async function requestApi<T>(url: string, options: RequestInit & { params?: Record<string, any> } = {}): Promise<T> {
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const targetPath = urlParams.get('callbackUrl');
-    // if(targetPath) {
-    //     window.location.href = targetPath;
-    // }
     const isFormData = options.body instanceof FormData;
     const headers = {
         ...(isFormData ? {} : { 'Content-Type': 'application/json' }),

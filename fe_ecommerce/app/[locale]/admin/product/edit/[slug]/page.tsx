@@ -1,23 +1,12 @@
 "use client";
-import { useParams, useRouter } from "next/navigation";
-import React, { useState } from "react";
-import {
-  Button,
-  Card,
-  Form,
-  Input,
-  InputNumber,
-  notification,
-  Select,
-  Space,
-  Spin,
-  Upload,
-} from "antd";
-import { PlusOutlined, SaveOutlined } from "@ant-design/icons";
-import { useTranslations } from "use-intl";
+import {useParams, useRouter} from "next/navigation";
+import React, {useState} from "react";
+import {Button, Card, Form, Input, InputNumber, notification, Select, Space, Spin, Upload,} from "antd";
+import {PlusOutlined, SaveOutlined} from "@ant-design/icons";
+import {useTranslations} from "use-intl";
 import dynamic from "next/dynamic";
-import { requestApi } from "@/components/api/be.api";
-import { ADMIN_PATHS } from "@/src/path";
+import {requestApi} from "@/components/api/be.api";
+import {ADMIN_PATHS} from "@/src/path";
 
 const TiptapFull = dynamic(
   () => import("@/components/Common/Editor/TiptapFull"),
@@ -44,7 +33,6 @@ const Page = () => {
   React.useEffect(() => {
     const fetchAll = async () => {
       setIsLoading(true);
-
       try {
         const [cateRes, dataSlug, attrRes]: any = await Promise.all([
           requestApi("category/find-all", { method: "GET" }),
@@ -106,41 +94,11 @@ const Page = () => {
     };
     fetchAll();
   }, []);
-  const getPriceNumber = (priceString: string) => Number(priceString.trim());
-  const formatPrice = (value: number) => value.toLocaleString("vi-VN");
+  function getPriceNumber(priceString?: string) {
+    return Number(priceString?.trim() || 0);
+  }
   const PriceInput = ({ value = '', onChange }: any) => {
-    const format = (val: any) => {
-      if (val === undefined || val === null) return "";
-    return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
-  const parse = (val: string) => {
-    return val.replace(/\D/g, "");
-  };
     return (
-      // <Input
-      //   value={format(value)}
-      //   onKeyDown={(e) => {
-      //   const allowKeys = [
-      //     "Backspace",
-      //     "Delete",
-      //     "ArrowLeft",
-      //     "ArrowRight",
-      //     "Tab",
-      //   ];
-
-      //   if (
-      //     !/[0-9]/.test(e.key) &&
-      //     !allowKeys.includes(e.key)
-      //   ) {
-      //     e.preventDefault();
-      //   }
-      // }}
-      //   onChange={(e) => {
-      //     const raw = parse(e.target.value);
-      //     onChange(raw);
-      //   }}
-      //   placeholder="Nhập giá"
-      // />
       <InputNumber
       value={value}
       style={{ width: "100%" }}
@@ -201,7 +159,6 @@ const Page = () => {
           JSON.stringify(existingGalleryIds),
         );
       if (values.variants && values.variants.length > 0) {
-        // console.log("variants to submit", values.variants);
         const variants = values.variants.map((v: any) => ({
           ...v,
           prices: {
@@ -209,7 +166,6 @@ const Page = () => {
             price: v.price,
           },
         }));
-        // formData.append("variants", JSON.stringify(values.variants));
         formData.append("variants", JSON.stringify(variants));
       }
       const res: any = await requestApi(`product/${slug}`, {
@@ -221,7 +177,7 @@ const Page = () => {
           title: "Thành công",
           description: "Cập nhật sản phẩm thành công.",
         });
-        // setTimeout(() => router.push(ADMIN_PATHS.PRODUCT.LIST()), 1500);
+        setTimeout(() => router.push(ADMIN_PATHS.PRODUCT.LIST()), 1500);
       } else {
         messageApi.error({
           title: "Thất bại",

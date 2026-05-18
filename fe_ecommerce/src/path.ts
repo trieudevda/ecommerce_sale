@@ -1,6 +1,7 @@
 const APP_PATH = {
     ADMIN: '/admin',
     USER: '/user',
+    AUTH: '/auth',
     PRODUCT_CATEGORY: '/product-category',
     PRODUCT_CATEGORY_ATTRIBUTE: '/attribute',
     PRODUCT: '/product',
@@ -39,5 +40,8 @@ export const ADMIN_PATHS = {
         CREATE: () => APP_PATH.ADMIN + APP_PATH.PERMISSION + '/create',
         EDIT: (id: string) => APP_PATH.ADMIN + APP_PATH.PERMISSION + `/edit/${id}`,
     },
-    LOGIN: '/admin/login',
+    AUTH: {
+        LOGIN: () => '/login' + APP_PATH.ADMIN ,
+    },
+
 };

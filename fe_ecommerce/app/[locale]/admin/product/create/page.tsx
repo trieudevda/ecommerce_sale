@@ -1,23 +1,12 @@
 "use client";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import {
-  Button,
-  Card,
-  Form,
-  Input,
-  InputNumber,
-  notification,
-  Select,
-  Space,
-  Spin,
-  Upload,
-} from "antd";
-import { PlusOutlined, SaveOutlined } from "@ant-design/icons";
-import { useTranslations } from "use-intl";
+import {useRouter} from "next/navigation";
+import React, {useState} from "react";
+import {Button, Card, Form, Input, InputNumber, notification, Select, Space, Spin, Upload, UploadFile,} from "antd";
+import {PlusOutlined, SaveOutlined} from "@ant-design/icons";
+import {useTranslations} from "use-intl";
 import dynamic from "next/dynamic";
-import { requestApi } from "@/components/api/be.api";
-import { ADMIN_PATHS } from "@/src/path";
+import {requestApi} from "@/components/api/be.api";
+import {ADMIN_PATHS} from "@/src/path";
 
 const TiptapFull = dynamic(
   () => import("@/components/Common/Editor/TiptapFull"),
@@ -32,23 +21,20 @@ const Page = () => {
   const t = useTranslations("Product.CRUD");
   const [form] = Form.useForm();
   const [content, setContent] = useState("");
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [avatarFile, setAvatarFile] = useState<UploadFile  | null>(null);
+  const [galleryFiles, setGalleryFiles] = useState<UploadFile []>([]);
 
   React.useEffect(() => {
     const fetchAll = async () => {
       setIsLoading(true);
-
       try {
         const [cateRes, attrRes] = await Promise.all([
           requestApi("category/find-all", { method: "GET" }),
           requestApi("category-attribute/find-all", { method: "GET" }),
         ]);
-
         if (cateRes && !cateRes.statusCode) {
           setCate(cateRes.data);
         }
-
         if (attrRes && !attrRes.statusCode) {
           setCateAttr(attrRes.data);
         }
@@ -76,10 +62,10 @@ const Page = () => {
       );
       formData.append("refType", "PRODUCT");
       if (avatarFile) {
-        formData.append("avatar", avatarFile);
+        formData.append("avatar", avatarFile.originFileObj);
       }
       galleryFiles.forEach((file) => {
-        formData.append("gallery", file);
+        formData.append("gallery", file.originFileObj);
       });
       if (values.variants && values.variants.length > 0) {
         formData.append("variants", JSON.stringify(values.variants));
@@ -139,9 +125,16 @@ const Page = () => {
                   listType="picture-card"
                   maxCount={1}
                   beforeUpload={(file) => {
-                    setAvatarFile(file);
+                    const uploadFile: UploadFile = {
+                      uid: file.uid,
+                      name: file.name,
+                      status: "done",
+                      originFileObj: file,
+                    };
+                    setAvatarFile(uploadFile);
                     return false; // Chặn upload tự động
                   }}
+                  fileList={avatarFile ? [avatarFile as any] : []}
                   onRemove={() => setAvatarFile(null)}
                 >
                   {!avatarFile && (
@@ -152,12 +145,18 @@ const Page = () => {
                   )}
                 </Upload>
               </Form.Item>
-              <Form.Item label={t("gallery")} name={'gallery'} rules={[{ required: true, message: t("please_upload_gallery") }]}>
+              <Form.Item label={t("gallery")} rules={[{ required: true, message: t("please_upload_gallery") }]}>
                 <Upload
                   listType="picture-card"
                   multiple
                   beforeUpload={(file) => {
-                    setGalleryFiles((prev) => [...prev, file]);
+                    const uploadFile: UploadFile = {
+                      uid: file.uid,
+                      name: file.name,
+                      status: "done",
+                      originFileObj: file,
+                    };
+                    setGalleryFiles((prev) => [...prev, uploadFile]);
                     return false;
                   }}
                   onRemove={(file) => {

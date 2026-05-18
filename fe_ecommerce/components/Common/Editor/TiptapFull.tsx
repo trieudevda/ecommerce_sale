@@ -1,5 +1,5 @@
 "use client"
-import { useEditor, EditorContent } from '@tiptap/react'
+import {EditorContent, useEditor} from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
@@ -14,6 +14,8 @@ const TiptapFull = ({ value, onChange }: { value: string, onChange: (val: string
             StarterKit.configure({
                 bulletList: { keepMarks: true, keepAttributes: false },
                 orderedList: { keepMarks: true, keepAttributes: false },
+                link: false,
+                underline: false,
             }),
             Underline,
             Image.configure({

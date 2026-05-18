@@ -1,10 +1,11 @@
 'use client';
-import {Provider, useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setAppLoading, setLogout, setUser} from "@/src/redux/slices/authSlice";
-import {checkAuthToken, requestApi} from "@/components/api/be.api";
+import {checkAuthToken} from "@/components/api/be.api";
 import React from "react";
 import {RootState} from "@/src/redux/store";
 import {useRouter} from "next/navigation";
+import {ADMIN_PATHS} from "@/src/path";
 
 export function AuthProvider({ children }) {
     const router = useRouter();
@@ -17,13 +18,13 @@ export function AuthProvider({ children }) {
                 const response = await checkAuthToken();
                 if (response && response?.statusCode >= 400) {
                     dispatch(setLogout());
-                    router.push('/login/admin');
+                    router.push(ADMIN_PATHS.AUTH.LOGIN());
                 } else {
                     dispatch(setUser(response));
                 }
             } catch (error) {
                 dispatch(setLogout());
-                router.push('/login/admin');
+                router.push(ADMIN_PATHS.AUTH.LOGIN());
             } finally {
                 dispatch(setAppLoading(false));
             }

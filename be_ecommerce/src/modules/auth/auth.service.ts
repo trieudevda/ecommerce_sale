@@ -25,8 +25,8 @@ export class AuthService {
     const payload = {
       sub: user.id,
       email: user.email,
-      role: user.role,
-      permission: user.role.permissions,
+      role: user.role.slug,
+      permission: user.role.permissions.map((p) => p.id),
     };
     const tokens = await this.getTokens(payload);
     await this.userService.updateRefreshToken(user.id, tokens.refreshToken);
@@ -67,8 +67,8 @@ export class AuthService {
       const payload1 = {
         sub: user.id,
         email: user.email,
-        role: user.role,
-        permission: user.role.permissions,
+        role: user.role.slug,
+        permission: user.role.permissions.map((p) => p.id),
       };
       const tokens = await this.getTokens(payload1);
       return {
