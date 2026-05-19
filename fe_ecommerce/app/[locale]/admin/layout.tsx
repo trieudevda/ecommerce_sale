@@ -1,37 +1,25 @@
 'use client'
-import {Button, Layout, Menu, notification, Spin, Table, theme, Typography} from "antd";
-import {
-    LoadingOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-} from "@ant-design/icons";
+import {Button, Layout, Menu, Spin, theme} from "antd";
+import {LoadingOutlined, MenuFoldOutlined, MenuUnfoldOutlined,} from "@ant-design/icons";
 import React, {useMemo} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "@/src/redux/store";
 import {sidebarAdmin} from "@/src/custom/menu-admin/sidebar-admin";
 import {AuthProvider} from "@/app/AuthProvider";
-import {NextIntlClientProvider} from "next-intl";
-import {routing} from "@/messages/routing";
-import {notFound} from "next/navigation";
-import {getMessages} from "next-intl/server";
-
 
 export default  function AdminLayout({children}: {
     children: React.ReactNode;
-    // params: Promise<{ locale: string }>;
 }) {
     const userId = useSelector((state: RootState) => state.auth.user?.sub) || '';
     const { Header, Sider, Content } = Layout;
-    const [messageApi, contextHolder] = notification.useNotification();
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-    const { user, isAuthenticated, isAppLoading } = useSelector((state: RootState) => state.auth);
+    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
     const [collapsed, setCollapsed] = React.useState(false);
     const menuAdmin = useMemo(()=>sidebarAdmin(userId),[userId]);
     return <AuthProvider>
         <Layout>
-            {contextHolder}
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="demo-logo-vertical" />
                 <Menu
