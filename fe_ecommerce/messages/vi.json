@@ -123,6 +123,15 @@
       "name": "Tên sản phẩm",
       "avatar": "Ảnh đại diện",
       "gallery": "Bộ sưu tập ảnh",
+      "attribute": "Thuộc tính",
+      "select_properties": "Chọn thuộc tính",
+      "select_a_value": "Chọn giá trị",
+      "SKU_code":"Mã SKU",
+      "enter_SKU": "Nhập SKU",
+      "inventory": "Tồn kho",
+      "enter_inventory": "Nhập tồn kho",
+      "product_variations": "Biến thể sản phẩm",
+      "add_new_variant": "thêm biến thể mới",
       "short_description": "Mô tả ngắn",
       "description": "Mô tả",
       "cancel": "Hủy",
@@ -137,6 +146,7 @@
       "category": "Danh mục",
       "please_select_category": "Vui lòng chọn danh mục",
       "price": "Giá",
+      "enter_price": "Nhập giá",
       "please_enter_price": "Vui lòng nhập giá",
       "stock": "Tồn kho",
       "please_enter_stock": "Vui lòng nhập tồn kho",
@@ -154,6 +164,7 @@
       "adding_product_failed": "Thêm sản phẩm thất bại",
       "updating_product_failed": "Cập nhật sản phẩm thất bại",
       "deleting_product_failed": "Xóa sản phẩm thất bại",
+      "delete": "Xóa",
       "save": "Lưu"
     },
     "Category": {
@@ -267,7 +278,7 @@
     "Description": {
        "You_are_not_authorized_to_do_this": "Bạn không có quyền thực hiện việc này!",
       "An_error_occurred_while_saving_the_data": "Có lỗi xảy ra khi lưu dữ liệu!",
-      "Unable_to_connect_to_the_server.": "Không thể kết nối đến máy chủ!"
+      "Unable_to_connect_to_the_server": "Không thể kết nối đến máy chủ!"
     }
   }
 }

@@ -21,6 +21,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [messageApi, contextHolder] = notification.useNotification();
   const t = useTranslations("Product.CRUD");
+  const tMess = useTranslations("Message");
   const [form] = Form.useForm();
   const [content, setContent] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -85,8 +86,8 @@ const Page = () => {
         }
       } catch (error) {
         messageApi.error({
-          title: "Lỗi",
-          description: "Không thể tải dữ liệu",
+          title: tMess('Title.error'),
+          description: tMess('Description.Unable_to_connect_to_the_server'),
         });
       } finally {
         setIsLoading(false);
@@ -174,13 +175,13 @@ const Page = () => {
       });
       if (res && res.status === "success") {
         messageApi.success({
-          title: "Thành công",
-          description: "Cập nhật sản phẩm thành công.",
+          title: tMess('Title.success'),
+          description: t('product_updated_successfully'),
         });
         setTimeout(() => router.push(ADMIN_PATHS.PRODUCT.LIST()), 1500);
       } else {
         messageApi.error({
-          title: "Thất bại",
+          title: tMess('Title.error'),
           description: Array.isArray(res.message)
             ? res.message[0]
             : res.message,
@@ -188,8 +189,8 @@ const Page = () => {
       }
     } catch (error) {
       messageApi.error({
-        title: "Lỗi",
-        description: "Có lỗi xảy ra khi lưu dữ liệu" + error.toString(),
+        title: tMess('Title.error'),
+        description: tMess('Description.An_error_occurred_while_saving_the_data'),
       });
     } finally {
       setIsLoading(false);
@@ -214,7 +215,7 @@ const Page = () => {
               >
                 <Input placeholder={t("name")} />
               </Form.Item>
-              <Form.Item label="Ảnh đại diện (Avatar)">
+              <Form.Item label={t('avatar')}>
                 <Upload
                   listType="picture-card"
                   maxCount={1}
@@ -249,7 +250,7 @@ const Page = () => {
                   )}
                 </Upload>
               </Form.Item>
-              <Form.Item label="Thư viện ảnh (Gallery)">
+              <Form.Item label={t('gallery')}>
                 <Upload
                   listType="picture-card"
                   multiple
@@ -270,12 +271,9 @@ const Page = () => {
                     setGalleryFiles((prev) =>
                       prev.filter((f) => f.uid !== file.uid),
                     );
-
                     setGalleryPreview((prev) =>
                       prev.filter((f) => f.uid !== file.uid),
                     );
-
-                    // remove existing image id
                     if (!isNaN(Number(file.uid))) {
                       setExistingGalleryIds((prev) =>
                         prev.filter((id) => id !== Number(file.uid)),
@@ -305,7 +303,7 @@ const Page = () => {
                 <Input.TextArea placeholder={t("short_description")} />
               </Form.Item>
               <Form.Item label={t("description")} name="description">
-                <TiptapFull value={content} onChange={setContent} />
+                <TiptapFull key={content} value={content} onChange={setContent} />
               </Form.Item>
               <Form.Item label={t("category")} name="category">
                 <Select
@@ -318,7 +316,7 @@ const Page = () => {
                 />
               </Form.Item>
               <Card
-                title="Biến thể sản phẩm"
+                title={t('product_variations')}
                 size="small"
                 style={{ marginBottom: 20 }}
               >
@@ -350,15 +348,15 @@ const Page = () => {
                           <Form.Item
                             {...restField}
                             name={[name, "attributeValueIds"]}
-                            label="Thuộc tính"
+                            label={t('attribute')}
                             style={{ width: 250 }}
                             rules={[
-                              { required: true, message: "Chọn thuộc tính" },
+                              { required: true, message: t('select_properties') },
                             ]}
                           >
                             <Select
                               mode="multiple"
-                              placeholder="Chọn giá trị (VD: Đỏ, L)"
+                              placeholder={t('select_a_value')}
                               options={cateAttr?.map((attr: any) => ({
                                 label: attr.name,
                                 options: attr.values?.map((val: any) => ({
@@ -371,30 +369,28 @@ const Page = () => {
                           <Form.Item
                             {...restField}
                             name={[name, "sku"]}
-                            label="Mã SKU"
-                            rules={[{ required: true, message: "Nhập SKU" }]}
+                            label={t('SKU_code')}
+                            rules={[{ required: true, message: t('enter_SKU') }]}
                           >
-                            <Input placeholder="Mã SKU" />
+                            <Input placeholder={t('SKU_code')} />
                           </Form.Item>
                           <Form.Item
                             {...restField}
                             name={[name, "stock"]}
-                            label="Kho"
+                            label={t('inventory')}
                             rules={[
-                              { required: true, message: "Nhập tồn kho" },
+                              { required: true, message: t('enter_inventory') },
                             ]}
                           >
-                            <Input placeholder="Tồn kho" type="number" />
+                            <Input placeholder={t('inventory')} type="number" />
                           </Form.Item>
                           <Form.Item
                             {...restField}
                             name={[name, "price"]}
-                            label="Giá"
-                            rules={[{ required: true, message: "Nhập giá" }]}
+                            label={t('price')}
+                            rules={[{ required: true, message: t('enter_price') }]}
                           >
                             <PriceInput />
-                            {/* <Input placeholder="Giá bán" type="number" */}
-                            {/* /> */}
                           </Form.Item>
 
                           <Button
@@ -403,7 +399,7 @@ const Page = () => {
                             danger
                             style={{ marginTop: 30 }}
                           >
-                            Xóa
+                            {t('delete')}
                           </Button>
                         </Space>
                       ))}
@@ -414,7 +410,7 @@ const Page = () => {
                           block
                           icon={<PlusOutlined />}
                         >
-                          Thêm biến thể mới
+                          {t('add_new_variant')}
                         </Button>
                       </Form.Item>
                     </>

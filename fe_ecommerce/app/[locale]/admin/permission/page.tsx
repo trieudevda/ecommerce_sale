@@ -63,7 +63,7 @@ const App: React.FC = () => {
     },[]);
     const initialCheckedKeys = useMemo(() => {
         const keys = [];
-        allRole.forEach(role => {
+        allRole?.forEach(role => {
             if (role.permissions) {
                 role.permissions.forEach(p => {
                     keys.push(`r${role.id}-p${p.id}`); // Phải khớp 100% với key ở trên

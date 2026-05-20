@@ -1,5 +1,5 @@
 'use client'
-import {Layout, notification, theme} from "antd";
+import {notification} from "antd";
 import React from "react";
 import {checkAuthToken} from "@/components/api/be.api";
 import {useDispatch, useSelector} from "react-redux";
@@ -7,6 +7,7 @@ import {RootState} from "@/src/redux/store";
 import {setLogout, setUser} from "@/src/redux/slices/authSlice";
 import {useRouter} from "next/navigation";
 import {ADMIN_PATHS} from "@/src/path";
+import {useTranslations} from "use-intl";
 
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -14,6 +15,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const [messageApi, contextHolder] = notification.useNotification();
     const { isAuthenticated, isAppLoading } = useSelector((state: RootState) => state.auth);
     const router = useRouter();
+    const tMess = useTranslations("Message");
     React.useEffect(() => {
         if(!isAuthenticated){
             const fetchData = async () => {
@@ -27,7 +29,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         router.push(ADMIN_PATHS.USER.LIST());
                     }
                 } catch (error) {
-                    messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
+                    messageApi.error({ title: tMess('Message.error'), description: tMess('Message.An_error_occurred_while_saving_the_data') });
                 } finally {
                 }
             };

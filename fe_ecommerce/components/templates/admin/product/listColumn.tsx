@@ -1,6 +1,7 @@
-import {Divider, Space, TableColumnsType, Tag, Tooltip, Typography} from "antd";
+import {Space, TableColumnsType, Tag, Tooltip, Typography} from "antd";
 import React from "react";
 import {PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
+
 interface DataType {
     id: string;
     name: string;
@@ -39,10 +40,10 @@ export const getListProductColumns = ({ onEdit, onDelete, t }: ActionProps): Tab
         title: t('status'),
         dataIndex: 'status',
     },
-    {
-        title: t('created_at'),
-        dataIndex: 'createdAt',
-    },
+    // {
+    //     title: t('created_at'),
+    //     dataIndex: 'createdAt',
+    // },
     {
         title: t('updated_at'),
         dataIndex: 'updatedAt',

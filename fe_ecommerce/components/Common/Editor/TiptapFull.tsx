@@ -50,7 +50,6 @@ const TiptapFull = ({ value, onChange }: { value: string, onChange: (val: string
                 />
             </div>
             <style jsx global>{`
-                /* 1. Xử lý Placeholder */
                 .tiptap p.is-editor-empty:first-child::before {
                     content: attr(data-placeholder);
                     float: left;
@@ -58,8 +57,6 @@ const TiptapFull = ({ value, onChange }: { value: string, onChange: (val: string
                     pointer-events: none;
                     height: 0;
                 }
-
-                /* 2. Ép style chuẩn cho danh sách trong Editor (rất quan trọng) */
                 .tiptap ul {
                     list-style-type: disc !important;
                     padding-left: 1.5rem !important;
@@ -71,10 +68,8 @@ const TiptapFull = ({ value, onChange }: { value: string, onChange: (val: string
                     margin: 1em 0 !important;
                 }
                 .tiptap li p {
-                    margin: 0 !important; /* Fix lỗi khoảng cách dòng trong List */
+                    margin: 0 !important;
                 }
-
-                /* 3. Style Blockquote chuyên nghiệp */
                 .tiptap blockquote {
                     border-left: 4px solid #d1d5db;
                     padding-left: 1rem;
