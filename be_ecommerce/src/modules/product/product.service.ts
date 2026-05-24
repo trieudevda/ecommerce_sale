@@ -13,16 +13,12 @@ import { Category } from '../category/entities/category.entity';
 import { CategoryRelationDto } from '../category/dto/category-relation';
 import { ProductVariantService } from '../product_variant/product_variant.service';
 import { ImageRefTypeEnum } from '../images/enum/images.enum';
-import { CreateProductVariantDto } from '../product_variant/dto/create-product_variant.dto';
 import { ProductStatusEnum } from './enums/product.enum';
 import { PriceHistoryService } from '../price_history/price_history.service';
 import dayjs from 'dayjs';
-import { stat } from 'fs';
 import { UpdateProductVariantDto } from '../product_variant/dto/update-product_variant.dto';
 import { ProductPriceHistory } from '../price_history/entities/price_history.entity';
 import { ProductVariant } from '../product_variant/entities/product_variant.entity';
-import { CreatePriceHistoryDto } from '../price_history/dto/create-price_history.dto';
-import { UpdatePriceHistoryDto } from '../price_history/dto/update-price_history.dto';
 
 @Injectable()
 export class ProductService {
@@ -34,7 +30,7 @@ export class ProductService {
     private readonly imageService: ImageService,
     private readonly productVariantService: ProductVariantService,
     private readonly priceHistoryService: PriceHistoryService,
-  ) { }
+  ) {}
   @Transactional()
   async create(
     files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] },
@@ -45,23 +41,27 @@ export class ProductService {
       const exist = await this.productRepo.findOne({ where: { slug: s } });
       return !!exist;
     });
-    data.category = await this.categoryRepo.findOne({ where: { id: data.category?.id } }) as CategoryRelationDto;
+    data.category = (await this.categoryRepo.findOne({
+      where: { id: data.category?.id },
+    })) as CategoryRelationDto;
     data.status = ProductStatusEnum.PUBLIC;
-    
+
     const product = this.productRepo.create(data);
     const savedProduct = await this.productRepo.save(product);
-    await this.imageService.createMany(files, savedProduct.id, ImageRefTypeEnum.PRODUCT);
-    const variants: any = data.variants?.map((v) =>
-    ({
+    await this.imageService.createMany(
+      files,
+      savedProduct.id,
+      ImageRefTypeEnum.PRODUCT,
+    );
+    const variants: any = data.variants?.map((v) => ({
       sku: v.sku,
       stock: v.stock,
       price: {
         price: v.price,
-        startDate: dayjs()
+        startDate: dayjs(),
       },
       attributeValueIds: v.attributeValueIds?.map((id) => id),
-    })
-    );
+    }));
     const createdVariants = await this.productVariantService.create(
       savedProduct.id,
       variants,
@@ -74,7 +74,7 @@ export class ProductService {
 
       await this.priceHistoryService.create({
         variant: { id: variant.id },
-        price: input.price as any,
+        price: input.price,
         startDate: new Date(),
       });
     }
@@ -130,10 +130,10 @@ export class ProductService {
       .leftJoin('product.variants', 'variants')
       .addSelect(['variants.id', 'variants.sku', 'variants.stock'])
       .leftJoinAndMapOne(
-    'variants.prices',
-    ProductPriceHistory,
-    'price',
-    `
+        'variants.prices',
+        ProductPriceHistory,
+        'price',
+        `
       price.id = (
         SELECT p2.id
         FROM product_price_history p2
@@ -144,7 +144,7 @@ export class ProductService {
         LIMIT 1
       )
     `,
-  )
+      )
       // .leftJoin('variants.prices', 'price',
       //   `
       //   price.startDate <= NOW()
@@ -161,12 +161,15 @@ export class ProductService {
       throw new NotFoundException('Product không tồn tại');
     }
     if (prod) {
-      const images = await this.imageService.findByRef(prod.id, ImageRefTypeEnum.PRODUCT);
+      const images = await this.imageService.findByRef(
+        prod.id,
+        ImageRefTypeEnum.PRODUCT,
+      );
       prod.gallery = images;
     }
     const result = {
       ...prod,
-      variants: prod.variants.map(v => ({
+      variants: prod.variants.map((v) => ({
         ...v,
         price: v.prices?.[0]?.price ?? null,
       })),
@@ -174,11 +177,17 @@ export class ProductService {
     return result;
   }
   @Transactional()
-  async update(files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] }, slug: string, updateProductDto: UpdateProductDto) {
-    const { existingAvatarIds, existingGalleryIds, refType, ...data } = updateProductDto;
-    console.log('updateProductDto----------------------------------------------');
-    console.dir(updateProductDto, { depth: null });
-    const getProduct = await this.productRepo.findOne({ where: { slug: slug }, relations: ['category', 'variants'] });
+  async update(
+    files: { avatar?: Express.Multer.File[]; gallery?: Express.Multer.File[] },
+    slug: string,
+    updateProductDto: UpdateProductDto,
+  ) {
+    const { existingAvatarIds, existingGalleryIds, refType, ...data } =
+      updateProductDto;
+    const getProduct = await this.productRepo.findOne({
+      where: { slug: slug },
+      relations: ['category', 'variants'],
+    });
     if (!getProduct) {
       throw new NotFoundException('Sản phẩm không tồn tại');
     }
@@ -187,46 +196,57 @@ export class ProductService {
     //   return !!exist;
     // });
     if (getProduct.category?.id !== data.category?.id) {
-      data.category = await this.categoryRepo.findOne({ where: { id: data.category?.id } }) as CategoryRelationDto;
+      data.category = (await this.categoryRepo.findOne({
+        where: { id: data.category?.id },
+      })) as CategoryRelationDto;
     }
-    if (updateProductDto.status && Object.values(ProductStatusEnum).includes(
-      updateProductDto.status as ProductStatusEnum,
-    )) {
+    if (
+      updateProductDto.status &&
+      Object.values(ProductStatusEnum).includes(updateProductDto.status)
+    ) {
       data.status = updateProductDto.status;
     }
     const product = this.productRepo.merge(getProduct, data);
     const savedProduct = await this.productRepo.save(product);
-    await this.imageService.updateImages(files, savedProduct.id, ImageRefTypeEnum.PRODUCT);
+    await this.imageService.updateImages(
+      files,
+      savedProduct.id,
+      ImageRefTypeEnum.PRODUCT,
+    );
     const variants = data.variants?.map((v) => {
       const oldVariant = getProduct.variants.find((item) => item.id === v.id);
       const newPrice: ProductPriceHistory = {
         id: v.priceId as any,
         variant: { id: v.id } as ProductVariant,
-        price: v.price as any,
+        price: v.price,
         startDate: dayjs().toDate(),
       } as ProductPriceHistory;
-      console.log('oldVariant------------------------------------------------');
-    console.dir(oldVariant, { depth: null }); 
-      console.log('newPrice------------------------------------------------');
-    console.dir(newPrice, { depth: null }); 
       return {
         id: v.id,
         sku: v.sku,
         stock: v.stock,
-        prices: (oldVariant?.prices?.length
+        prices: oldVariant?.prices?.length
           ? [...oldVariant.prices, newPrice]
-          : [newPrice]) as ProductPriceHistory[],
+          : [newPrice],
         attributeValueIds: v.attributeValueIds?.map((id) => id),
-      }
+      };
     }) as UpdateProductVariantDto[];
-    console.log('------------------------------------------------');
-    console.dir(variants, { depth: null }); 
-    const variant = await this.productVariantService.update(savedProduct.id, variants);
+    await this.productVariantService.update(savedProduct.id, variants);
     return {
       status: 'success',
     };
   }
-  remove(slug: string) {
-    return `This action removes a #${slug} product`;
+  @Transactional()
+  async remove(slug: string) {
+    const product = await this.productRepo.findOneBy({ slug: slug });
+    const status = { status: ProductStatusEnum.DELETE };
+    if (!product) {
+      throw new NotFoundException('Product không tồn tại');
+    }
+    const deletedProduct = this.productRepo.merge(product, status);
+    await this.productRepo.save(deletedProduct);
+    return {
+      status: 'success',
+    };
   }
 }

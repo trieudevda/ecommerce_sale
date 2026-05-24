@@ -1,14 +1,8 @@
 "use client"
 import React from 'react';
-import {
-     Button, Flex,
-    notification,
-    Table,
-    TableProps,
-     Typography,
-} from 'antd';
+import {Button, Flex, notification, Table, TableProps, Typography,} from 'antd';
 import {requestApi} from "@/components/api/be.api";
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import {useSelector} from "react-redux";
 import {RootState} from "@/src/redux/store";
 import AdminBreadcrumb from "@/components/templates/admin/breadcrumb/breadcrumb";
@@ -20,6 +14,7 @@ import {getListProductColumns} from "@/components/templates/admin/product/listCo
 const App: React.FC = () => {
     const router = useRouter();
     const t = useTranslations("Product.List");
+    const tMess = useTranslations("Message");
     const tTable = useTranslations("Product.Table");
     const [product,setProduct] = React.useState([])
     const [messageApi, contextHolder] = notification.useNotification();
@@ -34,35 +29,34 @@ const App: React.FC = () => {
                 setIsLoading(true);
                 const data:any = await requestApi('product/find-all', { method: 'GET' });
                 if( data.statusCode === 403 ){
-                    messageApi.error({title:'Quyền',description: "Bạn không có quyền thực hiện việc này!",
+                    messageApi.error({title:tMess('Title.role'),description: tMess('Description.You_are_not_authorized_to_do_this'),
                         placement: 'bottomRight',});
                     return;
                 }
                 setProduct(data.data);
             } catch (error) {
-                messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
+                messageApi.error({ title: tMess('Title.error'), description: tMess('Description.An_error_occurred_while_saving_the_data') });
             } finally {
                 setIsLoading(false);
             }
         };
-
-        fetchData();
+        // fetchData();
     },[]);
     const handleEdit = (slug: string)=>{
         router.push(ADMIN_PATHS.PRODUCT.EDIT(slug));
     }
     const handleDelete = async (slug: string)=>{
-        // const data:any = await requestApi('product/' + slug, { method: 'DELETE' });
-        // if(data?.statusCode && data.statusCode >= 400)
-        //     messageApi.error({title:'Xóa sản phẩm',description: Array.isArray(data.message) ? data.message[0] : data.message,
-        //         placement: 'bottomRight',});
-        // else if(data) {
-        //     messageApi.success({
-        //         title: 'Xóa sản phẩm', description: 'Dữ liệu sản phẩm đã được cập nhật trên hệ thống.',
-        //         placement: 'bottomRight',
-        //     });
-        //     setUser((prevData) => prevData.filter(user => user.slug !== slug));
-        // }
+        const data:any = await requestApi('product/' + slug, { method: 'DELETE' });
+        if(data?.statusCode && data.statusCode >= 400)
+            messageApi.error({title:tMess('Title.info'),description: Array.isArray(data.message) ? data.message[0] : data.message,
+                placement: 'bottomRight',});
+        else if(data) {
+            messageApi.success({
+                title: tMess('Title.info'), description: tMess('Description.data_updated_successfully'),
+                placement: 'bottomRight',
+            });
+            setProduct((prevData) => prevData.filter(p => p.slug !== slug));
+        }
     }
     const handleCreate = ()=>{
         router.push(ADMIN_PATHS.PRODUCT.CREATE());

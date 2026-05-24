@@ -242,6 +242,8 @@
   },
   "Auth": {
     "login": "Đăng nhập",
+    "login_fail": "Đăng nhập thất bại",
+    "logout": "Đăng xuất",
     "email": "Email",
     "password": "Mật khẩu",
     "re_password": "Nhập lại mật khẩu",
@@ -250,35 +252,27 @@
     "submit": "Đăng nhập",
     "successfully": "Thành công",
     "error": "Lỗi",
-    "full_name": "Họ và tên",
-    "please_enter_your_name": "Vui lòng nhập tên",
-    "invalid_email": "Email không hợp lệ",
-    "invalid_password": "Mật khẩu không hợp lệ",
-    "phone": "Số điện thoại",
-    "please_enter_phone": "Vui lòng nhập số điện thoại",
-    "phone_number_is_not_in_the_correct_Vietnamese": "Số điện thoại không đúng định dạng Việt Nam (10 số)",
-    "user_added_successfully": "Thêm người dùng thành công",
-    "": "Cập nhật người dùng thành công",
-    "": "Xóa người dùng thành công",
-    "error_when_adding_user": "Lỗi khi thêm người dùng",
-    "": "Lỗi khi cập nhật người dùng",
-    "": "Lỗi khi xóa người dùng",
-    "adding_users_failed": "Thêm người dùng thành công"
+    "login_successful": "Đăng nhập thành công, trang sẽ chuyển sau 2s"
   },
   "Permission": {
     "title": "Phân quyền"
   },
   "Message": {
     "Title": {
-      "role": "Vai trò",
+      "permission": "Vai trò",
+      "role": "Quyền",
       "error": "Lỗi",
       "success": "Thành công",
-      "fail": "Thất bại"
+      "fail": "Thất bại",
+      "info": "Thông báo"
     },
     "Description": {
-       "You_are_not_authorized_to_do_this": "Bạn không có quyền thực hiện việc này!",
+      "You_are_not_authorized_to_do_this": "Bạn không có quyền thực hiện việc này!",
       "An_error_occurred_while_saving_the_data": "Có lỗi xảy ra khi lưu dữ liệu!",
-      "Unable_to_connect_to_the_server": "Không thể kết nối đến máy chủ!"
+      "Unable_to_connect_to_the_server": "Không thể kết nối đến máy chủ!",
+      "data_added_successfully!": "Thêm dữ liệu thành công!",
+      "data_updated_successfully": "Dữ liệu cập nhật thành công!",
+      "logout_successful": "đăng xuất thành công"
     }
   }
 }

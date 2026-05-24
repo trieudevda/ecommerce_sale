@@ -1,7 +1,7 @@
 "use client";
 import {useRouter} from "next/navigation";
 import React, {useState} from "react";
-import {Button, Card, Form, Input, InputNumber, notification, Select, Space, Spin, Upload, UploadFile,} from "antd";
+import {Button, Card, Form, Input, InputNumber, notification, Select, Space, Spin, Upload, UploadFile} from "antd";
 import {PlusOutlined, SaveOutlined} from "@ant-design/icons";
 import {useTranslations} from "use-intl";
 import dynamic from "next/dynamic";
@@ -19,6 +19,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [messageApi, contextHolder] = notification.useNotification();
   const t = useTranslations("Product.CRUD");
+  const tMess = useTranslations("Message");
   const [form] = Form.useForm();
   const [content, setContent] = useState("");
   const [avatarFile, setAvatarFile] = useState<UploadFile  | null>(null);
@@ -40,8 +41,8 @@ const Page = () => {
         }
       } catch (error) {
         messageApi.error({
-          title: "Lỗi",
-          description: "Không thể tải dữ liệu",
+          title: tMess('Title.error'),
+          description: tMess('Description.Unable_to_connect_to_the_server'),
         });
       } finally {
         setIsLoading(false);
@@ -76,13 +77,13 @@ const Page = () => {
       });
       if (res && res.status === "success") {
         messageApi.success({
-          title: "Thành công",
-          description: "Thêm sản phẩm thành công.",
+          title: tMess('Title.success'),
+          description: tMess('Description.data_added_successfully'),
         });
         setTimeout(() => router.push(ADMIN_PATHS.PRODUCT.LIST()), 1500);
       } else {
         messageApi.error({
-          title: "Thất bại",
+          title: tMess('Title.fail'),
           description: Array.isArray(res.message)
             ? res.message[0]
             : res.message,
@@ -90,8 +91,8 @@ const Page = () => {
       }
     } catch (error) {
       messageApi.error({
-        title: "Lỗi",
-        description: "Có lỗi xảy ra khi lưu dữ liệu",
+        title: tMess('Title.fail'),
+        description:  tMess('Description.An_error_occurred_while_saving_the_data'),
       });
     } finally {
       setIsLoading(false);
@@ -132,7 +133,7 @@ const Page = () => {
                       originFileObj: file,
                     };
                     setAvatarFile(uploadFile);
-                    return false; // Chặn upload tự động
+                    return false;
                   }}
                   fileList={avatarFile ? [avatarFile as any] : []}
                   onRemove={() => setAvatarFile(null)}
@@ -200,7 +201,7 @@ const Page = () => {
                 />
               </Form.Item>
               <Card
-                title="Biến thể sản phẩm"
+                title={t('product_variations')}
                 size="small"
                 style={{ marginBottom: 20 }}
               >
@@ -225,12 +226,12 @@ const Page = () => {
                             label="Thuộc tính"
                             style={{ width: 250 }}
                             rules={[
-                              { required: true, message: "Chọn thuộc tính" },
+                              { required: true, message: t('select_properties') },
                             ]}
                           >
                             <Select
                               mode="multiple"
-                              placeholder="Chọn giá trị (VD: Đỏ, L)"
+                              placeholder={t('select_a_value')}
                               options={cateAttr?.map((attr: any) => ({
                                 label: attr.name,
                                 options: attr.values?.map((val: any) => ({
@@ -243,28 +244,28 @@ const Page = () => {
                           <Form.Item
                             {...restField}
                             name={[name, "sku"]}
-                            label="Mã SKU"
-                            rules={[{ required: true, message: "Nhập SKU" }]}
+                            label={t('SKU_code')}
+                            rules={[{ required: true, message: t('enter_SKU') }]}
                           >
-                            <Input placeholder="Mã SKU" />
+                            <Input placeholder={t('SKU_code')} />
                           </Form.Item>
                           <Form.Item
                             {...restField}
                             name={[name, "stock"]}
-                            label="Kho"
+                            label={t('stock')}
                             rules={[
-                              { required: true, message: "Nhập tồn kho" },
+                              { required: true, message: t('please_enter_stock') },
                             ]}
                           >
-                            <InputNumber placeholder="Tồn kho" min={0} />
+                            <InputNumber placeholder={t('stock')} min={0} />
                           </Form.Item>
                           <Form.Item
                             {...restField}
                             name={[name, "price"]}
-                            label="Giá"
-                            rules={[{ required: true, message: "Nhập giá" }]}
+                            label={t('price')}
+                            rules={[{ required: true, message: t('enter_price') }]}
                           >
-                            <InputNumber placeholder="Giá bán" min={0} />
+                            <InputNumber placeholder={t('price')} min={0} />
                           </Form.Item>
 
                           <Button

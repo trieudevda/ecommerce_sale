@@ -1,8 +1,8 @@
 import React from "react";
 import {NextIntlClientProvider} from "next-intl";
 import {getMessages} from "next-intl/server";
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type {Metadata} from "next";
+import {Geist, Geist_Mono} from "next/font/google";
 import "./../globals.css";
 import {AppProvider} from "@/app/AppProvider";
 
@@ -28,10 +28,12 @@ export default async function RootLayout({children,params}: {
         <html
             lang={locale}
             className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-        ><AppProvider >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-        <body className="min-h-full flex flex-col">{children}</body>
-        </NextIntlClientProvider>
-    </AppProvider>
-        </html></>
+        >
+            <AppProvider >
+                <NextIntlClientProvider locale={locale} messages={messages}>
+                    <body className="min-h-full flex flex-col">{children}</body>
+                </NextIntlClientProvider>
+            </AppProvider>
+        </html>
+    </>
 }

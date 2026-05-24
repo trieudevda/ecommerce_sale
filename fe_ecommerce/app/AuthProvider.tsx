@@ -14,8 +14,10 @@ export function AuthProvider({ children }) {
     React.useEffect(() => {
         const initAuth = async () => {
             try {
+                if(user) router.push(ADMIN_PATHS.USER.LIST());
                 dispatch(setAppLoading(true));
-                const response = await checkAuthToken();
+                const response = await checkAuthToken();console.log(ADMIN_PATHS.AUTH.LOGIN())
+                console.log('response');console.log(response);
                 if (response && response?.statusCode >= 400) {
                     dispatch(setLogout());
                     router.push(ADMIN_PATHS.AUTH.LOGIN());

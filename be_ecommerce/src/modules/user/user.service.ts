@@ -99,7 +99,6 @@ export class UserService {
   async findByIdForAuth(id: string): Promise<User | null> {
     return await this.userRepo.findOne({
       where: { id },
-      // select: ['id', 'email', 'password', 'role', 'refreshToken'],
       select: {
         id: true,
         email: true,

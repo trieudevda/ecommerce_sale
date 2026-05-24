@@ -28,6 +28,7 @@ import { PaymentModule } from './modules/payment/payment.module';
 import { ImagesModule } from './modules/images/images.module';
 import { CategoryAttributeModule } from './modules/category_attribute/category_attribute.module';
 import { CategoryAttributeValuesModule } from './modules/category_attribute_values/category_attribute_values.module';
+import { JwtRefreshStrategy } from './modules/auth/guard/jwt-refresh.strategy';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { CategoryAttributeValuesModule } from './modules/category_attribute_valu
   controllers: [AppController, AuthController],
   providers: [
     AppService,
+    JwtRefreshStrategy,
     JwtStrategy,
     {
       provide: APP_INTERCEPTOR,

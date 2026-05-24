@@ -1,23 +1,9 @@
 "use client"
 import React from 'react';
-import {
-    LoadingOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    UploadOutlined,
-    UserOutlined,
-    VideoCameraOutlined,
-} from '@ant-design/icons';
-import {
-    Breadcrumb, Button, Flex,
-    notification, Spin,
-    Table,
-    TableProps,
-    theme, Typography,
-} from 'antd';
+import {Button, Flex, notification, Table, TableProps, Typography,} from 'antd';
 import {requestApi} from "@/components/api/be.api";
 import {getListUserColumns} from "@/components/templates/admin/user/listColumn";
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import {useSelector} from "react-redux";
 import {RootState} from "@/src/redux/store";
 import AdminBreadcrumb from "@/components/templates/admin/breadcrumb/breadcrumb";
@@ -33,17 +19,9 @@ const App: React.FC = () => {
     const [messageApi, contextHolder] = notification.useNotification();
     const [isLoading, setIsLoading] = React.useState(true);
     const { user, isAuthenticated, isAppLoading } = useSelector((state: RootState) => state.auth);
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
     const onChange: TableProps['onChange'] = (pagination, filters, sorter, extra) => {
         console.log('params', pagination, filters, sorter, extra);
     };
-    React.useEffect(()=>{
-        // if (!isAuthenticated) {
-        //     router.push('/login/admin');
-        // }
-    },[router, isAuthenticated, isAppLoading ])
     React.useEffect(() => {
         const fetchData = async () => {
             try {
@@ -61,7 +39,6 @@ const App: React.FC = () => {
                 setIsLoading(false);
             }
         };
-
         fetchData();
     },[]);
     const handleEdit = (id: {id: string})=>{

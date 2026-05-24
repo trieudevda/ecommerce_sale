@@ -26,10 +26,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     }
                     else{
                         dispatch(setUser(user));
-                        router.push(ADMIN_PATHS.USER.LIST());
+                        router.push(ADMIN_PATHS.PERMISSION.LIST());
                     }
                 } catch (error) {
-                    messageApi.error({ title: tMess('Message.error'), description: tMess('Message.An_error_occurred_while_saving_the_data') });
+                    messageApi.error({ title: tMess('error'), description: tMess('Message.An_error_occurred_while_saving_the_data') });
                 } finally {
                 }
             };

@@ -1,11 +1,16 @@
 'use client'
-import {Button, Layout, Menu, Spin, theme} from "antd";
-import {LoadingOutlined, MenuFoldOutlined, MenuUnfoldOutlined,} from "@ant-design/icons";
+import {Button, Layout, Menu, notification, Spin, theme} from "antd";
+import {LoadingOutlined, LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import React, {useMemo} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/redux/store";
 import {sidebarAdmin} from "@/src/custom/menu-admin/sidebar-admin";
 import {AuthProvider} from "@/app/AuthProvider";
+import {requestApi} from "@/components/api/be.api";
+import {useRouter} from "next/navigation";
+import {useTranslations} from "use-intl";
+import {ADMIN_PATHS} from "@/src/path";
+import {setLogout} from "@/src/redux/slices/authSlice";
 
 export default  function AdminLayout({children}: {
     children: React.ReactNode;
@@ -16,10 +21,34 @@ export default  function AdminLayout({children}: {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
     const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+    const dispatch = useDispatch();
     const [collapsed, setCollapsed] = React.useState(false);
+    const [messageApi, contextHolder] = notification.useNotification();
+    const router = useRouter();
+    const tAuth = useTranslations("Auth");
+    const tMess = useTranslations("Message");
     const menuAdmin = useMemo(()=>sidebarAdmin(userId),[userId]);
+    const logout = async () => {
+        const res: any = await requestApi(`auth/logout`, {
+            method: 'POST',
+        });
+        if (res && res.status == 'success') {
+            dispatch(setLogout())
+            messageApi.success({
+                title: tMess('Title.success'),
+                description: tMess('Description.logout_successful'),
+            });
+            setTimeout(() => router.push(ADMIN_PATHS.AUTH.LOGIN()), 1500);
+        } else {
+            messageApi.error({
+                title: tMess('Title.fail'),
+                description: Array.isArray(res.message) ? res.message[0] : res.message,
+            });
+        }
+    }
     return <AuthProvider>
         <Layout>
+            {contextHolder}
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="demo-logo-vertical" />
                 <Menu
@@ -28,6 +57,7 @@ export default  function AdminLayout({children}: {
                     defaultSelectedKeys={['1']}
                     items={menuAdmin}
                 />
+                <Button type={'dashed'} icon={<LogoutOutlined />} onClick={logout}>{tAuth('logout')}</Button>
             </Sider>
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer }}>

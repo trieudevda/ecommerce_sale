@@ -29,7 +29,7 @@ const App: React.FC = () => {
                 setIsLoading(true);
                 const data = await requestApi('roles/find-all-role', { method: 'GET' });
                 if( data.statusCode === 403 ){
-                    messageApi.error({title:tMess('Title.role'),description: tMess("Description.You_are_not_authorized_to_do_this"),
+                    messageApi.error({title:tMess('Title.permission'),description: tMess("Description.You_are_not_authorized_to_do_this"),
                         placement: 'bottomRight',});
                     setTimeout(()=>{router.push(ADMIN_PATHS.USER.LIST())},1000);
                     return;

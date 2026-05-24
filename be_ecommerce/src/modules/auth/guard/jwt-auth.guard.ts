@@ -18,7 +18,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
     if (isPublic) {
-      return true; // Nếu có @Public() thì cho qua luôn, không check token nữa
+      return true;
     }
     return super.canActivate(context);
   }

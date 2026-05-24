@@ -38,7 +38,7 @@ export class AuthController {
       message: 'Đăng nhập thành công',
     };
   }
-
+  @Public()
   @Post('refresh')
   async refreshTokens(
     @Req() req: Request,
@@ -47,7 +47,6 @@ export class AuthController {
     const refreshToken = req.cookies['refresh_token'];
     if (!refreshToken) throw new UnauthorizedException('Đăng nhập thất bại');
     const tokens = await this.authService.refreshTokens(refreshToken);
-    // Ghi đè Access Token
     res.cookie('access_token', tokens.accessToken, {
       httpOnly: true,
       secure: false,
@@ -56,5 +55,15 @@ export class AuthController {
     });
 
     return tokens.user;
+  }
+  @Public()
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
+
+    return {
+      status: 'success',
+    };
   }
 }

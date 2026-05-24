@@ -1,10 +1,4 @@
-import {
-  IsOptional,
-  IsString,
-  IsInt,
-  Min,
-  IsIn, IsEnum,
-} from 'class-validator';
+import { IsEnum, IsIn, IsInt, IsOptional, IsString, Min, } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { ProductStatusEnum } from '../enums/product.enum';
 
@@ -23,7 +17,7 @@ export class FindProductQueryDto {
 
   @IsOptional()
   @IsEnum(ProductStatusEnum, { message: 'Status không hợp lệ' })
-  status?: ProductStatusEnum;
+  status?: ProductStatusEnum = ProductStatusEnum.PUBLIC;
 
   @IsOptional()
   @IsIn(['ASC', 'DESC'])

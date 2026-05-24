@@ -1,4 +1,3 @@
-// auth/jwt.strategy.ts
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-jwt';
@@ -22,6 +21,5 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('User không tồn tại');
     }
     return user;
-    // return { userId: payload.sub, email: payload.email, role: payload.role, };
   }
 }
