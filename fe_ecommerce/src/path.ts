@@ -41,7 +41,8 @@ export const ADMIN_PATHS = {
         EDIT: (id: string) => APP_PATH.ADMIN + APP_PATH.PERMISSION + `/edit/${id}`,
     },
     AUTH: {
-        LOGIN: () => '/login' + APP_PATH.ADMIN ,
+        LOGIN: () => APP_PATH.AUTH + '/login' + APP_PATH.ADMIN,
+        CREATE: () => APP_PATH.AUTH + '/create' + APP_PATH.ADMIN,
     },
 
 };

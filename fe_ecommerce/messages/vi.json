@@ -241,6 +241,7 @@
     }
   },
   "Auth": {
+    "create_account": "tạo tài khoản",
     "login": "Đăng nhập",
     "login_fail": "Đăng nhập thất bại",
     "logout": "Đăng xuất",
@@ -252,7 +253,14 @@
     "submit": "Đăng nhập",
     "successfully": "Thành công",
     "error": "Lỗi",
-    "login_successful": "Đăng nhập thành công, trang sẽ chuyển sau 2s"
+    "login_successful": "Đăng nhập thành công, trang sẽ chuyển sau 2s",
+    "shop_admin": "Quản lý cửa hàng",
+    "login_to_manage_your_store": "Đăng nhập để quản lý cửa hàng của bạn",
+    "email_fail": "Email không hợp lệ",
+    "please_enter_the_password": "Vui lòng nhập mật khẩu",
+    "forgot_your_password": "Quên mật khẩu?",
+    "or": "Hoặc",
+    "sign_in_with_google": "Đăng nhập với Google"
   },
   "Permission": {
     "title": "Phân quyền"
