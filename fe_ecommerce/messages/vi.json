@@ -55,6 +55,7 @@
       "name": "Tên",
       "email": "Email",
       "password": "Mật khẩu",
+      "confirm_password": "Nhập lại mật khẩu",
       "cancel": "Hủy",
       "create": "Thêm người dùng",
       "edit": "Chỉnh sửa người dùng",
@@ -89,7 +90,9 @@
       "inactive": "Không hoạt động",
       "deleted": "Đã xóa",
       "last_login": "Lần đăng nhập cuối",
-      "save": "Lưu"
+      "save": "Lưu",
+      "please_confirm_your_password": "Vui lòng nhập mật khẩu của bạn",
+      "passwords_do_not_match": "Mật khẩu không khớp"
     }
   },
   "Product": {
@@ -241,9 +244,10 @@
     }
   },
   "Auth": {
-    "create_account": "tạo tài khoản",
+    "create_account": "Tạo tài khoản",
     "login": "Đăng nhập",
     "login_fail": "Đăng nhập thất bại",
+    "register": "Đăng ký",
     "logout": "Đăng xuất",
     "email": "Email",
     "password": "Mật khẩu",
@@ -260,7 +264,11 @@
     "please_enter_the_password": "Vui lòng nhập mật khẩu",
     "forgot_your_password": "Quên mật khẩu?",
     "or": "Hoặc",
-    "sign_in_with_google": "Đăng nhập với Google"
+    "sign_in_with_google": "Đăng nhập với Google",
+    "register_to_start_managing_your_store": "Đăng ký để bắt đầu quản lý cửa hàng của bạn",
+    "i_agree_to_terms": "Tôi đồng ý với các điều khoản",
+    "passwords_do_not_match": "Mật khẩu không khớp",
+    "please_accept_terms": "please_accept_terms"
   },
   "Permission": {
     "title": "Phân quyền"
