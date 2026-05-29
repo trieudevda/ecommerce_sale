@@ -31,7 +31,7 @@ export default  function AdminLayout({children}: {
                         router.push(ADMIN_PATHS.PERMISSION.LIST());
                     }
                 } catch (error) {
-                    messageApi.error({ title: tMess('error'), description: tMess('Message.An_error_occurred_while_saving_the_data') });
+                    messageApi.error({ title: tMess('Title.error'), description: tMess('Description.An_error_occurred_while_saving_the_data') });
                 } finally {
                 }
             };

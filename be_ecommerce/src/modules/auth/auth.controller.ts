@@ -1,4 +1,13 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res, UnauthorizedException, } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import type { Request, Response } from 'express';
 import { Public } from '../../common/decorators/public.decorator';
@@ -23,16 +32,26 @@ export class AuthController {
       httpOnly: true,
       secure: isDev ? false : false,
       sameSite: isDev ? 'lax' : 'none',
-      maxAge: Number(process.env.JWT_EXPIRES_IN_ACCESS || 900000),
+      ...(signInDto.remember
+        ? {
+            maxAge: Number(process.env.JWT_EXPIRES_IN_REFRESH || 604800000),
+          }
+        : {}),
+      // maxAge: Number(process.env.JWT_EXPIRES_IN_ACCESS || 900000),
       path: '/',
     });
     response.cookie('refresh_token', data.refreshToken, {
       httpOnly: true,
       secure: isDev ? false : false,
       sameSite: isDev ? 'lax' : 'none',
-      maxAge: Number(process.env.JWT_EXPIRES_IN_REFRESH || 604800000),
+      ...(signInDto.remember
+        ? {
+            maxAge: Number(process.env.JWT_EXPIRES_IN_REFRESH || 604800000),
+          }
+        : {}),
       path: '/',
     });
+    // maxAge: Number(process.env.JWT_EXPIRES_IN_REFRESH || 604800000),
     return {
       user: data.user,
       message: 'Đăng nhập thành công',

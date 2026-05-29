@@ -1,21 +1,13 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
-import { Repository, In } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Permission } from '../permissions/entities/permission.entity';
 import { DEFAULT_LIMIT, MAX_LIMIT } from '../../config/constant-find';
 import { FindRoleQueryDto } from './dto/find-role-query.dto';
 import { Transactional } from 'typeorm-transactional';
 import { CreateRoleDto } from './dto/create-role.dto';
-import {UserStatusEnum} from "../user/enums/user.enum";
-import {FindUserQueryDto} from "../user/dto/find-user-query.dto";
-import {UpdateUserDto} from "../user/dto/update-user.dto";
-import {UpdateRoleDto} from "./dto/update-role.dto";
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class RolesService {
@@ -94,6 +86,7 @@ export class RolesService {
   }
   @Transactional()
   async create(createRoleDto: CreateRoleDto) {
+    console.log(123);
     const check = await this.roleRepo.findOneBy([
       { name: createRoleDto.name },
       { slug: createRoleDto.slug },

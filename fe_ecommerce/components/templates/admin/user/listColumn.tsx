@@ -1,6 +1,8 @@
-import {Divider, Space, TableColumnsType, Tag, Tooltip, Typography} from "antd";
+import {Space, TableColumnsType, Tag, Tooltip, Typography} from "antd";
 import React from "react";
 import {PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
+import {User} from "@/src/interface/user.interface";
+
 interface DataType {
     id: string;
     email: string;
@@ -20,7 +22,7 @@ interface ActionProps {
     onDelete: (id: string) => void;
     t: any
 }
-export const getListUserColumns = ({ onEdit, onDelete, t }: ActionProps): TableColumnsType<DataType> => [
+export const getListUserColumns = ({ onEdit, onDelete, t }: ActionProps): TableColumnsType<User> => [
     {
         // key: '',
         title: t('email'),
@@ -65,7 +67,7 @@ export const getListUserColumns = ({ onEdit, onDelete, t }: ActionProps): TableC
                 value: 'New York',
             },
         ],
-        onFilter: (value, record) => record.address.startsWith(value as string),
+        onFilter: (value, record) => record.address?.startsWith(value as string),
         filterSearch: true,
         // width: '40%',
     },

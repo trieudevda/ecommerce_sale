@@ -125,21 +125,30 @@ export class UserService {
   }
   @Transactional()
   async create(createUserDto: CreateUserDto) {
-    const role = await this.roleRepo.findOne({
+    let role = null;
+    role = await this.roleRepo.findOne({
       where: [{ id: createUserDto.role?.id }, { slug: UserRoleEnum.USER }],
     });
     if (!role) {
-      throw new NotFoundException('Role không tồn tại');
+      // throw new NotFoundException('Role không tồn tại');
+      role = await this.roleRepo.findOne({
+        where: { slug: UserRoleEnum.USER },
+      });
     }
     const user = this.userRepo.create({
       ...createUserDto,
-      role: role,
+      role: {
+        id: role?.id,
+      },
+      // role: role,
     });
     const savedUser = await this.userRepo.save(user);
     if (!savedUser) {
       throw new Error('Create failed');
     }
-    return savedUser;
+    return {
+      status: 'success',
+    };
   }
   @Transactional()
   async update(id: string, updateUserDto: UpdateUserDto) {

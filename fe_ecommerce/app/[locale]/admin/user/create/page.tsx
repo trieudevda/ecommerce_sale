@@ -3,11 +3,9 @@ import {useParams, useRouter} from 'next/navigation';
 
 import React, {useState} from "react";
 import {requestApi} from "@/components/api/be.api";
-import {Button, Card, DatePicker, Form, Input, Layout, notification, Select, Space, Spin} from "antd";
+import {Button, Card, DatePicker, Form, Input, notification, Select, Space, Spin} from "antd";
 import {ArrowLeftOutlined, SaveOutlined} from "@ant-design/icons";
 import dayjs from "dayjs";
-import {useSelector} from "react-redux";
-import {RootState} from "@/src/redux/store";
 import {useTranslations} from "use-intl";
 // import { useRouter } from 'next/navigation';
 
@@ -19,6 +17,7 @@ const Page = ()=>{
     const [isLoading, setIsLoading] = React.useState(false);
     const [messageApi, contextHolder] = notification.useNotification();
     const t = useTranslations("User.CRUD");
+    const tMess = useTranslations("Message");
     const [form] = Form.useForm();
     React.useEffect(() => {
         const fetchUserData = async () => {
@@ -68,15 +67,15 @@ const Page = ()=>{
                 body: JSON.stringify(transformedData),
             });
 
-            if (res && !res.statusCode) {
+            if (res && res.status == 'success') {
                 messageApi.success({
-                    title: 'Thành công',
-                    description: 'Thêm người dùng thành công.',
+                    title: tMess('successfully'),
+                    description: tMess('user_added_successfully'),
                 });
                 setTimeout(() => router.push('/admin/user'), 1500);
             } else {
                 messageApi.error({
-                    title: 'Thất bại',
+                    title: tMess('adding_users_failed'),
                     description: Array.isArray(res.message) ? res.message[0] : res.message,
                 });
             }

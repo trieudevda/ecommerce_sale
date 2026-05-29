@@ -16,8 +16,7 @@ export function AuthProvider({ children }) {
             try {
                 if(user) router.push(ADMIN_PATHS.USER.LIST());
                 dispatch(setAppLoading(true));
-                const response = await checkAuthToken();console.log(ADMIN_PATHS.AUTH.LOGIN())
-                console.log('response');console.log(response);
+                const response = await checkAuthToken();
                 if (response && response?.statusCode >= 400) {
                     dispatch(setLogout());
                     router.push(ADMIN_PATHS.AUTH.LOGIN());

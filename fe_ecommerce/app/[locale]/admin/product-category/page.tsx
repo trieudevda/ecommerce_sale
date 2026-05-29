@@ -1,29 +1,14 @@
 "use client"
 import React from 'react';
-import {
-    LoadingOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    UploadOutlined,
-    UserOutlined,
-    VideoCameraOutlined,
-} from '@ant-design/icons';
-import {
-    Breadcrumb, Button, Flex,
-    notification, Spin,
-    Table,
-    TableProps,
-    theme, Typography,
-} from 'antd';
+import {Button, Flex, notification, Table, TableProps, Typography,} from 'antd';
 import {requestApi} from "@/components/api/be.api";
-import {getListUserColumns} from "@/components/templates/admin/user/listColumn";
 import {useRouter, useSearchParams} from 'next/navigation';
 import {useSelector} from "react-redux";
 import {RootState} from "@/src/redux/store";
 import AdminBreadcrumb from "@/components/templates/admin/breadcrumb/breadcrumb";
 import {useTranslations} from "use-intl";
 import {ADMIN_PATHS} from "@/src/path";
-import { getListCategoryColumns } from '@/components/templates/admin/category/listColumn';
+import {getListCategoryColumns} from '@/components/templates/admin/category/listColumn';
 import LoadingAdmin from "@/components/templates/admin/loading/loading-admin";
 
 
@@ -90,7 +75,7 @@ const App: React.FC = () => {
                 <Flex gap={'small'} wrap={false}>
                     <Typography.Title level={3}>{t('title')}</Typography.Title>
                     {
-                        user.role.slug === 'superAdmin'
+                        user.role === 'superAdmin'
                         ? <Button type="primary" onClick={handleCreate}>{t('create')}</Button>
                             : <></>
                     }

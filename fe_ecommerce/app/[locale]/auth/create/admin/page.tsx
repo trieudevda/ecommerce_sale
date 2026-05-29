@@ -1,45 +1,54 @@
 'use client'
 import {useRouter} from 'next/navigation';
-import React from "react";
+import React, {useState} from "react";
 import {requestApi} from "@/components/api/be.api";
 import {Button, Card, Checkbox, Form, Input, notification, Spin, Typography} from "antd";
 import {LockOutlined, LoginOutlined, MailOutlined, ShoppingOutlined, UserOutlined} from "@ant-design/icons";
 import {useTranslations} from "use-intl";
+import {ADMIN_PATHS} from "@/src/path";
 
 const Page = ()=>{
     const router = useRouter();
     const [isLoading, setIsLoading] = React.useState(false);
     const [messageApi, contextHolder] = notification.useNotification();
     const [form] = Form.useForm();
+    const [role,setRole]=useState([]);
     const tAuth = useTranslations("Auth");
     const tUser = useTranslations("User.CRUD");
     const tMess = useTranslations("Message");
-    const onFinish = async (values: any) => {
-        console.log(values);
-        return;
-        if(values.password !== values.repassword) {
-            messageApi.error({
-                title: tMess('error'),
-                description: tMess('t_match'),
-            });
-            return;
+    React.useEffect(() => {
+        const fetchRole = async () =>{
+            try {
+                const res: any = await requestApi('roles/find-all', { method: 'GET' });
+                if (res && !res.statusCode) {
+                    setRole(res.data);
+                } else {
+                    messageApi.error({ title: tMess("Title.error_connect"), description: tMess('Description.Unable_to_connect_to_the_server') });
+                }
+            } catch (error) {
+                messageApi.error({ title: tMess("Title.error_connect"), description: tMess('Description.Unable_to_connect_to_the_server') });
+            } finally {
+                setIsLoading(false);
+            }
         }
+        fetchRole();
+    }, [form, messageApi]);
+    const onFinish = async (values: any) => {
         setIsLoading(true);
         try {
             const res: any = await requestApi(`user`, {
                 method: 'POST',
                 body: JSON.stringify(values),
             });
-
-            if (res && !res.statusCode) {
+            if (res && res.status == 'success') {
                 messageApi.success({
-                    title: tMess('successfully'),
-                    description: tMess('user_added_successfully'),
+                    title: tAuth('successfully'),
+                    description: tUser('user_added_successfully'),
                 });
-                setTimeout(() => router.push('/admin/user'), 1500);
+                setTimeout(() => router.push(ADMIN_PATHS.AUTH.LOGIN()), 1500);
             } else {
                 messageApi.error({
-                    title: tMess('adding_users_failed'),
+                    title: tUser('adding_users_failed'),
                     description: Array.isArray(res.message) ? res.message[0] : res.message,
                 });
             }
@@ -54,11 +63,9 @@ const Page = ()=>{
         <div className="min-h-dvh grid grid-cols-1 lg:grid-cols-[1fr_520px] bg-[#f5f7fb]">
             <div className="relative overflow-hidden flex items-center justify-center p-8 bg-gradient-to-br from-slate-900 via-blue-900 to-blue-600">
                 <div className="relative z-10 max-w-lg text-white">
-
                     <div className="w-20 h-20 rounded-3xl flex items-center justify-center mb-8 backdrop-blur-md bg-white/10">
                         <ShoppingOutlined className="text-4xl text-white" />
                     </div>
-
                     <Typography.Title className="!text-white text-4xl mb-5">
                         {tAuth('create_account')}
                         <br />
@@ -116,6 +123,7 @@ const Page = ()=>{
                             layout="vertical"
                             onFinish={onFinish}
                             size="large"
+                            disabled={isLoading}
                         >
                             <Form.Item
                                 label={tUser('name')}
@@ -211,11 +219,12 @@ const Page = ()=>{
                                             value
                                                 ? Promise.resolve()
                                                 : Promise.reject(
-                                                    new Error(tAuth("please_accept_terms"))
+                                                    new Error(tMess("Description.you_have_not_accepted_the_terms"))
                                                 ),
                                     },
                                 ]}
                                 className="mb-6"
+                                required={true}
                             >
                                 <Checkbox>{tAuth("i_agree_to_terms")}</Checkbox>
                             </Form.Item>

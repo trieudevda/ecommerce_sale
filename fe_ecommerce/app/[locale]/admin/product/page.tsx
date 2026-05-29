@@ -75,7 +75,7 @@ const App: React.FC = () => {
                     <Flex gap={'small'} wrap={false}>
                         <Typography.Title level={3}>{t('title')}</Typography.Title>
                         {
-                            user.role.slug !== 'user' && user.role.slug !== 'guest'
+                            user.role !== 'user' && user.role !== 'guest'
                                 ? <Button type="primary" onClick={handleCreate}>{t('create')}</Button>
                                 : <></>
                         }

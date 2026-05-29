@@ -22,9 +22,20 @@ export class DatabaseSeedService implements OnApplicationBootstrap {
       if (existingPers?.data.length === 0) {
         const allCodes = per.map((p) => p.code);
         await this.roleService.createRoleWithCodes(
-          'Quản trị viên',
+          'Quản trị viên cấp cao',
           'superAdmin',
           allCodes,
+        );
+        await this.roleService.createRoleWithCodes(
+          'Quản trị viên',
+          'admin',
+          [],
+        );
+        await this.roleService.createRoleWithCodes('Người dùng', 'user', []);
+        await this.roleService.createRoleWithCodes(
+          'Khách vãng lai',
+          'guest',
+          [],
         );
         await this.userService.create({
           email: 'adminsuper@gmail.com',

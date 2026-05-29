@@ -2,8 +2,7 @@
 import React from "react";
 import {Button, Card, Checkbox, Divider, Form, Input, notification, Spin, Typography} from "antd";
 import {useRouter} from "next/navigation";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/src/redux/store";
+import {useDispatch} from "react-redux";
 import {useTranslations} from "use-intl";
 import {GoogleOutlined, LockOutlined, LoginOutlined, MailOutlined, ShoppingOutlined} from "@ant-design/icons";
 import {requestApi} from "@/components/api/be.api";
@@ -14,7 +13,6 @@ const Page = ()=>{
     const [form] = Form.useForm();
     const router = useRouter();
     const dispatch = useDispatch();
-    const { isAppLoading } = useSelector((state: RootState) => state.auth);
     const [isLoading, setIsLoading] = React.useState(false);
     const [messageApi, contextHolder] = notification.useNotification();
     const tAuth = useTranslations("Auth");
@@ -23,6 +21,9 @@ const Page = ()=>{
     const onFinish = async (values: any) => {
         setIsLoading(true);
         try {
+            if(values.remember === undefined){
+                values.remember = false;
+            }
             const res: any = await requestApi(`auth/login`, {
                 method: 'POST',
                 body: JSON.stringify(values),
@@ -34,7 +35,7 @@ const Page = ()=>{
                     description: tAuth('login_successful'),
 
                 });
-                setTimeout(() => router.push(ADMIN_PATHS.ROLE.LIST()), 2000);
+                setTimeout(() => router.push(ADMIN_PATHS.USER.LIST()), 2000);
             } else {
                 messageApi.error({
                     title: tAuth('login_fail'),
@@ -173,14 +174,19 @@ const Page = ()=>{
                                     }}
                                 />
                             </Form.Item>
-                            <div className={"flex justify-between mb-6"}>
-                                <Checkbox>
-                                    {tAuth('remember_me')}
-                                </Checkbox>
-                                <a href="#">
-                                    {tAuth('forgot_your_password')}
-                                </a>
-                            </div>
+                            <Form.Item
+                                name="remember"
+                                valuePropName="checked"
+                            >
+                                <div className={"flex justify-between mb-6"}>
+                                    <Checkbox>
+                                        {tAuth('remember_me')}
+                                    </Checkbox>
+                                    <a href="#">
+                                        {tAuth('forgot_your_password')}
+                                    </a>
+                                </div>
+                            </Form.Item>
                             <Form.Item>
                                 <Button
                                     type="primary"
