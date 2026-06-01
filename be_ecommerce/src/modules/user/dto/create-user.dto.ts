@@ -12,7 +12,7 @@ import {
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import dayjs from 'dayjs';
-import { UserRoleEnum, UserStatusEnum } from '../enums/user.enum';
+import { UserStatusEnum } from '../enums/user.enum';
 import { RoleRelationDto } from '../../roles/dto/role-relation';
 
 // export enum UserRole {
@@ -38,8 +38,8 @@ export class CreateUserDto {
   fullName: string;
 
   @IsOptional()
-  @Matches(/^[0-9]{10,11}$/, {
-    message: 'Số điện thoại không hợp lệ',
+  @Matches(/^(0[3|5|7|8|9])[0-9]{8}$/, {
+    message: 'Số điện thoại Việt Nam không hợp lệ',
   })
   phone?: string;
 
