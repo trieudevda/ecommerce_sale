@@ -1,17 +1,16 @@
 'use client'
-import { useParams, useRouter } from 'next/navigation';
 import React from "react";
-import { Button, Card, Form, Input, Layout, notification, Select, Space, Spin } from "antd";
-import { SaveOutlined } from "@ant-design/icons";
-import { useTranslations } from "use-intl";
+import {Button, Card, Form, Input, notification, Space, Spin} from "antd";
+import {MinusCircleOutlined, PlusOutlined, SaveOutlined} from "@ant-design/icons";
+import {useTranslations} from "use-intl";
 import {requestApi} from "@/components/api/be.api";
 import LoadingAdmin from "@/components/templates/admin/loading/loading-admin";
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 const Page = () => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [messageApi, contextHolder] = notification.useNotification();
     const t = useTranslations("Product.Category.Attribute");
+    const tMess = useTranslations("Message");
     const [form] = Form.useForm();
     const onFinish = async (values: object) => {
         setIsLoading(true);
@@ -23,17 +22,17 @@ const Page = () => {
             if (res && res.data) {
                 form.resetFields();
                 messageApi.success({
-                    title: 'Thành công',
-                    description: 'Thêm thuộc tính thành công.',
+                    title: tMess('Title.info'),
+                    description: tMess('Description.data_added_successfully'),
                 });
             } else {
                 messageApi.error({
-                    title: 'Thất bại',
+                    title: tMess('Title.info'),
                     description: Array.isArray(res.message) ? res.message[0] : res.message,
                 });
             }
         } catch (error) {
-            messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
+            messageApi.error({ title: tMess('Title.error'), description: tMess('Description.An_error_occurred_while_saving_the_data') });
         } finally {
             setIsLoading(false);
         }
@@ -73,7 +72,7 @@ const Page = () => {
                                     {
                                         validator: async (_, names) => {
                                             if (!names || names.length < 1) {
-                                                return Promise.reject(new Error('Phải có ít nhất 1 giá trị'));
+                                                return Promise.reject(new Error(t('there_must_be_at_least_one_value')));
                                             }
                                         },
                                     },
@@ -86,7 +85,7 @@ const Page = () => {
                                                 <Form.Item
                                                     {...field}
                                                     name={[field.name, 'value']} // Map vào mảng object: { value: '...' }
-                                                    rules={[{ required: true, message: 'Nhập giá trị' }]}
+                                                    rules={[{ required: true, message: t('enter_value') }]}
                                                 >
                                                     <Input placeholder="Ví dụ: Đỏ / XL / 128GB" />
                                                 </Form.Item>

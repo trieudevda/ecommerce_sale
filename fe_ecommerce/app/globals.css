@@ -25,3 +25,52 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* =========================================
+   CUSTOM SCROLLBAR (Ép chạy trên Windows & Antd)
+   ========================================= */
+
+/* 1. Nhắm thẳng vào class chứa cuộn ngang/dọc của Ant Design Table và Tailwind */
+.ant-table-body::-webkit-scrollbar,
+.ant-table-content::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar,
+.custom-premium-modal .ant-modal-body::-webkit-scrollbar {
+  width: 6px !important;
+  height: 8px !important;
+}
+
+/* 2. Track (Phần rãnh trượt) */
+.ant-table-body::-webkit-scrollbar-track,
+.ant-table-content::-webkit-scrollbar-track,
+.overflow-x-auto::-webkit-scrollbar-track,
+.custom-premium-modal .ant-modal-body::-webkit-scrollbar-track {
+  background: transparent !important;
+  border-radius: 10px !important;
+}
+
+/* 3. Thumb (Phần tay cầm) */
+.ant-table-body::-webkit-scrollbar-thumb,
+.ant-table-content::-webkit-scrollbar-thumb,
+.overflow-x-auto::-webkit-scrollbar-thumb,
+.custom-premium-modal .ant-modal-body::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1 !important; /* Màu slate-300 */
+  border-radius: 10px !important;
+  border: 2px solid transparent !important; /* Tạo khoảng hở (padding) giả cho thanh cuộn */
+  background-clip: padding-box !important;
+}
+
+/* 4. Thumb Hover (Khi di chuột vào tay cầm) */
+.ant-table-body::-webkit-scrollbar-thumb:hover,
+.ant-table-content::-webkit-scrollbar-thumb:hover,
+.overflow-x-auto::-webkit-scrollbar-thumb:hover,
+.custom-premium-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8 !important; /* Màu slate-400 */
+}
+
+/* Firefox fallback */
+.ant-table-body,
+.ant-table-content,
+.overflow-x-auto,
+.custom-premium-modal .ant-modal-body {
+  scrollbar-width: thin !important;
+  scrollbar-color: #cbd5e1 transparent !important;
+}

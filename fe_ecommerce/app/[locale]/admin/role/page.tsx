@@ -16,6 +16,7 @@ const App: React.FC = () => {
     const router = useRouter();
     const t = useTranslations("Role.List");
     const tTable = useTranslations("Role.Table");
+    const tMess = useTranslations("Message");
     const [role,setRole] = React.useState([])
     const [messageApi, contextHolder] = notification.useNotification();
     const [isLoading, setIsLoading] = React.useState(true);
@@ -30,13 +31,13 @@ const App: React.FC = () => {
                 setIsLoading(true);
                 const data = await requestApi('roles/find-all', { method: 'GET' });
                 if( data.statusCode === 403 ){
-                    messageApi.error({title:'Quyền',description: "Bạn không có quyền thực hiện việc này!",
+                    messageApi.error({title:tMess('Title.info'),description: tMess('Description.You_are_not_authorized_to_do_this'),
                         placement: 'bottomRight',});
                     return;
                 }
                 setRole(data.data);
             } catch (error) {
-                messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
+                messageApi.error({ title: tMess('Title.error'), description: tMess('Description.Unable_to_connect_to_the_server') });
             } finally {
                 setIsLoading(false);
             }
@@ -44,17 +45,17 @@ const App: React.FC = () => {
 
         fetchData();
     },[]);
-    const handleEdit = (id: {id: string})=>{
-        router.push(`/admin/role/edit/${id}`);
+    const handleEdit = (id: string)=>{
+        router.push(ADMIN_PATHS.ROLE.EDIT(id));
     }
     const handleDelete = async (id: string)=>{
         const data = await requestApi('roles/' + id, { method: 'DELETE' });
         if(data?.statusCode && data.statusCode >= 400)
-            messageApi.error({title:'Xóa vai trò',description: Array.isArray(data.message) ? data.message[0] : data.message,
+            messageApi.error({title:tMess('Title.info'),description: Array.isArray(data.message) ? data.message[0] : data.message,
                 placement: 'bottomRight',});
         else if(data) {
             messageApi.success({
-                title: 'Xóa vai trò', description: 'Xóa vai trò thành công.',
+                title:tMess('Title.info'), description: tMess('Description.data_delete_successfully'),
                 placement: 'bottomRight',
             });
             setRole((prevData) => prevData.filter(role => role.id !== id));

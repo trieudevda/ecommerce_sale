@@ -59,8 +59,8 @@ export default  function AdminLayout({children}: {
                 />
                 <Button type={'dashed'} icon={<LogoutOutlined />} onClick={logout}>{tAuth('logout')}</Button>
             </Sider>
-            <Layout>
-                <Header style={{ padding: 0, background: colorBgContainer }}>
+            <Layout className={'relative overflow-hidden max-h-screen'}>
+                <Header className={'sticky top-0'} style={{ padding: 0, background: colorBgContainer }}>
                     <Button
                         type="text"
                         icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -73,9 +73,10 @@ export default  function AdminLayout({children}: {
                     />
                 </Header>
                 <Content
+                    className={'overflow-y-scroll'}
                     style={{
-                        margin: '24px 16px',
-                        padding: 24,
+                        margin: '12px 8px',
+                        padding: 12,
                         minHeight: 280,
                         background: colorBgContainer,
                         borderRadius: borderRadiusLG,

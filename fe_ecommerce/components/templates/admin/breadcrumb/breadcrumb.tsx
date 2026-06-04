@@ -1,10 +1,9 @@
 'use client'
 import React from 'react';
-import { Breadcrumb } from 'antd';
-import { usePathname } from 'next/navigation';
+import {Breadcrumb} from 'antd';
+import {usePathname} from 'next/navigation';
 import Link from 'next/link';
-import { HomeOutlined } from '@ant-design/icons';
-import {t} from "i18next";
+import {HomeOutlined} from '@ant-design/icons';
 import {useTranslations} from "use-intl";
 
 // const breadcrumbNameMap: Record<string, string> = {
@@ -46,7 +45,7 @@ const AdminBreadcrumb = () => {
     return (
         <Breadcrumb
             items={items}
-            style={{ margin: '16px 0', fontSize: '14px' }}
+            style={{ margin: '8px 0', fontSize: '14px' }}
         />
     );
 };

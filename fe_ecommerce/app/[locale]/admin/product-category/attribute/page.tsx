@@ -8,8 +8,8 @@ import {RootState} from "@/src/redux/store";
 import AdminBreadcrumb from "@/components/templates/admin/breadcrumb/breadcrumb";
 import {useTranslations} from "use-intl";
 import {ADMIN_PATHS} from "@/src/path";
-import LoadingAdmin from "@/components/templates/admin/loading/loading-admin";
 import {getListCategoryAttributeColumns} from "@/components/templates/admin/category-attribute/listColumn";
+import LoadingPage from "@/src/custom/loading-page/loading-page";
 
 
 const App: React.FC = () => {
@@ -20,6 +20,7 @@ const App: React.FC = () => {
     const [attr,setAttr] = React.useState([])
     const [messageApi, contextHolder] = notification.useNotification();
     const [isLoading, setIsLoading] = React.useState(true);
+    const tMess = useTranslations("Message");
     const { user } = useSelector((state: RootState) => state.auth);
     const onChange: TableProps['onChange'] = (pagination, filters, sorter, extra) => {
         // console.log('params', pagination, filters, sorter, extra);
@@ -29,13 +30,13 @@ const App: React.FC = () => {
             try {
                 const data = await requestApi('category-attribute/find-all', { method: 'GET' });
                 if( data.statusCode === 403 ){
-                    messageApi.error({title:'Danh mục',description: "Bạn không có quyền thực hiện việc này!",
+                    messageApi.error({title:tMess('Title.error'),description: tMess('Description.You_are_not_authorized_to_do_this'),
                         placement: 'bottomRight',});
                     return;
                 }
                 setAttr(data.data);
             } catch (error) {
-                messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
+                messageApi.error({ title: tMess('Title.error'), description: tMess('Description.Unable_to_connect_to_the_server') });
             } finally {
                 setIsLoading(false);
             }
@@ -52,11 +53,11 @@ const App: React.FC = () => {
         const data = await requestApi('category-attribute/'+slug , { method: 'DELETE' });
         if(data?.statusCode && data.statusCode >= 400)
             // messageApi.error({title:'Xóa thuộc tính',description: Array.isArray(data.message) ? data.message[0] : data.message,
-            messageApi.error({title:'Xóa thuộc tính',description: "Bạn không có quyền xóa thuộc tính",
+            messageApi.error({title:tMess('Title.info'),description: tMess('Description.You_are_not_authorized_to_do_this'),
             placement: 'bottomRight',});
         else if(data) {
             messageApi.success({
-                title: 'Xóa thuộc tính', description: 'Dữ liệu người dùng đã được cập nhật trên hệ thống.',
+                title: tMess('Title.info'), description: tMess('Description.data_update_successfully'),
                 placement: 'bottomRight',
             });
             setAttr((prevData) => prevData.filter(attr => attr.slug !== slug));
@@ -67,31 +68,25 @@ const App: React.FC = () => {
         onDelete: handleDelete,
         t: t
     });
+    if (isLoading) {
+        return <LoadingPage />;
+    }
     return <>
         {contextHolder}
-        {
-        isLoading
-                ? LoadingAdmin
-                : <div>
-                <Flex gap={'small'} wrap={false}>
-                    <Typography.Title level={3}>{t('title')}</Typography.Title>
-                    {
-                        user.role === 'superAdmin'
+        <div>
+            <Flex gap={'small'} wrap={false}>
+                <Typography.Title level={3}>{t('title')}</Typography.Title>
+                {
+                    user.role === 'superAdmin'
                         ? <Button type="primary" onClick={handleCreate}>{t('create')}</Button>
-                            : <></>
-                    }
-                </Flex>
-                <AdminBreadcrumb/>
-                {/*{*/}
-                {/*     isTree*/}
-                     <Table rowKey="id" columns={columns} dataSource={attr} onChange={onChange} expandable={{
-                            childrenColumnName: 'children',
-                        }}/>
-                     {/*: <Table rowKey="id" columns={columns} dataSource={attr} onChange={onChange}/>*/}
-                 {/*}*/}
-
-            </div>
-        }
+                        : <></>
+                }
+            </Flex>
+            <AdminBreadcrumb/>
+            <Table rowKey="id" columns={columns} dataSource={attr} onChange={onChange} expandable={{
+                childrenColumnName: 'children',
+            }}/>
+        </div>
         </>
 
 };

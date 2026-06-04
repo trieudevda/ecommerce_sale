@@ -1,13 +1,10 @@
 'use client'
-import {useParams, useRouter} from 'next/navigation';
+import {useRouter} from 'next/navigation';
 
-import React, {useState} from "react";
+import React from "react";
 import {requestApi} from "@/components/api/be.api";
-import {Button, Card, DatePicker, Form, Input, Layout, notification, Select, Space, Spin} from "antd";
+import {Button, Card, Form, Input, notification, Space, Spin} from "antd";
 import {ArrowLeftOutlined, SaveOutlined} from "@ant-design/icons";
-import dayjs from "dayjs";
-import {useSelector} from "react-redux";
-import {RootState} from "@/src/redux/store";
 import {useTranslations} from "use-intl";
 // import { useRouter } from 'next/navigation';
 
@@ -17,6 +14,7 @@ const Page = ()=>{
     const [messageApi, contextHolder] = notification.useNotification();
     const [form] = Form.useForm();
     const t = useTranslations("Role.CRUD");
+    const tMess = useTranslations("Message");
     const onFinish = async (values: any) => {
         setIsLoading(true);
         try {
@@ -27,18 +25,18 @@ const Page = ()=>{
 
             if (res && !res.statusCode) {
                 messageApi.success({
-                    title: 'Thành công',
-                    description: 'Thêm vai trò thành công.',
+                    title:  tMess('Title.info'),
+                    description: tMess('Description.data_added_successfully'),
                 });
                 form.setFieldsValue({name:"",slug:""});
             } else {
                 messageApi.error({
-                    title: 'Thất bại',
+                    title: tMess('Title.error'),
                     description: Array.isArray(res.message) ? res.message[0] : res.message,
                 });
             }
         } catch (error) {
-            messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
+            messageApi.error({ title: tMess('Title.error'), description: tMess('Description.An_error_occurred_while_saving_the_data') });
         } finally {
             setIsLoading(false);
         }
@@ -60,7 +58,7 @@ const Page = ()=>{
                         <Form.Item
                             label={t("name")}
                             name="name"
-                            rules={[{ required: true, message: 'Vui lòng nhập tên vai trò!' }]}
+                            rules={[{ required: true, message: t('please_enter_your_role_name') }]}
                         >
                             <Input placeholder={t("name")} />
                         </Form.Item>
@@ -68,7 +66,7 @@ const Page = ()=>{
                         <Form.Item
                             label={t('slug')}
                             name="slug"
-                            rules={[{ required: true, message: 'Vui lòng nhập tên viết tắt!' }]}
+                            rules={[{ required: true, message: t('please_enter_your_role_initials') }]}
                         >
                             <Input placeholder={t('slug')} />
                         </Form.Item>

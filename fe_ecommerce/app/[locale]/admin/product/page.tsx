@@ -9,6 +9,7 @@ import AdminBreadcrumb from "@/components/templates/admin/breadcrumb/breadcrumb"
 import {useTranslations} from "use-intl";
 import {ADMIN_PATHS} from "@/src/path";
 import {getListProductColumns} from "@/components/templates/admin/product/listColumn";
+import LoadingPage from "@/src/custom/loading-page/loading-page";
 
 
 const App: React.FC = () => {
@@ -40,7 +41,7 @@ const App: React.FC = () => {
                 setIsLoading(false);
             }
         };
-        // fetchData();
+        fetchData();
     },[]);
     const handleEdit = (slug: string)=>{
         router.push(ADMIN_PATHS.PRODUCT.EDIT(slug));
@@ -66,24 +67,23 @@ const App: React.FC = () => {
         onDelete: handleDelete,
         t: tTable
     });
+    if (isLoading) {
+        return <LoadingPage />;
+    }
     return <>
         {contextHolder}
-        {
-            isLoading
-                ? <div>Đang tải...</div>
-                : <div>
-                    <Flex gap={'small'} wrap={false}>
-                        <Typography.Title level={3}>{t('title')}</Typography.Title>
-                        {
-                            user.role !== 'user' && user.role !== 'guest'
-                                ? <Button type="primary" onClick={handleCreate}>{t('create')}</Button>
-                                : <></>
-                        }
-                    </Flex>
-                    <AdminBreadcrumb/>
-                    <Table rowKey="id" columns={columns} dataSource={product} onChange={onChange}/>
-                </div>
-        }
+        <div>
+            <Flex gap={'small'} wrap={false}>
+                <Typography.Title level={3}>{t('title')}</Typography.Title>
+                {
+                    user.role !== 'user' && user.role !== 'guest'
+                        ? <Button type="primary" onClick={handleCreate}>{t('create')}</Button>
+                        : <></>
+                }
+            </Flex>
+            <AdminBreadcrumb/>
+            <Table rowKey="id" columns={columns} dataSource={product} onChange={onChange}/>
+        </div>
     </>
 
 };

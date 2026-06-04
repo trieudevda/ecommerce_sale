@@ -1,14 +1,12 @@
 'use client'
-import { useParams, useRouter } from 'next/navigation';
+import {useParams, useRouter} from 'next/navigation';
 
-import React, { useState } from "react";
-import { requestApi } from "@/components/api/be.api";
-import { Button, Card, DatePicker, Form, Input, notification, Select, Space, Spin } from "antd";
-import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { RootState } from "@/src/redux/store";
-import { useTranslations } from "use-intl";
-import { ADMIN_PATHS } from "@/src/path";
+import React, {useState} from "react";
+import {requestApi} from "@/components/api/be.api";
+import {Button, Card, Form, Input, notification, Select, Space, Spin} from "antd";
+import {ArrowLeftOutlined, SaveOutlined} from "@ant-design/icons";
+import {useTranslations} from "use-intl";
+import {ADMIN_PATHS} from "@/src/path";
 
 const Page = () => {
     const router = useRouter();
@@ -22,78 +20,8 @@ const Page = () => {
     const [messageApi, contextHolder] = notification.useNotification();
     const [form] = Form.useForm();
     const t = useTranslations("Product.Category");
+    const tMess = useTranslations("Message");
     React.useEffect(() => {
-    //     const fetchCateData = async () => {
-    //         try {
-    //             const res: object = await requestApi('category/find/', { method: 'GET', params: { slug: slug, isActive: true } });
-    //             if (res && !res.statusCode) {
-    //                 const formattedData = {
-    //                     ...res,
-    //                     parentId: res.parent?.id,
-    //                     attributeIds: res.attributes?.map((attr: any) => attr.id) || [],
-    //                     type: res.type
-    //                 };
-    //                 form.setFieldsValue(formattedData);
-    //             } else {
-    //                 messageApi.error({ title: 'Lỗi', description: res.message || 'Không tìm thấy thuộc tính' });
-    //             }
-    //         } catch (error) {
-    //             messageApi.error({ title: 'Lỗi kết nối', description: 'Không thể lấy dữ liệu từ server' });
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     };
-        
-    // const fetchCate = async () => {
-    //     try {
-    //         const res: any = await requestApi('category/find-all', { method: 'GET', params: { type: form.getFieldValue('type') } });
-    //         if (res && !res.statusCode) {
-    //             if (res !== "undefined")
-    //                 setCate(res.data);
-    //         } else {
-    //             messageApi.error({ title: 'Lỗi', description: res.message || 'Chưa có vai trò' });
-    //         }
-    //     } catch (error) {
-    //         messageApi.error({ title: 'Lỗi kết nối', description: 'Không thể lấy dữ liệu từ server' });
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
-    //     const fetchCateType = async () => {
-    //         try {
-    //             const res: any = await requestApi('category/enums/ref-types', { method: 'GET' });
-    //             if (res && !res.statusCode) {
-    //                 if (res !== "undefined") {
-    //                     setCateType(res);
-    //                 }
-    //             } else {
-    //                 messageApi.error({ title: 'Lỗi', description: res.message || 'Chưa có kiểu loại' });
-    //             }
-    //         } catch (error) {
-    //             messageApi.error({ title: 'Lỗi kết nối', description: 'Không thể lấy dữ liệu từ server' });
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     }
-    //     const fetchCateAttr = async () => {
-    //         try {
-    //             const res: any = await requestApi('category-attribute/find-all', { method: 'GET' });
-    //             if (res && !res.statusCode) {
-    //                 if (res !== "undefined")
-    //                     setCateAttr(res.data);
-    //             } else {
-    //                 messageApi.error({ title: 'Lỗi', description: res.message || 'Chưa có thuộc tính' });
-    //             }
-    //         } catch (error) {
-    //             messageApi.error({ title: 'Lỗi kết nối', description: 'Không thể lấy dữ liệu từ server' });
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     }
-    //     fetchCateType();
-    //     fetchCateAttr();
-    //     fetchCateData();
-    //     fetchCate();
         const fetchData = async () => {
         setIsLoading(true);
         try {
@@ -101,7 +29,6 @@ const Page = () => {
                 requestApi('category/enums/ref-types', { method: 'GET' }),
                 requestApi('category-attribute/find-all', { method: 'GET' })
             ]);
-
             if (resTypes && !resTypes.statusCode) setCateType(resTypes);
             if (resAttrs && !resAttrs.statusCode) setCateAttr(resAttrs.data);
 
@@ -110,7 +37,6 @@ const Page = () => {
                     method: 'GET', 
                     params: { slug, isActive: true } 
                 });
-
                 if (resDetail && !resDetail.statusCode) {
                     const detail = resDetail; 
                     
@@ -134,30 +60,29 @@ const Page = () => {
                 }
             }
         } catch (error) {
-            messageApi.error({ message: 'Lỗi kết nối', description: 'Không thể lấy dữ liệu' });
+            messageApi.error({ title: tMess('Title.error'), description: tMess('Description.Unable_to_connect_to_the_server')});
         } finally {
             setIsLoading(false);
         }
     };
-
     fetchData();
     }, [slug, form]);
     const handleFetchCate = async (type: string) => {
         form.setFieldValue('childId', undefined);
         setCate([]);
-        setIsChildLoading(true);
+        // setIsChildLoading(true);
         try {
             const res: any = await requestApi('category/find-all', { method: 'GET', params: { type: type } });
             if (res && !res.statusCode) {
                 if (res !== "undefined")
                     setCate(res.data);
             } else {
-                messageApi.error({ title: 'Lỗi', description: res.message || 'Chưa có vai trò' });
+                messageApi.error({ title: tMess('Title.error'), description: res.message || tMess('Description.no_catefory_yet') });
             }
         } catch (error) {
-            messageApi.error({ title: 'Lỗi kết nối', description: 'Không thể lấy dữ liệu từ server' });
+            messageApi.error({ title: tMess('Title.error'), description: tMess('Description.You_are_not_authorized_to_do_this') });
         } finally {
-            setIsChildLoading(false);
+            // setIsChildLoading(false);
         }
     }
     const onFinish = async (values: any) => {
@@ -170,18 +95,18 @@ const Page = () => {
 
             if (res && !res.statusCode) {
                 messageApi.success({
-                    title: 'Thành công',
-                    description: 'Thông tin thuộc tính đã được cập nhật.',
+                    title: tMess('Title.info'),
+                    description: tMess('Description.data_update_successfully'),
                 });
                 setTimeout(() => router.push(ADMIN_PATHS.PRODUCT.CATEGORY.LIST()), 1500);
             } else {
                 messageApi.error({
-                    title: 'Cập nhật thất bại',
+                    title: tMess('Title.info'),
                     description: Array.isArray(res.message) ? res.message[0] : res.message,
                 });
             }
         } catch (error) {
-            messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
+            messageApi.error({ title: tMess('Title.error'), description: tMess('Description.An_error_occurred_while_saving_the_data') });
         } finally {
             setIsLoading(false);
         }
@@ -249,7 +174,6 @@ const Page = () => {
                         <Form.Item
                             label={t('description')}
                             name="description"
-                        // rules={[{ required: true, message: t('please_enter_description') }]}
                         >
                             <Input.TextArea placeholder={t('description')} />
                         </Form.Item>
@@ -257,7 +181,6 @@ const Page = () => {
                         <Form.Item
                             label={t('metaTitle')}
                             name="metaTitle"
-                        // rules={[{ required: true, message: t('please_enter_meta_title') }]}
                         >
                             <Input placeholder={t('metaTitle')} />
                         </Form.Item>
@@ -265,7 +188,6 @@ const Page = () => {
                         <Form.Item
                             label={t('metaDescription')}
                             name="metaDescription"
-                        // rules={[{ required: true, message: t('please_enter_meta_description') }]}
                         >
                             <Input placeholder={t('metaDescription')} />
                         </Form.Item>
@@ -273,7 +195,6 @@ const Page = () => {
                         <Form.Item
                             label={t('metaKeywords')}
                             name="metaKeywords"
-                        // rules={[{ required: true, message: t('please_enter_meta_keywords') }]}
                         >
                             <Input placeholder={t('metaKeywords')} />
                         </Form.Item>

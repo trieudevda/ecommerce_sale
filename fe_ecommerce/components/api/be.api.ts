@@ -17,6 +17,11 @@ export async function requestApi<T>(url: string, options: RequestInit & { params
         credentials: 'include'
     });
     if (!response.ok) {
+        if(response.status === 401) {
+            await checkAuthToken()
+            await requestApi(url, options);
+            return;
+        }
         const errorData = await response.json().catch(() => ({}));
         return errorData;
     }

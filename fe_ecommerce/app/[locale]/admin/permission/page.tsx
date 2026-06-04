@@ -12,13 +12,12 @@ import {ADMIN_PATHS} from "@/src/path";
 const App: React.FC = () => {
     const router = useRouter();
     const t = useTranslations("Permission");
-    const tTable = useTranslations("User.Table");
     const tMess = useTranslations("Message");
     const [allRole,setAllRole] = React.useState([])
     const [per,setPer] = React.useState([])
     const [messageApi, contextHolder] = notification.useNotification();
     const [isLoading, setIsLoading] = React.useState(true);
-    const { user, isAuthenticated, isAppLoading } = useSelector((state: RootState) => state.auth);
+    const { user } = useSelector((state: RootState) => state.auth);
     const onChange: TableProps['onChange'] = (pagination, filters, sorter, extra) => {
         console.log('params', pagination, filters, sorter, extra);
     };
@@ -161,7 +160,7 @@ const App: React.FC = () => {
     const updateState = async (targetKey: string, currentCheckedKeys: string[]) => {
         const changes = getPermissionChanges(currentCheckedKeys);
         if (changes.length === 0) {
-            console.warn("Không tìm thấy thay đổi về Permission.");
+            // console.warn("Không tìm thấy thay đổi về Permission.");
             return;
         }
         const match = targetKey.match(/r(\d+)/);
@@ -183,7 +182,7 @@ const App: React.FC = () => {
             } else {
                 messageApi.success({
                     title: tMess('Title.fail'),
-                    description: 'Đã cập nhật quyền hạn.',
+                    description: tMess('Description.data_update_successfully'),
                     placement: 'bottomRight',
                 });
             }

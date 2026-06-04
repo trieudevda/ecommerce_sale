@@ -9,7 +9,7 @@ import AdminBreadcrumb from "@/components/templates/admin/breadcrumb/breadcrumb"
 import {useTranslations} from "use-intl";
 import {ADMIN_PATHS} from "@/src/path";
 import {getListCategoryColumns} from '@/components/templates/admin/category/listColumn';
-import LoadingAdmin from "@/components/templates/admin/loading/loading-admin";
+import LoadingPage from "@/src/custom/loading-page/loading-page";
 
 
 const App: React.FC = () => {
@@ -17,6 +17,7 @@ const App: React.FC = () => {
     const searchParams = useSearchParams();
     const isTree = searchParams.get('isTree') || false;
     const t = useTranslations("Product.Category");
+    const tMess = useTranslations("Message");
     const [cate,setCate] = React.useState([])
     const [messageApi, contextHolder] = notification.useNotification();
     const [isLoading, setIsLoading] = React.useState(true);
@@ -29,13 +30,13 @@ const App: React.FC = () => {
             try {
                 const data = await requestApi('category/find-all', { method: 'GET',params:{isTree:isTree,isActive:true} });
                 if( data.statusCode === 403 ){
-                    messageApi.error({title:'Danh mục',description: "Bạn không có quyền thực hiện việc này!",
+                    messageApi.error({title:tMess('Title.error'),description: tMess('Description.You_are_not_authorized_to_do_this'),
                         placement: 'bottomRight',});
                     return;
                 }
                 setCate(data.data);
             } catch (error) {
-                messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
+                messageApi.error({ title: tMess('Title.error'), description: tMess('Description.An_error_occurred_while_saving_the_data') });
             } finally {
                 setIsLoading(false);
             }
@@ -51,11 +52,11 @@ const App: React.FC = () => {
     const handleDelete = async (slug: string)=>{
         const data = await requestApi('category/'+slug, { method: 'DELETE' });
         if(data?.statusCode && data.statusCode >= 400)
-            messageApi.error({title:'Xóa Danh mục',description: Array.isArray(data.message) ? data.message[0] : data.message,
+            messageApi.error({title:tMess('Title.info'),description: Array.isArray(data.message) ? data.message[0] : data.message,
             placement: 'bottomRight',});
         else if(data) {
             messageApi.success({
-                title: 'Xóa Danh mục', description: 'Dữ liệu danh mục đã được cập nhật trên hệ thống.',
+                title: tMess('Title.info'), description: tMess('Description.data_update_successfully'),
                 placement: 'bottomRight',
             });
             setCate((prevData) => prevData.filter(cate => cate.slug !== slug));
@@ -66,25 +67,23 @@ const App: React.FC = () => {
         onDelete: handleDelete,
         t: t
     });
+    if (isLoading) {
+        return <LoadingPage />;
+    }
     return <>
         {contextHolder}
-        {
-        isLoading
-                ? LoadingAdmin
-                : <div>
-                <Flex gap={'small'} wrap={false}>
-                    <Typography.Title level={3}>{t('title')}</Typography.Title>
-                    {
-                        user.role === 'superAdmin'
+        <div>
+            <Flex gap={'small'} wrap={false}>
+                <Typography.Title level={3}>{t('title')}</Typography.Title>
+                {
+                    user.role === 'superAdmin'
                         ? <Button type="primary" onClick={handleCreate}>{t('create')}</Button>
-                            : <></>
-                    }
-                </Flex>
-                <AdminBreadcrumb/>
-                <Table rowKey="id" columns={columns} dataSource={cate} onChange={onChange}/>
-
-            </div>
-        }
+                        : <></>
+                }
+            </Flex>
+            <AdminBreadcrumb/>
+            <Table rowKey="id" columns={columns} dataSource={cate} onChange={onChange}/>
+        </div>
         </>
 
 };

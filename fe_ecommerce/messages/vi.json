@@ -48,7 +48,27 @@
       "create": "Thêm người dùng",
       "name": "Tên",
       "email": "Email",
-      "actions": "Hành động"
+      "actions": "Hành động",
+      "accept": "Áp dụng",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "delete": "Xóa",
+      "export_CSV_file": "Xuất file CSV",
+      "print_list": "In danh sách",
+      "display_settings": "Cài đặt hiển thị",
+      "manage_and_monitor_all_system_members": "Quản lý và theo dõi toàn bộ thành viên hệ thống",
+      "search": "Tìm kiếm...",
+      "filter": "Bộ lọc",
+      "show": "Hiển thị",
+      "customize_columns": "Tùy chỉnh cột",
+      "enabledisable_data_fields_to_optimize_your_table_display_space": "Bật/tắt các trường dữ liệu để tối ưu hóa không gian hiển thị bảng của bạn",
+      "deselect_all": "Bỏ chọn tất cả",
+      "select_all": "Chọn tất cả",
+      "restore": "Khôi phục",
+      "complete": "Hoàn tất",
+      "selected": "Đã chọn",
+      "page": "Trang"
     },
     "CRUD": {
       "title": "Chỉnh sửa người dùng",
@@ -56,7 +76,6 @@
       "email": "Email",
       "password": "Mật khẩu",
       "confirm_password": "Nhập lại mật khẩu",
-      "cancel": "Hủy",
       "create": "Thêm người dùng",
       "edit": "Chỉnh sửa người dùng",
       "full_name": "Họ và tên",
@@ -92,7 +111,14 @@
       "last_login": "Lần đăng nhập cuối",
       "save": "Lưu",
       "please_confirm_your_password": "Vui lòng nhập mật khẩu của bạn",
-      "passwords_do_not_match": "Mật khẩu không khớp"
+      "passwords_do_not_match": "Mật khẩu không khớp",
+      "no_user_found": "Không tìm thấy người dùng",
+      "fill_in_the_information_below_to_set_up_a_new_user_account": "Điền các thông tin dưới đây để thiết lập tài khoản người dùng mới",
+      "personal_information": "Thông tin cá nhân",
+      "place_name": "Nguyễn Văn A",
+      "enter_your_residential_address":"Nhập địa chỉ cư trú",
+      "accounts_and_permissions": "Tài khoản & Phân quyền",
+      "cancel": "Hủy bỏ"
     }
   },
   "Product": {
@@ -202,6 +228,7 @@
       "delete": "Xóa danh mục",
       "active": "Hoạt động",
       "inactive": "Không hoạt động",
+      "category_added_successfully": "Thêm danh mục thành công",
       "Attribute": {
         "create": "Tạo thuộc tính",
         "edit_attr": "Chỉnh sửa thuộc tính",
@@ -217,7 +244,9 @@
         "edit": "Chỉnh sửa",
         "delete": "Xóa",
         "created_at": "Ngày tạo",
-        "updated_at": "Ngày cập nhật"
+        "updated_at": "Ngày cập nhật",
+        "there_must_be_at_least_one_value": "Phải có ít nhất 1 giá trị",
+        "enter_value": "Nhập giá trị"
       }
     }
   },
@@ -240,7 +269,9 @@
       "name": "Tên",
       "slug": "Viết tắt",
       "save": "Lưu",
-      "cancel": "Hủy"
+      "cancel": "Hủy",
+      "please_enter_your_role_name": "Vui lòng nhập tên vai trò!",
+      "please_enter_your_role_initials": "Vui lòng nhập tên viết tắt!"
     }
   },
   "Auth": {
@@ -288,12 +319,17 @@
       "An_error_occurred_while_saving_the_data": "Có lỗi xảy ra khi lưu dữ liệu!",
       "Unable_to_connect_to_the_server": "Không thể kết nối đến máy chủ!",
       "data_added_successfully": "Thêm dữ liệu thành công!",
+      "data_added_fail": "Thêm dữ liệu thất bại!",
       "data_update_successfully": "Cập nhật dữ liệu thành công!",
       "data_delete_successfully": "Xóa dữ liệu thành công!",
       "data_delete_fail": "Xóa dữ liệu thất bại!",
       "data_updated_successfully": "Dữ liệu cập nhật thành công!",
       "logout_successful": "đăng xuất thành công",
-      "you_have_not_accepted_the_terms": "Bạn chưa chấp nhận điều khoản"
+      "you_have_not_accepted_the_terms": "Bạn chưa chấp nhận điều khoản",
+      "no_specific_type_available": "Chưa có kiểu loại",
+      "no_role_found": "Không tìm thấy  vai trò",
+      "no_role_yet": "Chưa có vai trò",
+      "no_catefory_yet": "Chưa có danh mục"
     }
   }
 }

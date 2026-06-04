@@ -1,9 +1,9 @@
 'use client'
 import {useParams, useRouter} from 'next/navigation';
 
-import React, {useState} from "react";
+import React from "react";
 import {requestApi} from "@/components/api/be.api";
-import {Button, Card, DatePicker, Form, Input, Layout, notification, Select, Space, Spin} from "antd";
+import {Button, Card, Form, Input, notification, Space, Spin} from "antd";
 import {ArrowLeftOutlined, LoadingOutlined, SaveOutlined} from "@ant-design/icons";
 import dayjs from "dayjs";
 import {useSelector} from "react-redux";
@@ -20,6 +20,7 @@ const Page = ()=>{
     const [messageApi, contextHolder] = notification.useNotification();
     const [form] = Form.useForm();
     const t = useTranslations("Role.CRUD");
+    const tMess = useTranslations("Message");
     const { user, isAuthenticated, isAppLoading } = useSelector((state: RootState) => state.auth);
     React.useEffect(() => {
         const fetchRoleData = async () => {
@@ -31,10 +32,10 @@ const Page = ()=>{
                         dateOfBirth: res.dateOfBirth ? dayjs(res.dateOfBirth) : null,
                     });
                 } else {
-                    messageApi.error({ title: 'Lỗi', description: res.message || 'Không tìm thấy vai trò' });
+                    messageApi.error({ title: tMess('Title.error'), description: res.message || tMess('Description.no_role_found') });
                 }
             } catch (error) {
-                messageApi.error({ title: 'Lỗi kết nối', description: 'Không thể lấy dữ liệu từ server' });
+                messageApi.error({ title: tMess('Title.error'), description: tMess('Description.Unable_to_connect_to_the_server') });
             } finally {
                 setIsLoading(false);
             }
@@ -52,18 +53,18 @@ const Page = ()=>{
 
             if (res && !res.statusCode) {
                 messageApi.success({
-                    title: 'Thành công',
-                    description: 'Vai trò đã được cập nhật.',
+                    title: tMess('Title.info'),
+                    description: tMess('Description.data_update_successfully'),
                 });
                 setTimeout(() => router.push(ADMIN_PATHS.ROLE.LIST()), 1500);
             } else {
                 messageApi.error({
-                    title: 'Cập nhật thất bại',
+                    title: tMess('Title.error'),
                     description: Array.isArray(res.message) ? res.message[0] : res.message,
                 });
             }
         } catch (error) {
-            messageApi.error({ title: 'Lỗi', description: 'Có lỗi xảy ra khi lưu dữ liệu' });
+            messageApi.error({ title: tMess('Title.error'), description: tMess('Description.An_error_occurred_while_saving_the_data') });
         } finally {
             setIsLoading(false);
         }
@@ -86,7 +87,7 @@ const Page = ()=>{
                         <Form.Item
                             label={t("name")}
                             name="name"
-                            rules={[{ required: true, message: 'Vui lòng nhập tên vai trò!' }]}
+                            rules={[{ required: true, message: t('please_enter_your_role_name') }]}
                         >
                             <Input placeholder={t("name")} />
                         </Form.Item>
@@ -94,7 +95,7 @@ const Page = ()=>{
                         <Form.Item
                             label={t('slug')}
                             name="slug"
-                            rules={[{ required: true, message: 'Vui lòng nhập tên viết tắt!' }]}
+                            rules={[{ required: true, message: t('please_enter_your_role_initials') }]}
                         >
                             <Input placeholder={t('slug')} />
                         </Form.Item>
