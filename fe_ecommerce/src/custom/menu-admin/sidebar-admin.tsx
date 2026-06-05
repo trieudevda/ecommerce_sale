@@ -1,10 +1,14 @@
 import {
-    DashboardOutlined, EditOutlined, KeyOutlined,
+    DashboardOutlined,
+    EditOutlined,
+    KeyOutlined,
     LaptopOutlined,
-    OrderedListOutlined, PlusOutlined, ProductOutlined, SafetyOutlined, TagsOutlined,
-    UploadOutlined,
-    UserOutlined,
-    VideoCameraOutlined
+    OrderedListOutlined,
+    PlusOutlined,
+    ProductOutlined,
+    SafetyOutlined,
+    TagsOutlined,
+    UserOutlined
 } from "@ant-design/icons";
 import React from "react";
 import Link from "next/link";
@@ -14,7 +18,7 @@ const sidebarAdmin = (userId: string) => [
     {
         key: '1',
         icon: <DashboardOutlined />,
-        label: 'nav 1',
+        label: <Link href={ADMIN_PATHS.DASHBOARD.LIST()}>Dashboard</Link>,
     },
     {
         key: 'user',

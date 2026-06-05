@@ -1,4 +1,5 @@
 const APP_PATH = {
+    DASHBOARD: '/dashboard',
     ADMIN: '/admin',
     USER: '/user',
     AUTH: '/auth',
@@ -9,6 +10,9 @@ const APP_PATH = {
     PERMISSION: '/permission',
 }
 export const ADMIN_PATHS = {
+    DASHBOARD: {
+        LIST: () => APP_PATH.ADMIN + APP_PATH.DASHBOARD,
+    },
     USER: {
         LIST: () => APP_PATH.ADMIN + APP_PATH.USER,
         CREATE: () => APP_PATH.ADMIN + APP_PATH.USER + '/create',

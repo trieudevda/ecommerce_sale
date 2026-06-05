@@ -76,7 +76,6 @@ const Page = () => {
         }
         if (id) fetchUserData();
         fetchRole();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, form]);
 
     const onFinish = async (values: any) => {
@@ -99,7 +98,7 @@ const Page = () => {
                 setTimeout(() => router.push('/admin/user'), 1500);
             } else {
                 messageApi.error({
-                    title: tMess('Title.fail'), // Đã sửa lại lỗi thông báo (trước đó ghi Title.success)
+                    title: tMess('Title.fail'),
                     description: Array.isArray(res.message) ? res.message[0] : res.message,
                 });
             }
@@ -109,12 +108,11 @@ const Page = () => {
             setIsLoading(false);
         }
     };
-
     return (
         <ConfigProvider
             theme={{
                 token: {
-                    colorPrimary: '#2563eb', // Đồng bộ màu xanh của Tailwind
+                    colorPrimary: '#2563eb',
                     colorTextBase: '#334155',
                     fontFamily: 'inherit',
                     borderRadius: 8
@@ -130,12 +128,8 @@ const Page = () => {
             }}
         >
             {contextHolder}
-
-            {/* Background chuẩn SaaS */}
             <div className="min-h-screen bg-slate-50/50 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/50 via-slate-50/50 to-slate-50 p-4 sm:p-6 lg:p-8 animate-in fade-in duration-700">
                 <div className="max-w-4xl mx-auto">
-
-                    {/* Header Trang */}
                     <div className="flex items-center gap-4 mb-6">
                         <Button
                             icon={<ArrowLeftOutlined />}
@@ -144,10 +138,10 @@ const Page = () => {
                         />
                         <div>
                             <Typography.Title level={2} className="!mb-0 !text-2xl !font-extrabold tracking-tight text-slate-800">
-                                Chỉnh sửa người dùng
+                                {t('edit')}
                             </Typography.Title>
                             <p className="text-slate-500 text-sm mt-1">
-                                Cập nhật thông tin chi tiết cho tài khoản <span className="font-semibold text-slate-700">#{id}</span>.
+                                {t('update_account_details')} <span className="font-semibold text-slate-700">#{id}</span>.
                             </p>
                         </div>
                     </div>
@@ -165,126 +159,115 @@ const Page = () => {
                                 className="w-full"
                             >
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-2">
-
-                                    {/* CỘT 1: THÔNG TIN CÁ NHÂN */}
                                     <div>
                                         <div className="flex items-center gap-2 mb-6 text-slate-800 font-semibold text-base">
-                                            <UserOutlined className="text-blue-500" /> Thông tin cá nhân
+                                            <UserOutlined className="text-blue-500" />{t('personal_information')}
                                         </div>
 
                                         <Form.Item
-                                            label={<span className="text-slate-600 font-medium">Họ và tên</span>}
+                                            label={<span className="text-slate-600 font-medium">{t('full_name')}</span>}
                                             name="fullName"
-                                            rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
+                                            rules={[{ required: true, message: t('please_enter_your_name')}]}
                                         >
-                                            <Input prefix={<UserOutlined className="text-slate-400 mr-1" />} placeholder="Họ và Tên" className="hover:border-blue-400 focus:border-blue-500" />
+                                            <Input prefix={<UserOutlined className="text-slate-400 mr-1" />} placeholder={t('full_name')} className="hover:border-blue-400 focus:border-blue-500" />
                                         </Form.Item>
 
                                         <Form.Item
-                                            label={<span className="text-slate-600 font-medium">Số điện thoại</span>}
+                                            label={<span className="text-slate-600 font-medium">{t('phone')}</span>}
                                             name="phone"
                                             rules={[
-                                                { required: true, message: 'Vui lòng nhập số điện thoại!' },
-                                                { pattern: /^(0[3|5|7|8|9])([0-9]{8})$/, message: 'Số điện thoại không đúng định dạng (10 số)!' }
+                                                { required: true, message: t('please_enter_phone') },
+                                                { pattern: /^(0[3|5|7|8|9])([0-9]{8})$/, message: t('phone_number_is_not_in_the_correct_Vietnamese') }
                                             ]}
                                         >
                                             <Input
                                                 prefix={<PhoneOutlined className="text-slate-400 mr-1" />}
-                                                placeholder="090..."
+                                                placeholder={t('phone')}
                                                 maxLength={10}
                                                 allowClear
                                                 onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
                                                 className="hover:border-blue-400 focus:border-blue-500"
                                             />
                                         </Form.Item>
-
                                         <Form.Item
-                                            label={<span className="text-slate-600 font-medium">Địa chỉ</span>}
+                                            label={<span className="text-slate-600 font-medium">{t('address')}</span>}
                                             name="address"
-                                            rules={[{ required: true, message: 'Vui lòng cập nhật địa chỉ!' }]}
+                                            rules={[{ required: true, message: t('please_enter_address') }]}
                                         >
-                                            <Input prefix={<EnvironmentOutlined className="text-slate-400 mr-1" />} placeholder="Địa chỉ cư trú..." className="hover:border-blue-400 focus:border-blue-500" />
+                                            <Input prefix={<EnvironmentOutlined className="text-slate-400 mr-1" />} placeholder={t('address')} className="hover:border-blue-400 focus:border-blue-500" />
                                         </Form.Item>
-
                                         <Form.Item
-                                            label={<span className="text-slate-600 font-medium">Ngày sinh</span>}
+                                            label={<span className="text-slate-600 font-medium">{t('date_of_birth')}</span>}
                                             name="dateOfBirth"
-                                            rules={[{ required: true, message: 'Vui lòng chọn ngày sinh!' }]}
+                                            rules={[{ required: true, message: t('please_select_date_of_birth') }]}
                                         >
                                             <DatePicker
                                                 format="DD/MM/YYYY"
                                                 className="w-full hover:border-blue-400 focus:border-blue-500"
-                                                placeholder="Chọn ngày sinh"
+                                                placeholder={t('please_select_date_of_birth')}
                                             />
                                         </Form.Item>
                                     </div>
-
-                                    {/* CỘT 2: TÀI KHOẢN VÀ PHÂN QUYỀN */}
                                     <div>
                                         <div className="flex items-center gap-2 mb-6 text-slate-800 font-semibold text-base mt-8 md:mt-0">
-                                            <SafetyCertificateOutlined className="text-blue-500" /> Tài khoản & Phân quyền
+                                            <SafetyCertificateOutlined className="text-blue-500" />{t('accounts_and_permissions')}
                                         </div>
-
                                         <Form.Item
                                             label={<span className="text-slate-600 font-medium">Email</span>}
                                             name="email"
-                                            rules={[{ required: true, type: 'email', message: 'Email không hợp lệ!' }]}
+                                            rules={[{ required: true, type: 'email', message: t('invalid_email') }]}
                                         >
                                             <Input prefix={<MailOutlined className="text-slate-400 mr-1" />} placeholder="example@gmail.com" className="hover:border-blue-400 focus:border-blue-500" />
                                         </Form.Item>
 
                                         <div className="grid grid-cols-2 gap-4">
                                             <Form.Item
-                                                label={<span className="text-slate-600 font-medium">Vai trò</span>}
+                                                label={<span className="text-slate-600 font-medium">{t('role')}</span>}
                                                 name="role"
-                                                rules={[{ required: true, message: 'Vui lòng chọn vai trò!' }]}
+                                                rules={[{ required: true, message: t('please_select_role') }]}
                                             >
                                                 <Select
-                                                    placeholder="Chọn vai trò"
+                                                    placeholder={t('role')}
                                                     options={role.map((item: any) => ({ value: item.id, label: item.name }))}
                                                     className="hover:border-blue-400 focus:border-blue-500"
                                                 />
                                             </Form.Item>
 
                                             <Form.Item
-                                                label={<span className="text-slate-600 font-medium">Xác thực email</span>}
+                                                label={<span className="text-slate-600 font-medium">{t('is_email_verified')}</span>}
                                                 name="isEmailVerified"
                                             >
                                                 <Select
                                                     options={[
-                                                        { value: true, label: <span className="text-emerald-600 font-medium">Đã xác thực</span> },
-                                                        { value: false, label: <span className="text-rose-600 font-medium">Chưa xác thực</span> },
+                                                        { value: true, label: <span className="text-emerald-600 font-medium">{t('verified')}</span> },
+                                                        { value: false, label: <span className="text-rose-600 font-medium">{t('unverified')}</span> },
                                                     ]}
                                                     className="hover:border-blue-400 focus:border-blue-500"
                                                 />
                                             </Form.Item>
                                         </div>
-
                                         <Form.Item
-                                            label={<span className="text-slate-600 font-medium">Trạng thái</span>}
+                                            label={<span className="text-slate-600 font-medium">{t('status')}</span>}
                                             name="status"
                                         >
                                             <Select
                                                 options={[
-                                                    { value: 'active', label: <span className="text-emerald-600 font-medium">Đang sử dụng</span> },
-                                                    { value: 'inactive', label: <span className="text-slate-500 font-medium">Đã khóa</span> },
-                                                    { value: 'deleted', label: <span className="text-rose-600 font-medium">Đã xóa</span> },
+                                                    { value: 'active', label: <span className="text-emerald-600 font-medium">{t('active')}</span> },
+                                                    { value: 'inactive', label: <span className="text-slate-500 font-medium">{t('inactive')}</span> },
+                                                    { value: 'deleted', label: <span className="text-rose-600 font-medium">{t('deleted')}</span> },
                                                 ]}
                                                 className="hover:border-blue-400 focus:border-blue-500"
                                             />
                                         </Form.Item>
                                     </div>
                                 </div>
-
                                 <Divider className="my-6 border-slate-100" />
-
-                                {/* NÚT HÀNH ĐỘNG */}
                                 <div className="flex justify-end gap-3">
                                     <Button
                                         onClick={() => router.back()}
                                         className="h-11 px-6 rounded-xl text-slate-600 font-medium hover:bg-slate-50 border-slate-200"
                                     >
-                                        Hủy bỏ
+                                        {t('cancel')}
                                     </Button>
                                     <Button
                                         type="primary"
@@ -293,7 +276,7 @@ const Page = () => {
                                         loading={isLoading}
                                         className="h-11 px-8 rounded-xl font-semibold bg-blue-600 hover:bg-blue-500 border-0 shadow-[0_4px_14px_0_rgb(37,99,235,0.39)] hover:-translate-y-0.5 transition-all"
                                     >
-                                        Lưu thay đổi
+                                        {t('save')}
                                     </Button>
                                 </div>
                             </Form>

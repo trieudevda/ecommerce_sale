@@ -99,6 +99,7 @@
       "role": "Vai trò",
       "please_select_role": "Vui lòng chọn vai trò",
       "date_of_birth": "Ngày sinh",
+      "select_date_of_birth": "Chọn ngày sinh",
       "please_enter_date_of_birth": "Vui lòng nhập ngày sinh",
       "please_select_date_of_birth": "Vui lòng chọn ngày sinh",
       "is_email_verified": "Xác thực Email",
@@ -118,7 +119,8 @@
       "place_name": "Nguyễn Văn A",
       "enter_your_residential_address":"Nhập địa chỉ cư trú",
       "accounts_and_permissions": "Tài khoản & Phân quyền",
-      "cancel": "Hủy bỏ"
+      "cancel": "Hủy bỏ",
+      "update_account_details": "Cập nhật thông tin chi tiết cho tài khoản"
     }
   },
   "Product": {
@@ -145,12 +147,18 @@
       "create": "Thêm sản phẩm",
       "name": "Tên sản phẩm",
       "category": "Danh mục",
-      "actions": "Hành động"
+      "actions": "Hành động",
+      "page": "trang"
     },
     "CRUD": {
+      "add_new_products_to_your_store_system_add_new_products_to_your_store_system": "Thêm sản phẩm mới vào hệ thống cửa hàng của bạn.",
+      "edit_the_details_for_the_selected_product":"Chỉnh sửa thông tin chi tiết cho sản phẩm đang chọn.",
+      "basic_information":"Thông tin cơ bản",
+      "upload": "Tải lên",
       "title": "Chỉnh sửa sản phẩm",
       "name": "Tên sản phẩm",
       "avatar": "Ảnh đại diện",
+      "upload_background_image": "Tải lên ảnh nền",
       "gallery": "Bộ sưu tập ảnh",
       "attribute": "Thuộc tính",
       "select_properties": "Chọn thuộc tính",
@@ -160,12 +168,15 @@
       "inventory": "Tồn kho",
       "enter_inventory": "Nhập tồn kho",
       "product_variations": "Biến thể sản phẩm",
-      "add_new_variant": "thêm biến thể mới",
+      "add_new_variant": "Thêm biến thể mới",
       "short_description": "Mô tả ngắn",
       "description": "Mô tả",
       "cancel": "Hủy",
       "create": "Thêm sản phẩm",
       "edit": "Chỉnh sửa sản phẩm",
+      "classify": "Phân loại",
+      "product_images": "Hình ảnh sản phẩm",
+      "brief_product_description":"Mô tả ngắn gọn về sản phẩm",
       "please_enter_name": "Vui lòng nhập tên sản phẩm",
       "please_upload_avatar": "Vui lòng tải lên ảnh đại diện",
       "please_upload_gallery": "Vui lòng tải lên bộ sưu tập ảnh",
@@ -303,6 +314,15 @@
   },
   "Permission": {
     "title": "Phân quyền"
+  },
+  "Modal": {
+    "customize_the_column_display": "Tùy chỉnh cột hiển thị",
+    "enabledisable_data_fields_to_optimize_warehouse_display_space": "Bật/tắt các trường dữ liệu để tối ưu không gian hiển thị kho hàng.",
+    "selected": "Đã chọn",
+    "deselect_all": "Bỏ chọn tất cả",
+    "select_all": "Chọn tất cả",
+    "recovery": "Khôi phục",
+    "complete": "Hoàn tất"
   },
   "Message": {
     "Title": {
