@@ -49,48 +49,21 @@ const sidebarAdmin = (userId: string) => [
             },
             {
                 key: 'product-category',
-                icon: <LaptopOutlined />,
+                icon: <LaptopOutlined/>,
                 label: 'Danh mục',
                 children: [
                     {
                         key: 'product-category-list',
-                        icon: <OrderedListOutlined />,
+                        icon: <OrderedListOutlined/>,
                         label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.LIST()}>Danh sách</Link>,
                     },
-                    // {
-                    //     key: 'product-category-create',
-                    //     icon: <PlusOutlined />,
-                    //     label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.CREATE()}>Tạo danh mục</Link>,
-                    // },
                     {
                         key: 'product-category-attribute-list',
-                        icon: <TagsOutlined />,
+                        icon: <TagsOutlined/>,
                         label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.LIST()}>Thuộc tính</Link>,
                     },
-                    // {
-                    //     key: 'product-category-attribute-value-list',
-                    //     icon: <TagsOutlined />,
-                    //     label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE_VALUE.LIST()}>Giá trị Thuộc tính</Link>,
-                    // },
-                    // {
-                    //     key: 'product-category-attribute',
-                    //     icon: <OrderedListOutlined />,
-                    //     label: 'Thuộc tính',
-                    //     children: [
-                    //         {
-                    //             key: 'product-category-attribute-create',
-                    //             icon: <TagsOutlined />,
-                    //             label: <Link href={ADMIN_PATHS.PRODUCT.CATEGORY.ATTRIBUTE.CREATE()}>Tạo thuộc tính</Link>,
-                    //         },
-                    //     ]
-                    // },
                 ]
             }
-            // {
-            //     key: 'edit',
-            //     icon: <EditOutlined />,
-            //     label: <Link href={ADMIN_PATHS.USER.EDIT(userId)}>Sửa</Link>,
-            // }
         ],
     },
     {
@@ -120,11 +93,6 @@ const sidebarAdmin = (userId: string) => [
                 icon: <OrderedListOutlined />,
                 label: <Link href={ADMIN_PATHS.PERMISSION.LIST()}>Danh sách</Link>,
             },
-            {
-                key: 'per-create',
-                icon: <PlusOutlined />,
-                label: <Link href={ADMIN_PATHS.PERMISSION.CREATE()}>Thêm</Link>,
-            }
         ],
     },
 ]
