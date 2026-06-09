@@ -1,0 +1,88 @@
+html{
+  background-color: #f8fafc;
+}
+.liquid-gradient {
+  background: linear-gradient(270deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6);
+  background-size: 300% 300%;
+  animation: liquidFlow 8s ease-in-out infinite;
+}
+/* Dành riêng cho chữ (Text) để màu chui vào trong chữ */
+.liquid-text-gradient {
+  background: linear-gradient(270deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6);
+  background-size: 300% 300%;
+  animation: liquidFlow 8s ease-in-out infinite;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+@keyframes liquidFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 2. Liquid Shape: Khối hình giọt nước chuyển động (Dùng cho Banner/Hình ảnh) */
+.liquid-shape {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation: liquidMorph 8s ease-in-out infinite alternate;
+  overflow: hidden;
+}
+
+@keyframes liquidMorph {
+  0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+}
+
+/* 3. Liquid Card: Bo góc siêu lớn, đổ bóng mượt và nảy nhẹ */
+.liquid-card {
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); /* Hiệu ứng nảy lò xo nhẹ */
+}
+.liquid-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 30px 60px -15px rgba(59, 130, 246, 0.25); /* Bóng đổ ánh xanh rực rỡ */
+}
+
+/* 4. Liquid Button: Nút bấm tràn viền, hiệu ứng lướt sáng */
+.liquid-btn {
+  border-radius: 9999px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: none !important;
+}
+.liquid-btn::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: all 0.6s ease;
+}
+.liquid-btn:hover::after {
+  left: 100%;
+}
+.liquid-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(0,0,0,0.2);
+}
+/* Hiệu ứng gradient di chuyển */
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient 5s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Bo góc Liquid cho card */
+.rounded-3xl {
+  border-radius: 40px;
+}

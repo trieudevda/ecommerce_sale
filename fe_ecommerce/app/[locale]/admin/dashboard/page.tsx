@@ -140,7 +140,7 @@ export default function DashboardPage() {
                 {/* Box Doanh thu */}
                 <Col xs={24} sm={12} xl={6}>
                     <Card
-                        bordered={false}
+                        variant="borderless"
                         className="rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden relative group"
                     >
                         {/* Lớp phủ gradient mờ góc phải */}
@@ -164,7 +164,7 @@ export default function DashboardPage() {
                 {/* Box Đơn hàng */}
                 <Col xs={24} sm={12} xl={6}>
                     <Card
-                        bordered={false}
+                        variant="borderless"
                         className="rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden relative group"
                     >
                         <div className="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-emerald-100 to-transparent rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500" />
@@ -187,7 +187,7 @@ export default function DashboardPage() {
                 {/* Box Khách hàng */}
                 <Col xs={24} sm={12} xl={6}>
                     <Card
-                        bordered={false}
+                        variant="borderless"
                         className="rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden relative group"
                     >
                         <div className="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-purple-100 to-transparent rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500" />
@@ -210,7 +210,7 @@ export default function DashboardPage() {
                 {/* Box Tồn kho Alert */}
                 <Col xs={24} sm={12} xl={6}>
                     <Card
-                        bordered={false}
+                        variant="borderless"
                         className="rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden relative group"
                     >
                         <div className="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-rose-100 to-transparent rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500" />
@@ -235,7 +235,7 @@ export default function DashboardPage() {
             <Row>
                 <Col span={24}>
                     <Card
-                        bordered={false}
+                        variant="borderless"
                         className="rounded-2xl shadow-sm overflow-hidden"
                         styles={{
                             header: { borderBottom: '1px solid #f0f0f0', padding: '20px 24px' },

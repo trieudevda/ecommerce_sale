@@ -96,6 +96,25 @@ const sidebarAdmin = (userId: string) => [
         ],
     },
 ]
+const MENUMAP = [
+    { prefix: '/product/category/attribute', key: 'product-category-attribute-list' },
+    { prefix: '/product/category', key: 'product-category-list' },
+    { prefix: '/product', key: 'product-list' },
+    { prefix: '/role/create', key: 'role-create' },
+    { prefix: '/role', key: 'role-list' },
+    { prefix: '/permission', key: 'per-list' },
+    { prefix: '/user', key: 'user-list' },
+];
+const findParentKeys = (items: any[], targetKey: string, parents: string[] = []): string[] | null => {
+    for (const item of items) {
+        if (item.key === targetKey) return parents;
+        if (item.children) {
+            const found = findParentKeys(item.children, targetKey, [...parents, item.key]);
+            if (found) return found;
+        }
+    }
+    return null;
+};
 export  {
-    sidebarAdmin,
+    sidebarAdmin, MENUMAP, findParentKeys
 }

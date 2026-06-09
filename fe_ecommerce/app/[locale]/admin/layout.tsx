@@ -4,10 +4,10 @@ import {LoadingOutlined, LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined} f
 import React, {useMemo} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/redux/store";
-import {sidebarAdmin} from "@/src/custom/menu-admin/sidebar-admin";
+import {findParentKeys, MENUMAP, sidebarAdmin} from "@/src/custom/menu-admin/sidebar-admin";
 import {AuthProvider} from "@/app/AuthProvider";
 import {requestApi} from "@/components/api/be.api";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {useTranslations} from "use-intl";
 import {ADMIN_PATHS} from "@/src/path";
 import {setLogout} from "@/src/redux/slices/authSlice";
@@ -15,6 +15,7 @@ import {setLogout} from "@/src/redux/slices/authSlice";
 export default  function AdminLayout({children}: {
     children: React.ReactNode;
 }) {
+    const pathname = usePathname();
     const userId = useSelector((state: RootState) => state.auth.user?.sub) || '';
     const { Header, Sider, Content } = Layout;
     const {
@@ -28,6 +29,17 @@ export default  function AdminLayout({children}: {
     const tAuth = useTranslations("Auth");
     const tMess = useTranslations("Message");
     const menuAdmin = useMemo(()=>sidebarAdmin(userId),[userId]);
+    const [openKeys, setOpenKeys] = React.useState<string[]>([]);
+    const activeKey = useMemo(() => {
+        const match = MENUMAP.find(m => pathname.includes(m.prefix));
+        return match ? match.key : 'dashboard';
+    }, [pathname]);
+    React.useEffect(() => {
+        const parentKeys = findParentKeys(menuAdmin, activeKey, []);
+        if (parentKeys) {
+            setOpenKeys(parentKeys);
+        }
+    }, [activeKey, menuAdmin]);
     const logout = async () => {
         const res: any = await requestApi(`auth/logout`, {
             method: 'POST',
@@ -46,6 +58,9 @@ export default  function AdminLayout({children}: {
             });
         }
     }
+    const onOpenChange = (keys: string[]) => {
+        setOpenKeys(keys);
+    };
     return <AuthProvider>
         <Layout>
             {contextHolder}
@@ -54,7 +69,10 @@ export default  function AdminLayout({children}: {
                 <Menu
                     theme="dark"
                     mode="inline"
-                    defaultSelectedKeys={['1']}
+                    openKeys={openKeys}
+                    onOpenChange={onOpenChange}
+                    selectedKeys={[activeKey]}
+                    // defaultSelectedKeys={['1']}
                     items={menuAdmin}
                 />
                 <Button type={'dashed'} icon={<LogoutOutlined />} onClick={logout}>{tAuth('logout')}</Button>
