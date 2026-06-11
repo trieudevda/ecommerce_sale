@@ -1,8 +1,8 @@
 'use client';
 import {store} from "@/src/redux/store";
-import {Provider, useDispatch} from "react-redux";
+import {Provider} from "react-redux";
 import React from "react";
 
-export function AppProvider({ children }) {
+export function AppProvider({ children }:{children:React.ReactNode}) {
     return <Provider store={store}>{children}</Provider>;
 }
