@@ -7,7 +7,9 @@ import {RootState} from "@/src/redux/store";
 import {useRouter} from "next/navigation";
 import {ADMIN_PATHS} from "@/src/path";
 
-export function AuthProvider({ children }) {
+export function AuthProvider({children}: {
+    children: React.ReactNode;
+}) {
     const router = useRouter();
     const dispatch = useDispatch();
     const { user, isAuthenticated, isAppLoading } = useSelector((state: RootState) => state.auth);

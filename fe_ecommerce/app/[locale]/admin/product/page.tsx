@@ -105,7 +105,10 @@ const App: React.FC = () => {
     const allColumns = getListProductColumns({ onEdit: handleEdit, onDelete: handleDelete, t: tTable });
 
     const displayColumns = allColumns.filter(col => {
-        const columnIdentifier = (col.key || col.dataIndex) as string;
+        // const columnIdentifier = (col.key || col.dataIndex) as string;
+        const columnIdentifier = String(
+            col.key ?? ('dataIndex' in col ? col.dataIndex : '')
+        );;
         return visibleColumns.includes(columnIdentifier) || columnIdentifier === 'actions';
     });
 
@@ -269,7 +272,7 @@ const App: React.FC = () => {
                     width={420}
                     closeIcon={<span className="text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 p-1.5 rounded-full transition-colors"><MoreOutlined className="rotate-90" /></span>}
                     className="custom-premium-modal"
-                    styles={{ content: { padding: 0, borderRadius: 24, overflow: 'hidden' } }}
+                    style={{ padding: 0, borderRadius: 24, overflow: 'hidden'  }}
                 >
                     <div className="bg-slate-50 px-6 py-5 border-b border-slate-100">
                         <div className="flex items-center gap-3 mb-1">

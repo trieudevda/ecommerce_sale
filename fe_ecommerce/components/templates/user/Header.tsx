@@ -198,7 +198,7 @@ const HeaderUser = () => {
                             content={<MegaMenuContent />}
                             placement="bottomLeft"
                             trigger="hover"
-                            styles={{ padding: 0, borderRadius: '16px', overflow: 'hidden' }}
+                            style={{ padding: 0, borderRadius: '16px', overflow: 'hidden' }}
                             arrow={false}
                         >
                             <Button

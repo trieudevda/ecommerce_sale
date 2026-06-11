@@ -20,7 +20,7 @@ export const getListUserColumns = ({ onEdit, onDelete, t }: ActionProps): TableC
             <div className="p-3 shadow-xl rounded-2xl bg-white border border-slate-100 w-64" onKeyDown={(e) => e.stopPropagation()}>
                 <Input
                     placeholder={`Tìm ${title.toLowerCase()}...`}
-                    value={selectedKeys[0]}
+                    value={(selectedKeys[0] ?? "") as string}
                     onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => confirm()}
                     className="mb-3 w-full border-slate-200 focus:border-blue-500 rounded-lg"
@@ -91,7 +91,7 @@ export const getListUserColumns = ({ onEdit, onDelete, t }: ActionProps): TableC
                 { text: 'Admin', value: 'ADMIN' },
                 { text: 'User', value: 'USER' },
             ],
-            onFilter: (value, record) => record.role === value,
+            onFilter: (value:any, record) => record.role === value,
             filterIcon: (filtered: boolean) => <FilterOutlined className={`text-base ${filtered ? 'text-blue-600' : 'text-slate-400'}`} />,
             render: (role) => (
                 <span className={`px-2 py-1 rounded-md text-xs font-semibold ${

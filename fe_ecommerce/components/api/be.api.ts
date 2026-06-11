@@ -1,31 +1,76 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-export async function requestApi<T>(url: string, options: RequestInit & { params?: Record<string, any> } = {}): Promise<T> {
+// export async function requestApi<T>(url: string, options: RequestInit & { params?: Record<string, any> } = {}): Promise<T> {
+//     const isFormData = options.body instanceof FormData;
+//     const headers = {
+//         ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+//         ...(options.headers || {}),
+//     };
+//     let fullUrl = `${BASE_URL}${url}`;
+//     if (options.params) {
+//         const queryString = new URLSearchParams(options.params).toString();
+//         fullUrl += `?${queryString}`;
+//     }
+//     let response = await fetch(fullUrl, {
+//         ...options,
+//         headers,
+//         credentials: 'include'
+//     });
+//     if (!response.ok) {
+//         if(response.status === 401) {
+//             await checkAuthToken()
+//             await requestApi(url, options);
+//             return;
+//         }
+//         const errorData = await response.json().catch(() => ({}));
+//         return errorData;
+//     }
+//     return response.json();
+// }
+export async function requestApi<T>(
+    url: string,
+    options: RequestInit & { params?: Record<string, any> } = {}
+): Promise<T> {
     const isFormData = options.body instanceof FormData;
+
     const headers = {
-        ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
         ...(options.headers || {}),
     };
+
     let fullUrl = `${BASE_URL}${url}`;
+
     if (options.params) {
         const queryString = new URLSearchParams(options.params).toString();
         fullUrl += `?${queryString}`;
     }
+
     let response = await fetch(fullUrl, {
         ...options,
         headers,
-        credentials: 'include'
+        credentials: "include",
     });
-    if (!response.ok) {
-        if(response.status === 401) {
-            await checkAuthToken()
-            await requestApi(url, options);
-            return;
-        }
-        const errorData = await response.json().catch(() => ({}));
-        return errorData;
+
+    // 🔁 handle 401
+    if (response.status === 401) {
+        await checkAuthToken();
+
+        const retry = await fetch(fullUrl, {
+            ...options,
+            headers,
+            credentials: "include",
+        });
+
+        return (await retry.json()) as T;
     }
-    return response.json();
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw data;
+    }
+
+    return data as T;
 }
 export async function uploadSingle(file: File) {
   const formData = new FormData();

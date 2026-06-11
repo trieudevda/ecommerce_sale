@@ -29,7 +29,7 @@ export const getListCategoryAttributeColumns = ({ onEdit, onDelete, t }: ActionP
             <div className="p-3 shadow-xl rounded-2xl bg-white border border-slate-100 w-64" onKeyDown={(e) => e.stopPropagation()}>
                 <Input
                     placeholder={`Tìm ${title.toLowerCase()}...`}
-                    value={selectedKeys[0]}
+                    value={(selectedKeys[0] ?? "") as string}
                     onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => confirm()}
                     className="mb-3 w-full border-slate-200 focus:border-blue-500 rounded-lg"

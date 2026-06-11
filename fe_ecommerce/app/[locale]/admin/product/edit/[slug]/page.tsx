@@ -407,7 +407,7 @@ const Page = () => {
                               return false;
                             }}
                             onRemove={(file) => {
-                              setGalleryFiles((prev) => prev.filter((f) => f.uid !== file.uid));
+                              setGalleryFiles((prev) => prev.filter((f:any) => f.uid !== file.uid));
                               setGalleryPreview((prev) => prev.filter((f) => f.uid !== file.uid));
                               if (!isNaN(Number(file.uid))) {
                                 setExistingGalleryIds((prev) => prev.filter((id) => id !== Number(file.uid)));

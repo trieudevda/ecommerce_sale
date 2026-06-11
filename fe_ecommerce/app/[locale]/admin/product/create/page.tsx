@@ -58,8 +58,10 @@ const Page = () => {
           requestApi("category/find-all", { method: "GET" }),
           requestApi("category-attribute/find-all", { method: "GET" }),
         ]);
-        if (cateRes && !cateRes.statusCode) setCate(cateRes.data);
-        if (attrRes && !attrRes.statusCode) setCateAttr(attrRes.data);
+        const cateData = cateRes as any;
+        const attrData = attrRes as any;
+        if (cateRes && !cateData.statusCode) setCate(cateData.data);
+        if (attrRes && !attrData.statusCode) setCateAttr(attrData.data);
       } catch (error) {
         messageApi.error({
           title: tMess('Title.error'),

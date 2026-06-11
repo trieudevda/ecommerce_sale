@@ -21,8 +21,8 @@ const App: React.FC = () => {
                     requestApi('roles/find-all-role', { method: 'GET' }),
                     requestApi('permissions/find-all', { method: 'GET' })
                 ]);
-                setAllRole(rolesRes);
-                setPer(perRes.data);
+                setAllRole(rolesRes as any[]);
+                setPer((perRes as any).data);
             } catch (error) {
                 messageApi.error({ title: tMess('Title.error'), description: tMess("Description.Unable_to_connect_to_the_server") });
             } finally {
@@ -40,7 +40,7 @@ const App: React.FC = () => {
             });
             messageApi.success({ title: tMess('Title.success'), description: tMess('Description.data_update_successfully') });
             // Refresh local state
-            const rolesRes = await requestApi('roles/find-all-role', { method: 'GET' });
+            const rolesRes: any[] = await requestApi('roles/find-all-role', { method: 'GET' });
             setAllRole(rolesRes);
         } catch (e) {
             messageApi.error({ title: tMess('Title.fail'), description: tMess('Description.An_error_occurred_while_saving_the_data') });
