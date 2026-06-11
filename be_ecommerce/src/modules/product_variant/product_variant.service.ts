@@ -7,7 +7,6 @@ import { ProductVariant } from './entities/product_variant.entity';
 import { CategoryAttributeValue } from '../category_attribute_values/entities/category_attribute_value.entity';
 import { PriceHistoryService } from '../price_history/price_history.service';
 import { ProductPriceHistory } from '../price_history/entities/price_history.entity';
-import { CreatePriceHistoryDto } from '../price_history/dto/create-price_history.dto';
 
 @Injectable()
 export class ProductVariantService {
@@ -15,9 +14,12 @@ export class ProductVariantService {
     @InjectRepository(ProductVariant)
     private readonly productVariantRepository: Repository<ProductVariant>,
     private readonly priceHistoryService: PriceHistoryService,
+  ) {}
+  async create(
+    productId: number,
+    createProductVariantDto: CreateProductVariantDto[],
   ) {
-  }
-  async create(productId: number, createProductVariantDto: CreateProductVariantDto[]) {
+    if (createProductVariantDto == undefined) return [];
     const entities = createProductVariantDto.map((variant) =>
       this.productVariantRepository.create({
         ...variant,
@@ -42,7 +44,7 @@ export class ProductVariantService {
       where: { product: { id: productId } },
       relations: ['attributeValues', 'prices'],
     });
-    const map = new Map(oldVariants.map(v => [v.id, v]));
+    const map = new Map(oldVariants.map((v) => [v.id, v]));
     const result: ProductVariant[] = [];
     for (const dto of dtos) {
       if (dto.id && map.has(dto.id)) {
@@ -50,9 +52,15 @@ export class ProductVariantService {
         if (dto.sku !== undefined) old.sku = dto.sku;
         if (dto.stock !== undefined) old.stock = dto.stock;
         if (dto.prices !== undefined && dto.prices.length > 0) {
-          old.prices = await this.priceHistoryService.update(old.id, old.prices, dto.prices as ProductPriceHistory[]);
+          old.prices = await this.priceHistoryService.update(
+            old.id,
+            old.prices,
+            dto.prices as ProductPriceHistory[],
+          );
         }
-        old.attributeValues = (dto.attributeValueIds || []).map(id => ({ id } as CategoryAttributeValue));
+        old.attributeValues = (dto.attributeValueIds || []).map(
+          (id) => ({ id }) as CategoryAttributeValue,
+        );
         result.push(old);
         map.delete(dto.id);
       } else {
@@ -61,7 +69,7 @@ export class ProductVariantService {
           sku: dto.sku,
           stock: dto.stock,
           product: { id: productId },
-          attributeValues: (dto.attributeValueIds || []).map(id => ({ id })),
+          attributeValues: (dto.attributeValueIds || []).map((id) => ({ id })),
         });
         await this.productVariantRepository.save(variant);
         const created = await this.priceHistoryService.create({

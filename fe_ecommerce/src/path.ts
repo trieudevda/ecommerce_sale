@@ -8,6 +8,7 @@ const APP_PATH = {
     PRODUCT: '/product',
     ROLE: '/role',
     PERMISSION: '/permission',
+    CUSTOMER: '/',
 }
 export const ADMIN_PATHS = {
     DASHBOARD: {
@@ -48,5 +49,7 @@ export const ADMIN_PATHS = {
         LOGIN: () => APP_PATH.AUTH + '/login' + APP_PATH.ADMIN,
         CREATE: () => APP_PATH.AUTH + '/create' + APP_PATH.ADMIN,
     },
-
+    CUSTOMER: {
+        HOMEPAGE: APP_PATH.CUSTOMER,
+    }
 };

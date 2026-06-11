@@ -1,8 +1,11 @@
 'use client';
 import React, {useState} from 'react';
-import {Badge, Button, Card, Col, Input, Layout, Row, Typography} from 'antd';
-import {SearchOutlined, ShoppingCartOutlined, UserOutlined} from '@ant-design/icons';
+import {Button, Card, Carousel, Col, Layout, Row, Typography} from 'antd';
 import "@/public/styles/css/main.scss"
+import "@/public/styles/css/layout.scss"
+import FooterUser from "@/components/templates/user/Footer";
+import HeaderUser from "@/components/templates/user/Header";
+import HeroSlider from "@/components/templates/user/HeroSlider";
 
 const { Header, Content, Footer } = Layout;
 const { Title, Text } = Typography;
@@ -10,52 +13,78 @@ const { Title, Text } = Typography;
 export default function HomePage() {
     const [visibleProducts, setVisibleProducts] = useState(8);
     const products = Array.from({ length: 12 }, (_, i) => i + 1);
-
+    const slides = [
+        {
+            title: "Chảy Cùng",
+            highlight: "Công Nghệ",
+            desc: "Trải nghiệm thiết kế mềm mại, uyển chuyển.",
+            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe",
+        },
+        {
+            title: "Khám Phá",
+            highlight: "Tương Lai",
+            desc: "Những sản phẩm công nghệ đột phá cho cuộc sống hiện đại.",
+            image: "https://images.unsplash.com/photo-1518770660439-4636190af475",
+        },
+        {
+            title: "Sáng Tạo",
+            highlight: "Không Giới Hạn",
+            desc: "Thiết kế nghệ thuật kết hợp công nghệ tiên phong.",
+            image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+        },
+    ];
     return (
         <Layout className="bg-transparent font-sans">
-
-            {/* HEADER: Kính mờ (Glassmorphism) */}
-            <Header className="bg-white/70 backdrop-blur-xl border-b border-white/50 h-20 px-0 sticky top-0 z-50 shadow-sm">
-                <div className="max-w-[1400px] mx-auto w-full px-6 flex items-center justify-between h-full">
-                    <div className="text-3xl font-black tracking-tight liquid-gradient text-transparent bg-clip-text">
-                        LIQUID.
-                    </div>
-
-                    <div className="hidden lg:flex flex-1 max-w-xl mx-8">
-                        <Input
-                            size="large"
-                            placeholder="Tìm kiếm..."
-                            prefix={<SearchOutlined className="text-slate-400" />}
-                            className="rounded-full bg-slate-100/50 border-none hover:bg-white focus:bg-white transition-all shadow-inner"
-                        />
-                    </div>
-
-                    <div className="flex gap-6 items-center">
-                        <Badge count={2} color="#3b82f6">
-                            <Button shape="circle" icon={<ShoppingCartOutlined className="text-xl text-slate-700" />} className="liquid-btn bg-white shadow-sm h-10 w-10" />
-                        </Badge>
-                        <Button shape="circle" icon={<UserOutlined className="text-xl text-slate-700" />} className="liquid-btn bg-white shadow-sm h-10 w-10" />
-                    </div>
-                </div>
-            </Header>
-
+            <HeaderUser/>
+            <HeroSlider/>
             <Content className="max-w-[1400px] mx-auto w-full px-6 py-12">
-
-                {/* BANNER: Sử dụng Liquid Shape & Gradient */}
                 <div className="flex flex-col md:flex-row items-center justify-between mb-24 gap-12">
-                    <div className="flex-1 space-y-8">
-                        <Title level={1} className="!text-6xl md:!text-8xl font-black tracking-tighter text-slate-800">
-                            Chảy Cùng <br/> <span className="liquid-text-gradient">Công Nghệ</span>
-                        </Title>
-                        <Text className="text-xl text-slate-500 block max-w-lg">
-                            Trải nghiệm thiết kế mềm mại, uyển chuyển. Nâng tầm phong cách sống với những sản phẩm công nghệ tinh hoa nhất.
-                        </Text>
-                        <Button size="large" className="liquid-btn liquid-gradient text-white font-bold h-14 px-10 text-lg">
-                            Khám phá ngay
-                        </Button>
-                    </div>
+                    <Carousel autoplay effect="fade">
+                        {slides.map((slide, index) => (
+                            <div key={index}>
+                                <div className="min-h-[700px] flex items-center">
+                                    <div className="container mx-auto px-6">
+                                        <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+                                            <div className="flex-1 space-y-8">
+                                                <Title
+                                                    level={1}
+                                                    className="!text-6xl md:!text-8xl font-black tracking-tighter text-slate-800"
+                                                >
+                                                    {slide.title}
+                                                    <br />
+                                                    <span className="liquid-text-gradient">
+                                            {slide.highlight}
+                                        </span>
+                                                </Title>
 
-                    {/* Khối hình giọt nước chuyển động */}
+                                                <Text className="text-xl text-slate-500 block max-w-lg">
+                                                    {slide.desc}
+                                                </Text>
+
+                                                <Button
+                                                    size="large"
+                                                    className="liquid-btn liquid-gradient text-white font-bold h-14 px-10 text-lg"
+                                                >
+                                                    Khám phá ngay
+                                                </Button>
+                                            </div>
+
+                                            <div className="flex-1 flex justify-center">
+                                                <div className="w-[350px] h-[350px] md:w-[500px] md:h-[500px] liquid-shape liquid-gradient p-2 shadow-2xl shadow-blue-500/20">
+                                                    <div
+                                                        className="w-full h-full liquid-shape bg-cover bg-center"
+                                                        style={{
+                                                            backgroundImage: `url(${slide.image})`,
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </Carousel>
                     <div className="flex-1 flex justify-center">
                         <div className="w-[350px] h-[350px] md:w-[500px] md:h-[500px] liquid-shape liquid-gradient p-2 shadow-2xl shadow-blue-500/20">
                             {/* Bên trong Shape có thể chứa ảnh */}
@@ -102,19 +131,7 @@ export default function HomePage() {
                     )}
                 </div>
             </Content>
-
-            {/* FOOTER */}
-            <Footer className="bg-slate-900 text-slate-400 pt-20 pb-10 px-6 rounded-t-[80px] shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
-                <div className="max-w-[1400px] mx-auto w-full text-center">
-                    <div className="text-4xl font-black tracking-tight liquid-text-gradient text-transparent bg-clip-text mb-6 inline-block">
-                        LIQUID.
-                    </div>
-                    <p className="max-w-xl mx-auto mb-10">Sự hòa quyện hoàn hảo giữa công nghệ hiện đại và thiết kế nghệ thuật.</p>
-                    <div className="border-t border-slate-800 pt-8 text-sm">
-                        © 2026 Liquid UI. All rights reserved.
-                    </div>
-                </div>
-            </Footer>
+            <FooterUser />
         </Layout>
     );
 }

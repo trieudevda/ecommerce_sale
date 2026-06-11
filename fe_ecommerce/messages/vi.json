@@ -402,5 +402,18 @@
       "no_role_yet": "Chưa có vai trò",
       "no_catefory_yet": "Chưa có danh mục"
     }
+  },
+  "Customer": {
+    "about_us": "Về chúng tôi",
+    "website_design": "Thiết kế website",
+    "service": "Dịch vụ",
+    "project": "Dự án",
+    "blog": "Bài viết",
+    "contact": "Liên hệ",
+    "order": "Đặt hàng",
+    "stores_near_you": "Cửa hàng gần bạn",
+    "order_tracking": "Tra cứu đơn hàng",
+    "promotion": "Khuyến mãi",
+    "cart": "Giỏ hàng"
   }
 }

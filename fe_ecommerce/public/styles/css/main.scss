@@ -86,3 +86,27 @@ html{
 .rounded-3xl {
   border-radius: 40px;
 }
+
+.hero-swiper {
+  width: 100%;
+}
+
+.hero-swiper .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: #94a3b8;
+  opacity: 1;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+  background: #3b82f6;
+  transform: scale(1.3);
+}
+
+.hero-swiper .swiper-slide {
+  opacity: 0 !important;
+}
+
+.hero-swiper .swiper-slide-active {
+  opacity: 1 !important;
+}

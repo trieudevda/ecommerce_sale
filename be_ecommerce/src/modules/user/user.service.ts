@@ -1,17 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
-import { Transactional } from 'typeorm-transactional';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { FindUserQueryDto } from './dto/find-user-query.dto';
-import { DEFAULT_LIMIT, MAX_LIMIT } from '../../config/constant-find';
-import { UserRoleEnum, UserStatusEnum } from './enums/user.enum';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {CreateUserDto} from './dto/create-user.dto';
+import {UpdateUserDto} from './dto/update-user.dto';
+import {User} from './entities/user.entity';
+import {Transactional} from 'typeorm-transactional';
+import {Repository} from 'typeorm';
+import {InjectRepository} from '@nestjs/typeorm';
+import {FindUserQueryDto} from './dto/find-user-query.dto';
+import {DEFAULT_LIMIT, MAX_LIMIT} from '../../config/constant-find';
+import {UserRoleEnum, UserStatusEnum} from './enums/user.enum';
 import * as bcrypt from 'bcrypt';
-import { Role } from '../roles/entities/role.entity';
-import { Permission } from '../permissions/entities/permission.entity';
-import { CustomLoggerService } from '../../common/logger/logger.service';
+import {Role} from '../roles/entities/role.entity';
+import {Permission} from '../permissions/entities/permission.entity';
+import {CustomLoggerService} from '../../common/logger/logger.service';
 
 @Injectable()
 export class UserService {
@@ -69,6 +69,7 @@ export class UserService {
   async findOne({ id, email }: FindUserQueryDto) {
     const user = await this.userRepo.findOne({
       where: [{ id: id }, { email: email }],
+      relations: ['role'],
     });
     if (!user) {
       throw new NotFoundException('User không tồn tại');
@@ -126,6 +127,12 @@ export class UserService {
   @Transactional()
   async create(createUserDto: CreateUserDto) {
     let role = null;
+    const checkUser = await this.userRepo.findOneBy({
+      email: createUserDto.email,
+    });
+    if (checkUser) {
+      throw new NotFoundException('Người dùng đã tồn tại');
+    }
     role = await this.roleRepo.findOne({
       where: [{ id: createUserDto.role?.id }, { slug: UserRoleEnum.USER }],
     });
