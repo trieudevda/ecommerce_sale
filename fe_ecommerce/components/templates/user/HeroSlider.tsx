@@ -66,7 +66,7 @@ export default function HeroSlider() {
             >
                 {slides.map((slide) => (
                     <SwiperSlide key={slide.id}>
-                        <div className="min-h-screen flex items-center">
+                        <div className="flex items-center">
                             <div className="max-w-[1400px] mx-auto px-6 w-full">
                                 <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
 

@@ -1,6 +1,6 @@
 'use client';
 import React, {useState} from 'react';
-import {Button, Card, Carousel, Col, Layout, Row, Typography} from 'antd';
+import {Button, Card, Col, Layout, Row, Typography} from 'antd';
 import "@/public/styles/css/main.scss"
 import "@/public/styles/css/layout.scss"
 import FooterUser from "@/components/templates/user/Footer";
@@ -38,61 +38,6 @@ export default function HomePage() {
             <HeaderUser/>
             <HeroSlider/>
             <Content className="max-w-[1400px] mx-auto w-full px-6 py-12">
-                <div className="flex flex-col md:flex-row items-center justify-between mb-24 gap-12">
-                    <Carousel autoplay effect="fade">
-                        {slides.map((slide, index) => (
-                            <div key={index}>
-                                <div className="min-h-[700px] flex items-center">
-                                    <div className="container mx-auto px-6">
-                                        <div className="flex flex-col md:flex-row items-center justify-between gap-12">
-                                            <div className="flex-1 space-y-8">
-                                                <Title
-                                                    level={1}
-                                                    className="!text-6xl md:!text-8xl font-black tracking-tighter text-slate-800"
-                                                >
-                                                    {slide.title}
-                                                    <br />
-                                                    <span className="liquid-text-gradient">
-                                            {slide.highlight}
-                                        </span>
-                                                </Title>
-
-                                                <Text className="text-xl text-slate-500 block max-w-lg">
-                                                    {slide.desc}
-                                                </Text>
-
-                                                <Button
-                                                    size="large"
-                                                    className="liquid-btn liquid-gradient text-white font-bold h-14 px-10 text-lg"
-                                                >
-                                                    Khám phá ngay
-                                                </Button>
-                                            </div>
-
-                                            <div className="flex-1 flex justify-center">
-                                                <div className="w-[350px] h-[350px] md:w-[500px] md:h-[500px] liquid-shape liquid-gradient p-2 shadow-2xl shadow-blue-500/20">
-                                                    <div
-                                                        className="w-full h-full liquid-shape bg-cover bg-center"
-                                                        style={{
-                                                            backgroundImage: `url(${slide.image})`,
-                                                        }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </Carousel>
-                    <div className="flex-1 flex justify-center">
-                        <div className="w-[350px] h-[350px] md:w-[500px] md:h-[500px] liquid-shape liquid-gradient p-2 shadow-2xl shadow-blue-500/20">
-                            {/* Bên trong Shape có thể chứa ảnh */}
-                            <div className="w-full h-full liquid-shape bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe')] bg-cover bg-center opacity-90 mix-blend-overlay"></div>
-                        </div>
-                    </div>
-                </div>
-
                 {/* SẢN PHẨM: Sử dụng Liquid Card */}
                 <div className="mb-20">
                     <Title level={2} className="mb-10 text-center tracking-tight text-slate-800">

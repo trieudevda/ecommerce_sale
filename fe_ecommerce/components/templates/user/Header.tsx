@@ -14,12 +14,15 @@ import Link from "next/link";
 import {useTranslations} from "use-intl";
 
 const { Header } = Layout;
-const { Title, Text } = Typography;
+const { Title } = Typography;
+
 interface ProductSearch {
     id: string;
     name: string;
     image: string;
-}const categoriesData = [
+}
+
+const categoriesData = [
     {
         id: 'phone',
         icon: <MobileOutlined />,
@@ -49,16 +52,13 @@ const flashSaleProducts = [
 
 // --- COMPONENT MEGA MENU ---
 const MegaMenuContent = () => {
-    // State lưu giữ ID danh mục đang được hover ở cột trái
     const [activeCat, setActiveCat] = React.useState(categoriesData[0].id);
-
-    // Lấy data của danh mục đang active
     const activeData = categoriesData.find(cat => cat.id === activeCat);
 
     return (
         <div className="flex w-[850px] min-h-[400px] bg-white rounded-2xl overflow-hidden shadow-2xl border border-slate-100">
 
-            {/* CỘT 1: Danh sách danh mục dọc (25%) */}
+            {/* CỘT 1 */}
             <div className="w-[25%] bg-slate-50 py-4 flex flex-col border-r border-slate-100">
                 {categoriesData.map((cat) => (
                     <div
@@ -77,7 +77,7 @@ const MegaMenuContent = () => {
                 ))}
             </div>
 
-            {/* CỘT 2: Thương hiệu & Sản phẩm Hot theo danh mục (50%) */}
+            {/* CỘT 2 */}
             <div className="w-[50%] p-6 bg-white">
                 <Title level={5} className="!text-slate-800 !mb-4">Thương hiệu nổi bật</Title>
                 <div className="flex flex-wrap gap-2 mb-8">
@@ -93,7 +93,13 @@ const MegaMenuContent = () => {
                     {activeData?.hotProducts.map(prod => (
                         <Link href={`/product/${prod.id}`} key={prod.id} className="flex flex-col gap-2 group">
                             <div className="h-24 bg-slate-100 rounded-xl flex items-center justify-center overflow-hidden relative">
-                                <Image src={prod.img} alt={prod.name} fill className="object-cover group-hover:scale-105 transition-transform" />
+                                <Image
+                                    src={prod.img}
+                                    alt={prod.name}
+                                    fill
+                                    sizes="150px" // Đã thêm sizes
+                                    className="object-cover group-hover:scale-105 transition-transform"
+                                />
                             </div>
                             <span className="text-sm font-semibold text-slate-700 group-hover:text-blue-600 line-clamp-2">{prod.name}</span>
                             <span className="text-blue-600 font-bold">{prod.price}</span>
@@ -102,7 +108,7 @@ const MegaMenuContent = () => {
                 </div>
             </div>
 
-            {/* CỘT 3: Giá Sốc Hôm Nay (25%) */}
+            {/* CỘT 3 */}
             <div className="w-[25%] bg-gradient-to-b from-red-50 to-orange-50 p-6 border-l border-red-100/50">
                 <div className="flex items-center gap-2 mb-6">
                     <FireOutlined className="text-red-500 text-xl" />
@@ -112,7 +118,13 @@ const MegaMenuContent = () => {
                     {flashSaleProducts.map(prod => (
                         <Link href={`/product/${prod.id}`} key={prod.id} className="group">
                             <div className="h-28 bg-white rounded-xl mb-3 relative overflow-hidden shadow-sm">
-                                <Image src={prod.img} alt={prod.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                                <Image
+                                    src={prod.img}
+                                    alt={prod.name}
+                                    fill
+                                    sizes="120px" // Đã thêm sizes
+                                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                />
                                 <div className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
                                     HOT
                                 </div>
@@ -129,11 +141,13 @@ const MegaMenuContent = () => {
         </div>
     );
 };
+
 const HeaderUser = () => {
     const t = useTranslations("Customer");
     const [searchText, setSearchText] = React.useState("");
     const [options, setOptions] = React.useState<any[]>([]);
     const [loading, setLoading] = React.useState(false);
+
     React.useEffect(() => {
         if (!searchText.trim()) {
             setOptions([]);
@@ -143,21 +157,14 @@ const HeaderUser = () => {
         const delayDebounceFn = setTimeout(async () => {
             setLoading(true);
             try {
-                // ==========================================
-                // TODO: THAY THẾ BẰNG API THẬT CỦA BẠN TẠI ĐÂY
-                // const response = await requestApi(`products/search?keyword=${searchText}`);
-                // const data: ProductSearch[] = response.data;
-                // ==========================================
-
                 // DỮ LIỆU GIẢ LẬP (Mock Data)
                 const mockData: ProductSearch[] = [
                     { id: '1', name: `Điện thoại thông minh - ${searchText}`, image: '/assets/images/horizontal-logo.png' },
                     { id: '2', name: `Laptop Gaming - ${searchText}`, image: '/assets/images/horizontal-logo.png' },
                 ];
 
-                // Map dữ liệu từ Backend thành định dạng hiển thị của AutoComplete
                 const formattedOptions = mockData.map(item => ({
-                    value: item.id, // Value thực sự khi chọn
+                    value: item.id,
                     label: (
                         <Link href={`/product/${item.id}`} className="flex items-center gap-3 py-2 px-1 hover:bg-slate-50 transition-colors rounded-lg">
                             <div className="flex-shrink-0 relative w-10 h-10 bg-slate-100 rounded-md overflow-hidden">
@@ -165,6 +172,7 @@ const HeaderUser = () => {
                                     src={item.image}
                                     alt={item.name}
                                     fill
+                                    sizes="40px" // Đã thêm sizes
                                     className="object-cover"
                                 />
                             </div>
@@ -179,7 +187,7 @@ const HeaderUser = () => {
             } finally {
                 setLoading(false);
             }
-        }, 500); // 500ms là thời gian lý tưởng để debounce
+        }, 500);
 
         return () => clearTimeout(delayDebounceFn);
     }, [searchText]);
@@ -189,7 +197,14 @@ const HeaderUser = () => {
             <div className="max-w-[1400px] mx-auto w-full px-6 flex items-center justify-between h-full">
                 <div className="flex-shrink-0 flex items-center">
                     <Link href="/">
-                        <Image src="/assets/images/horizontal-logo.png" height={60} width={200} alt="logo" />
+                        <Image
+                            src="/assets/images/horizontal-logo.png"
+                            loading={"eager"}
+                            height={80}
+                            width={140}
+                            alt="logo"
+                            style={{ width: 'auto', height: 'auto' }}
+                        />
                     </Link>
                 </div>
                 <div className="hidden lg:flex flex-1 justify-center items-center gap-8 font-semibold text-slate-700 text-base">
@@ -198,7 +213,7 @@ const HeaderUser = () => {
                             content={<MegaMenuContent />}
                             placement="bottomLeft"
                             trigger="hover"
-                            style={{ padding: 0, borderRadius: '16px', overflow: 'hidden' }}
+                            styles={{ body: { padding: 0, borderRadius: '16px', overflow: 'hidden' } }} // Đã sửa lỗi style thành styles={{body: ...}}
                             arrow={false}
                         >
                             <Button
@@ -209,13 +224,13 @@ const HeaderUser = () => {
                                 Danh mục
                             </Button>
                         </Popover>
-                        {/* KHỐI TÌM KIẾM AUTOCOMPLETE */}
+
                         <div className="hidden md:block w-64 lg:w-72">
                             <AutoComplete
                                 options={options}
                                 onSearch={setSearchText}
                                 className="w-full"
-                                popupClassName="rounded-xl shadow-xl border border-slate-100" // Bo góc dropdown list
+                                classNames={{ popup: "rounded-xl shadow-xl border border-slate-100" }} // Đã thay thế popupClassName
                                 notFoundContent={
                                     loading ? (
                                         <div className="text-center py-4 text-blue-500"><Spin size="small" /> Đang tìm...</div>
@@ -245,9 +260,9 @@ const HeaderUser = () => {
                                 className="liquid-btn bg-white shadow-sm h-10 w-10 border-none "
                             />
                         </Badge>
-                        {t('cart')}</Link>
+                        {t('cart')}
+                    </Link>
                 </div>
-
             </div>
         </Header>
     );
