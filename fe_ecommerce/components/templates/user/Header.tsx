@@ -49,16 +49,12 @@ const flashSaleProducts = [
     { id: 101, name: 'AirPods Pro 2', price: '4.990.000đ', oldPrice: '6.500.000đ', img: '/assets/images/horizontal-logo.png' },
     { id: 102, name: 'Sạc nhanh 20W', price: '390.000đ', oldPrice: '690.000đ', img: '/assets/images/horizontal-logo.png' },
 ];
-
-// --- COMPONENT MEGA MENU ---
 const MegaMenuContent = () => {
     const [activeCat, setActiveCat] = React.useState(categoriesData[0].id);
     const activeData = categoriesData.find(cat => cat.id === activeCat);
 
     return (
         <div className="flex w-[850px] min-h-[400px] bg-white rounded-2xl overflow-hidden shadow-2xl border border-slate-100">
-
-            {/* CỘT 1 */}
             <div className="w-[25%] bg-slate-50 py-4 flex flex-col border-r border-slate-100">
                 {categoriesData.map((cat) => (
                     <div
@@ -76,8 +72,6 @@ const MegaMenuContent = () => {
                     </div>
                 ))}
             </div>
-
-            {/* CỘT 2 */}
             <div className="w-[50%] p-6 bg-white">
                 <Title level={5} className="!text-slate-800 !mb-4">Thương hiệu nổi bật</Title>
                 <div className="flex flex-wrap gap-2 mb-8">
@@ -213,7 +207,7 @@ const HeaderUser = () => {
                             content={<MegaMenuContent />}
                             placement="bottomLeft"
                             trigger="hover"
-                            styles={{ body: { padding: 0, borderRadius: '16px', overflow: 'hidden' } }} // Đã sửa lỗi style thành styles={{body: ...}}
+                            styles={{ body: { padding: 0, borderRadius: '16px', overflow: 'hidden' } }}
                             arrow={false}
                         >
                             <Button
@@ -230,7 +224,7 @@ const HeaderUser = () => {
                                 options={options}
                                 onSearch={setSearchText}
                                 className="w-full"
-                                classNames={{ popup: "rounded-xl shadow-xl border border-slate-100" }} // Đã thay thế popupClassName
+                                classNames={{ popup: "rounded-xl shadow-xl border border-slate-100" }}
                                 notFoundContent={
                                     loading ? (
                                         <div className="text-center py-4 text-blue-500"><Spin size="small" /> Đang tìm...</div>
