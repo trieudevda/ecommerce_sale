@@ -5,6 +5,7 @@ import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
 import "./../globals.css";
 import {AppProvider} from "@/app/AppProvider";
+import {Analytics} from "@vercel/analytics/next"
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default async function RootLayout({children,params}: {
             lang={locale}
             className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
         >
+        <Analytics/>
             <AppProvider >
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <body className="min-h-full flex flex-col">{children}</body>
