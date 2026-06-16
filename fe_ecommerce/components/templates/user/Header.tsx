@@ -207,7 +207,7 @@ const HeaderUser = () => {
                             content={<MegaMenuContent />}
                             placement="bottomLeft"
                             trigger="hover"
-                            styles={{ body: { padding: 0, borderRadius: '16px', overflow: 'hidden' } }}
+                            styles={{ container: { padding: 0, borderRadius: '16px', overflow: 'hidden' } }}
                             arrow={false}
                         >
                             <Button
@@ -224,7 +224,7 @@ const HeaderUser = () => {
                                 options={options}
                                 onSearch={setSearchText}
                                 className="w-full"
-                                classNames={{ popup: "rounded-xl shadow-xl border border-slate-100" }}
+                                classNames={{ popup: {root:"rounded-xl shadow-xl border border-slate-100"} }}
                                 notFoundContent={
                                     loading ? (
                                         <div className="text-center py-4 text-blue-500"><Spin size="small" /> Đang tìm...</div>

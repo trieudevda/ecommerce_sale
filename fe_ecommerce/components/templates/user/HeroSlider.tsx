@@ -1,12 +1,7 @@
 "use client";
 import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Autoplay,
-  EffectFade,
-  Navigation,
-  Pagination,
-} from "swiper/modules";
+import {Swiper, SwiperSlide} from "swiper/react";
+import {Autoplay, EffectFade, Navigation, Pagination,} from "swiper/modules";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -15,22 +10,26 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
+
 const mainBanners = [
   {
     id: 1,
     image: "https://images.unsplash.com/photo-1550029402-226115b7c579?q=80&w=1200",
     title: "Khám phá Công nghệ",
+    path:""
   },
   {
     id: 2,
     image: "https://images.unsplash.com/photo-1531297172864-45d0601bfac6?q=80&w=1200",
     title: "Thế giới Phụ kiện",
+    path:""
   },
   {
     id: 3,
     image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=1200",
     title: "Làm việc Hiệu suất",
+    path:""
   },
 ];
 const rightBanners = [
@@ -88,7 +87,7 @@ export default function HeroSection() {
                     priority={index === 0}
                     className="object-cover"
                     alt={slide.title}
-                    onClick={slide?.path ? () => router.push(slide.path) : () => {}}
+                    onClick={slide?.path!='' ? () => router.push(slide.path) : () => {}}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                 </div>
